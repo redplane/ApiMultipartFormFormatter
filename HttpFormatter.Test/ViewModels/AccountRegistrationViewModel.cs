@@ -1,0 +1,29 @@
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Web.Http.ModelBinding;
+using HttpFormatter.Test.Models;
+using MultiPartFormData.Models;
+
+namespace HttpFormatter.Test.ViewModels
+{
+    public class AccountRegistrationViewModel
+    {
+        /// <summary>
+        /// Account owner.
+        /// </summary>
+        [Required]
+        public Owner Owner { get; set; }
+
+        /// <summary>
+        /// User age.
+        /// </summary>
+        [Required]
+        public int Age { get; set; }
+
+        /// <summary>
+        /// Account photo.
+        /// </summary>
+        [Required]
+        public List<HttpFile> Photos { get; set; }
+    }
+}
