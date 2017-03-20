@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using AttributeParser.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,8 +18,10 @@ namespace AttributeParser
             var dictionary = new Dictionary<string, object>();
             dictionary.Add("id", 1);
             dictionary.Add("category[id]", 1);
-            dictionary.Add("category[photo][absolute]", "Absolute");
-            dictionary.Add("category[photo][relative]", "Relative");
+
+            dictionary.Add("category[photos][0][absolute]", "Absolute");
+            dictionary.Add("category[photos][0][relative]", "Relative");
+            dictionary.Add("category[photos][1][absolute]", "Absolute");
 
             var instance = Activator.CreateInstance(typeof(Account));
 
@@ -45,7 +49,7 @@ namespace AttributeParser
             var lastKey = parameters[parameters.Count - 1];
 
             // Initiate property information.
-            PropertyInfo propertyInfo;
+            PropertyInfo propertyInfo = null;
 
             // Loop through every keys.
             for (var index = 0; index < parameters.Count - 1; index++)
@@ -53,28 +57,50 @@ namespace AttributeParser
                 // Find key.
                 var key = parameters[index];
 
-                propertyInfo =
-                    pointer.GetType()
-                        .GetProperties()
-                        .FirstOrDefault(x => key.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
+                // Whether key is numeric or not.
+                // Collection should be used numeric index to insert to list.
+                if (IsNumeric(key))
+                {
+                    int iCollectionIndex;
+                    if (!int.TryParse(key, out iCollectionIndex))
+                        break;
+
+                    if (propertyInfo == null)
+                        break;
+
+
+                    var itemCount = (int)propertyInfo.PropertyType.GetProperty("Count").GetValue(pointer, null);
+                    var genericArguments = propertyInfo.PropertyType.GetGenericArguments();
+
+                    //var iGenericListArgumentTotal = propertyInfo.PropertyType.GetMethod("Count").Invoke(pointer, new[] { null });
+                    if (iCollectionIndex > itemCount - 1)
+                    {
+                        var listItem = Activator.CreateInstance(propertyInfo.PropertyType.GetGenericArguments()[0]);
+                        propertyInfo.PropertyType.GetMethod("Add").Invoke(pointer, new[] { listItem });
+                        pointer = listItem;
+                        continue;
+                    }
+
+                    var commandSelectItem = typeof(Enumerable)
+                        .GetMethod("ElementAt")
+                        .MakeGenericMethod(genericArguments[0]);
+
+                    // Find item at specific index.
+                    pointer = commandSelectItem.Invoke(pointer, new[] { pointer, iCollectionIndex });
+                }
+
+                // Find property information of pointer.
+                propertyInfo = FindInstanceProperty(pointer, key);
 
                 // Property hasn't been initialized.
                 if (propertyInfo == null)
                     break;
 
-                // Initiate property.
-                propertyInfo = pointer.GetType()
-                    .GetProperties()
-                    .FirstOrDefault(x => key.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
-
-                // Property doesn't exist in object.
-                if (propertyInfo == null)
-                    return;
-                
                 var val = propertyInfo.GetValue(pointer);
                 if (val == null)
                 {
-                    val = Convert.ChangeType(Activator.CreateInstance(propertyInfo.PropertyType), propertyInfo.PropertyType);
+                    val = Convert.ChangeType(Activator.CreateInstance(propertyInfo.PropertyType),
+                        propertyInfo.PropertyType);
                     propertyInfo.SetValue(pointer, val);
                     pointer = val;
                     continue;
@@ -83,12 +109,36 @@ namespace AttributeParser
                 pointer = val;
             }
 
-            propertyInfo = pointer.GetType()
-                .GetProperties()
-                .FirstOrDefault(x => lastKey.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
+            // Find last property.
+            propertyInfo = FindInstanceProperty(pointer, lastKey);
 
             if (propertyInfo != null)
                 propertyInfo.SetValue(pointer, Convert.ChangeType(value, propertyInfo.PropertyType));
+        }
+
+        /// <summary>
+        /// Find property information of an instance by using property name.
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private static PropertyInfo FindInstanceProperty(object instance, string name)
+        {
+            return
+                    instance.GetType()
+                        .GetProperties()
+                        .FirstOrDefault(x => name.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        /// <summary>
+        /// Check whether text is only numeric or not.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private static bool IsNumeric(string text)
+        {
+            var regexNumeric = new Regex("^[0-9]*$");
+            return regexNumeric.IsMatch(text);
         }
 
         private static void Main_1(string[] args)
@@ -99,7 +149,7 @@ namespace AttributeParser
             dictionary.Add("owner[age]", "1");
             dictionary.Add("power[index]", "1");
             dictionary.Add("power[range]", "5");
-            
+
             var model = new Dictionary<string, object>();
             foreach (var key in dictionary.Keys)
             {
@@ -146,7 +196,7 @@ namespace AttributeParser
                 //((Dictionary<string, object>)pointer).Add(key, pair);
                 pointer = val;
             }
-            
+
             ((Dictionary<string, object>)pointer)[lastKey] = value;
         }
     }

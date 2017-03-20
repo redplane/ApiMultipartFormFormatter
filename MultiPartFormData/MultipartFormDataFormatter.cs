@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading.Tasks;
 using MultiPartFormData.Models;
 
@@ -34,11 +35,17 @@ namespace MultiPartFormData
             return false;
         }
 
-        public override async Task<object> ReadFromStreamAsync(Type type, Stream readStream, HttpContent content,
+        public override async Task<object> ReadFromStreamAsync(Type type, Stream stream, HttpContent content,
             IFormatterLogger formatterLogger)
         {
-            if (type == null) throw new ArgumentNullException(nameof(type));
-            if (readStream == null) throw new ArgumentNullException(nameof(readStream));
+            // Type is invalid.
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+
+            // Stream is invalid.
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+
 
             try
             {
@@ -46,7 +53,9 @@ namespace MultiPartFormData
                 var multipartProvider = await content.ReadAsMultipartAsync();
                 var httpContents = multipartProvider.Contents;
 
-                IDictionary<string, object> parameters = new Dictionary<string, object>();
+                // Create an instance from specific type.
+                var instance = Activator.CreateInstance(type);
+
                 foreach (var httpContent in httpContents)
                 {
                     // Find parameter from content deposition.
@@ -62,7 +71,7 @@ namespace MultiPartFormData
                     if (string.IsNullOrEmpty(httpContent.Headers.ContentDisposition.FileName))
                     {
                         var value = await httpContent.ReadAsStringAsync();
-                        Read(parameters, parameterParts, value);
+                        Read(instance, parameterParts, value);
                         continue;
                     }
 
@@ -80,14 +89,10 @@ namespace MultiPartFormData
                     else
                         file = null;
 
-                    Read(parameters, parameterParts, file);
+                    Read(instance, parameterParts, file);
                 }
-
-                var member = type.GetMember("Owner").GetType();
-                //var t = owner.GetType();
-                var a = Activator.CreateInstance(type);
-                var k = type.GetProperty("Owner");
-                return null;
+                
+                return instance;
             }
             catch (Exception e)
             {
@@ -98,28 +103,65 @@ namespace MultiPartFormData
             }
         }
 
-        private void Read(IDictionary<string, object> model, IList<string> parameters, object value)
+        /// <summary>
+        /// Read and construct nested properties instance base on parameters with final value.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="parameters"></param>
+        /// <param name="value"></param>
+        private void Read(object model, IList<string> parameters, object value)
         {
-            object pointer = model;
+            // Initiate model pointer.
+            var pointer = model;
+
+            // Find the last key.
             var lastKey = parameters[parameters.Count - 1];
+
+            // Initiate property information.
+            PropertyInfo propertyInfo;
+
+            // Loop through every keys.
             for (var index = 0; index < parameters.Count - 1; index++)
             {
-                var dictionary = (Dictionary<string, object>) pointer;
+                // Find key.
                 var key = parameters[index];
-                if (dictionary.ContainsKey(key))
+
+                propertyInfo =
+                    pointer.GetType()
+                        .GetProperties()
+                        .FirstOrDefault(x => key.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
+
+                // Property hasn't been initialized.
+                if (propertyInfo == null)
+                    break;
+
+                // Initiate property.
+                propertyInfo = pointer.GetType()
+                    .GetProperties()
+                    .FirstOrDefault(x => key.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
+
+                // Property doesn't exist in object.
+                if (propertyInfo == null)
+                    return;
+
+                var val = propertyInfo.GetValue(pointer);
+                if (val == null)
                 {
-                    pointer = dictionary[key];
+                    val = Convert.ChangeType(Activator.CreateInstance(propertyInfo.PropertyType), propertyInfo.PropertyType);
+                    propertyInfo.SetValue(pointer, val);
+                    pointer = val;
                     continue;
                 }
 
-                //var pair = new Dictionary<string, object>();
-                var val = new Dictionary<string, object>();
-                dictionary.Add(key, val);
-                //((Dictionary<string, object>)pointer).Add(key, pair);
                 pointer = val;
             }
 
-            ((Dictionary<string, object>) pointer)[lastKey] = value;
+            propertyInfo = pointer.GetType()
+                .GetProperties()
+                .FirstOrDefault(x => lastKey.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
+
+            if (propertyInfo != null)
+                propertyInfo.SetValue(pointer, Convert.ChangeType(value, propertyInfo.PropertyType));
         }
     }
 }

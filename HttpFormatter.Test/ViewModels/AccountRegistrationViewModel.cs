@@ -24,6 +24,6 @@ namespace HttpFormatter.Test.ViewModels
         /// Account photo.
         /// </summary>
         [Required]
-        public List<HttpFile> Photos { get; set; }
+        public HttpFile Photo { get; set; }
     }
 }
