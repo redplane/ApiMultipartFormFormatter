@@ -7,8 +7,8 @@
     <ProjectGuid>{1F851995-9C6B-4B34-82AF-AC4E075F00C2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MultiPartFormData</RootNamespace>
-    <AssemblyName>MultiPartFormData</AssemblyName>
+    <RootNamespace>ApiMultiPartFormData</RootNamespace>
+    <AssemblyName>ApiMultiPartFormData</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -51,10 +51,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\HttpFileImageValidateAttribute.cs" />
-    <Compile Include="Attributes\HttpFileMediatypeValidateAttribute.cs" />
-    <Compile Include="Attributes\HttpFileSizeValidateAttribute.cs" />
-    <Compile Include="Constants\MediaType.cs" />
     <Compile Include="Models\HttpFile.cs" />
     <Compile Include="MultipartFormDataFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

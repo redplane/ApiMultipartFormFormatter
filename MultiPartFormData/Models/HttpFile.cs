@@ -1,4 +1,4 @@
-﻿namespace MultiPartFormData.Models
+﻿namespace ApiMultiPartFormData.Models
 {
     public class HttpFile
     {

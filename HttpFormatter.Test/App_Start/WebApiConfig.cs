@@ -1,5 +1,5 @@
 ﻿using System.Web.Http;
-using MultiPartFormData;
+using ApiMultiPartFormData;
 
 namespace HttpFormatter.Test
 {
