@@ -1,7 +1,11 @@
-﻿namespace HttpFormatter.Test.Models
+﻿using MultiPartFormData.Models;
+
+namespace HttpFormatter.Test.Models
 {
     public class Owner
     {
         public Name Name { get; set; }
+
+        public HttpFile Photo { get; set; }
     }
 }

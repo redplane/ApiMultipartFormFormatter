@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MultiPartFormData.Models;
 
@@ -109,7 +111,7 @@ namespace MultiPartFormData
 
                     Read(instance, parameterParts, file);
                 }
-                
+
                 return instance;
             }
             catch (Exception e)
@@ -122,7 +124,7 @@ namespace MultiPartFormData
         }
 
         /// <summary>
-        /// Read and construct nested properties instance base on parameters with final value.
+        /// Read parameters list and bind information to model.
         /// </summary>
         /// <param name="model"></param>
         /// <param name="parameters"></param>
@@ -133,53 +135,164 @@ namespace MultiPartFormData
             var pointer = model;
 
             // Find the last key.
-            var lastKey = parameters[parameters.Count - 1];
+            //var lastKey = parameters[parameters.Count - 1];
 
             // Initiate property information.
-            PropertyInfo propertyInfo;
+            PropertyInfo propertyInfo = null;
 
-            // Loop through every keys.
-            for (var index = 0; index < parameters.Count - 1; index++)
+            if (parameters == null || parameters.Count < 1)
+                return;
+
+            for (var index = 0; index < parameters.Count; index++)
             {
-                // Find key.
+                // Find parameter key.
                 var key = parameters[index];
-
-                propertyInfo =
-                    pointer.GetType()
-                        .GetProperties()
-                        .FirstOrDefault(x => key.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
-
-                // Property hasn't been initialized.
-                if (propertyInfo == null)
-                    break;
-
-                // Initiate property.
-                propertyInfo = pointer.GetType()
-                    .GetProperties()
-                    .FirstOrDefault(x => key.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
-
-                // Property doesn't exist in object.
-                if (propertyInfo == null)
-                    return;
-
-                var val = propertyInfo.GetValue(pointer);
-                if (val == null)
+                
+                // Numeric key is always about array.
+                if (IsNumeric(key))
                 {
-                    val = Convert.ChangeType(Activator.CreateInstance(propertyInfo.PropertyType), propertyInfo.PropertyType);
-                    propertyInfo.SetValue(pointer, val);
+                    // Invalid property info.
+                    if (propertyInfo == null)
+                        return;
+
+                    // Current property information is not a list.
+                    if (!IsList(propertyInfo.PropertyType))
+                        return;
+
+                    // Find the index of parameter.
+                    var iCollectionIndex = 0;
+                    if (!int.TryParse(key, out iCollectionIndex))
+                        return;
+
+                    // Add new property into list.
+                    object val = null;
+
+                    // This is the last key.
+                    if (index + 1 >= parameters.Count)
+                    {
+                        InitiateArrayMember(pointer, iCollectionIndex, propertyInfo, value);
+                        return;
+                    }
+
+                    val = InitiateArrayMember(pointer, iCollectionIndex, propertyInfo);
                     pointer = val;
+
+                    // Find the property information of the next key.
+                    var nextKey = parameters[index + 1];
+                    propertyInfo = FindInstanceProperty(pointer, nextKey);
                     continue;
                 }
 
-                pointer = val;
+                // Find property of the current key.
+                propertyInfo = FindInstanceProperty(pointer, key);
+
+                // Property doesn't exist.
+                if (propertyInfo == null)
+                    return;
+
+                // This is the last parameter.
+                if (index + 1 >= parameters.Count)
+                {
+                    propertyInfo.SetValue(pointer, Convert.ChangeType(value, propertyInfo.PropertyType));
+                    return;
+                }
+
+                // Find property value.
+                var pVal = propertyInfo.GetValue(pointer);
+
+                // Value doesn't exist.
+                if (pVal == null)
+                {
+                    // Initiate property value.
+                    pVal = Convert.ChangeType(Activator.CreateInstance(propertyInfo.PropertyType),
+                        propertyInfo.PropertyType);
+                    propertyInfo.SetValue(pointer, pVal);
+                    pointer = pVal;
+                }
+                else
+                {
+                    // Value is list.
+                    if (IsList(propertyInfo.PropertyType))
+                    {
+                        pointer = propertyInfo.GetValue(pointer);
+                        InitiateArrayMember(pointer, -1, propertyInfo, value);
+                        continue;
+                    }
+
+                    // Go to next key
+                    pointer = pVal;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add or update member of array.
+        /// </summary>
+        /// <param name="pointer"></param>
+        /// <param name="iCollectionIndex"></param>
+        /// <param name="propertyInfo"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private object InitiateArrayMember(object pointer, int iCollectionIndex, PropertyInfo propertyInfo, object value = null)
+        {
+            var itemCount = (int)propertyInfo.PropertyType.GetProperty("Count").GetValue(pointer, null);
+            var genericArguments = propertyInfo.PropertyType.GetGenericArguments();
+
+            //var iGenericListArgumentTotal = propertyInfo.PropertyType.GetMethod("Count").Invoke(pointer, new[] { null });
+            if (iCollectionIndex < 0 || iCollectionIndex > itemCount - 1)
+            {
+                object listItem = null;
+                if (value != null)
+                    listItem = value;
+                else
+                    listItem = Activator.CreateInstance(propertyInfo.PropertyType.GetGenericArguments()[0]);
+                propertyInfo.PropertyType.GetMethod("Add").Invoke(pointer, new[] { listItem });
+                return listItem;
             }
 
-            propertyInfo = pointer.GetType()
-                .GetProperties()
-                .FirstOrDefault(x => lastKey.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
+            var commandSelectItem = typeof(Enumerable)
+                .GetMethod("ElementAt")
+                .MakeGenericMethod(genericArguments[0]);
 
-            if (propertyInfo != null)
-                propertyInfo.SetValue(pointer, Convert.ChangeType(value, propertyInfo.PropertyType));
+            // Find item at specific index.
+            return commandSelectItem.Invoke(pointer, new[] { pointer, iCollectionIndex });
+        }
+        
+
+        /// <summary>
+        /// Find property information of an instance by using property name.
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private PropertyInfo FindInstanceProperty(object instance, string name)
+        {
+            return
+                    instance.GetType()
+                        .GetProperties()
+                        .FirstOrDefault(x => name.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        /// <summary>
+        /// Check whether text is only numeric or not.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        private bool IsNumeric(string text)
+        {
+            var regexNumeric = new Regex("^[0-9]*$");
+            return regexNumeric.IsMatch(text);
+        }
+
+        /// <summary>
+        /// Whether instance is a collection or not.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private bool IsList(Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition()
+                    == typeof(List<>);
         }
     }
 }
