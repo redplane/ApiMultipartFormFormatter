@@ -22,6 +22,7 @@ namespace AttributeParser
             dictionary.Add("category[photos][0][absolute]", "Absolute");
             dictionary.Add("category[photos][0][relative]", "Relative");
             dictionary.Add("category[photos][1][absolute]", "Absolute");
+            dictionary.Add("category[photos][1][relative]", "This is relative");
 
             var instance = Activator.CreateInstance(typeof(Account));
 

@@ -55,16 +55,8 @@
     <Compile Include="Attributes\HttpFileMediatypeValidateAttribute.cs" />
     <Compile Include="Attributes\HttpFileSizeValidateAttribute.cs" />
     <Compile Include="Constants\MediaType.cs" />
-    <Compile Include="Converters\Original\HttpContentOriginalConverter.cs" />
-    <Compile Include="Converters\HttpContentToMultipartFormDataConverter.cs" />
-    <Compile Include="Converters\Original\MultipartFormDataAnalyzer.cs" />
-    <Compile Include="Infrastructure\DateTimeConverterISO8601.cs" />
-    <Compile Include="Infrastructure\Extensions\TypeExtensions.cs" />
     <Compile Include="Models\HttpFile.cs" />
     <Compile Include="MultipartFormDataFormatter.cs" />
-    <Compile Include="Models\MultipartFormData.cs" />
-    <Compile Include="Analyzers\MultipartFormFileAnalyzer.cs" />
-    <Compile Include="Converters\MultipartFormDataAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

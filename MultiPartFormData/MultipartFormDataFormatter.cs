@@ -23,18 +23,36 @@ namespace MultiPartFormData
             SupportedMediaTypes.Add(new MediaTypeHeaderValue(SupportedMediaType));
         }
 
+        /// <summary>
+        /// Whether the instance can be read or not.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public override bool CanReadType(Type type)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             return true;
         }
 
+        /// <summary>
+        /// Whether the instance can be written or not.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public override bool CanWriteType(Type type)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             return false;
         }
 
+        /// <summary>
+        /// Read data from incoming stream.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="stream"></param>
+        /// <param name="content"></param>
+        /// <param name="formatterLogger"></param>
+        /// <returns></returns>
         public override async Task<object> ReadFromStreamAsync(Type type, Stream stream, HttpContent content,
             IFormatterLogger formatterLogger)
         {
