@@ -7,7 +7,7 @@
 ### Usages:
 To use this custom media format in your WEB API 2 project. Please following these steps:
 
- * Install the lastest nuget package by using command `TODO:`.
+ * Install the lastest nuget package by using command `Install-Package ApiMultipartFormDataFormatter`.
  * Open WebApiConfig.cs file and add the following command: `config.Formatters.Add(new ApiMultipartFormDataFormatter());`
  	* For example:
  	```
