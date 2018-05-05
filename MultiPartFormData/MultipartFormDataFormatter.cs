@@ -9,7 +9,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MultiPartFormData.Models;
+using ApiMultiPartFormData.Models;
 
 namespace MultiPartFormData
 {

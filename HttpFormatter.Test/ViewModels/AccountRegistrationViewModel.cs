@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ApiMultiPartFormData.Models;
 using HttpFormatter.Test.Models;
-using MultiPartFormData.Models;
 
 namespace HttpFormatter.Test.ViewModels
 {

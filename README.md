@@ -70,6 +70,8 @@ public class AccountRegistrationViewModel
 * Currently, this formatter cannot deal with interfaces such as: IAccount, IList, IEnumerable, ... To use it with a collection, please specify : List, Enumerable, ....
 * For a collection, please use List, Enumerable, ... instead of [] (array). This feature will be updated later.
 
+### NOTE:
+* While sending the request, please make sure not to attach `Content-Type` in header or make `Content-Type` be `NULL` 
 ### Images:
 
 [Postman request](http://i.imgur.com/q8Elrwv.png)

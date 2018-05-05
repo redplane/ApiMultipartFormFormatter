@@ -1,4 +1,4 @@
-﻿using MultiPartFormData.Models;
+﻿using ApiMultiPartFormData.Models;
 
 namespace HttpFormatter.Test.Models
 {

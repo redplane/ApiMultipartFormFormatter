@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -108,9 +109,9 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MultiPartFormData\MultiPartFormData.csproj">
-      <Project>{1f851995-9c6b-4b34-82af-ac4e075f00c2}</Project>
-      <Name>MultiPartFormData</Name>
+    <ProjectReference Include="..\MultiPartFormData\ApiMultiPartFormData.csproj">
+      <Project>{1F851995-9C6B-4B34-82AF-AC4E075F00C2}</Project>
+      <Name>ApiMultiPartFormData</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
