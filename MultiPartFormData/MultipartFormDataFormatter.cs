@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ApiMultiPartFormData.Models;
 
-namespace MultiPartFormData
+namespace ApiMultiPartFormData
 {
     public class MultipartFormDataFormatter : MediaTypeFormatter
     {
