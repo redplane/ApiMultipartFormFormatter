@@ -31,8 +31,6 @@ namespace AttributeParser
                 var parameters = key.Replace("[", ",").Replace("]", ",").Split(',').Where(x => !string.IsNullOrEmpty(x)).ToList();
                 Read(instance, parameters, dictionary[key]);
             }
-
-            var a = 1;
         }
 
         /// <summary>
