@@ -1,12 +1,16 @@
 language: csharp
 solution: ApiHttpFormatter.sln
-mono: 3.10.0
+mono: 3.12.0
 
 # Caching phrase.
 cache:
   directories:
   - packages
   
+# Install prepration phrase.
+before_install:
+- sudo apt-get install mono-complete
+
 # Installation phrase.
 install:
 - curl -L -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
