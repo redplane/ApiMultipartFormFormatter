@@ -10,7 +10,7 @@ namespace HttpFormatter.Test.Controllers
     {
         [Route("register")]
         [HttpPost]
-        public HttpResponseMessage Register([FromUri] int index, [FromBody] AccountRegistrationViewModel parameters)
+        public HttpResponseMessage Register(AccountRegistrationViewModel parameters)
         {
             if (parameters == null)
             {
