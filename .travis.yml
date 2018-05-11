@@ -1,11 +1,3 @@
 language: csharp
 solution: ApiHttpFormatter.sln
 mono: lastest
-
-# Dependency installation phrase.
-install:
-- nuget restore ApiHttpFormatter.sln
-
-# Build phrase.
-script:
-- xbuild /p:Configuration=Release ApiHttpFormatter.sln
