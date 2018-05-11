@@ -1,0 +1,9 @@
+configuration: Release
+
+# Before build phrase
+before_build:
+ - nuget restore
+    
+# Build phrase
+build:
+ publish_wap: true
