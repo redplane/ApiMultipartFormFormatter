@@ -1,10 +1,10 @@
-# ApiMultipartFormDataFormatter
+# ApiMultipartFormDataFormatter [![Build Status](https://travis-ci.org/redplane/ApiMultipartFormFormatter.svg?branch=master)](https://travis-ci.org/redplane/ApiMultipartFormFormatter)
 
-### Features:
+## Features:
 
  * Receives multipart/form-data request from client, parses information and bind to model.
 
-### Usages:
+## Usages:
 To use this custom media format in your WEB API 2 project. Please following these steps:
 
  * Install the lastest nuget package by using command `Install-Package ApiMultipartFormDataFormatter`.
@@ -27,6 +27,32 @@ To use this custom media format in your WEB API 2 project. Please following thes
         config.Formatters.Add(new ApiMultipartFormDataFormatter());
     }
     ``` 	
+    
+    In controller file:
+    ```
+    [RoutePrefix("api/account")]
+    public class ApiAccountController : ApiController
+    {
+        [Route("register")]
+        [HttpPost]
+        public HttpResponseMessage Register(AccountRegistrationViewModel parameters)
+        {
+            if (parameters == null)
+            {
+                parameters = new AccountRegistrationViewModel();
+                Validate(parameters);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+    }
+    ```
+    
  * Start posting a multipart/form-data to your WEB API 2 project and enjoy.
  
  
@@ -66,11 +92,11 @@ public class AccountRegistrationViewModel
     
 ```
 
-### Limitation:
+## Limitation:
 * Currently, this formatter cannot deal with interfaces such as: IAccount, IList, IEnumerable, ... To use it with a collection, please specify : List, Enumerable, ....
 * For a collection, please use List, Enumerable, ... instead of [] (array). This feature will be updated later.
 
-### NOTE:
+## NOTE:
 * While sending the request, please make sure not to attach `Content-Type` in header or make `Content-Type` be `NULL` 
 ### Images:
 
