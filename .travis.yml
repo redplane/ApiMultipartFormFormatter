@@ -18,4 +18,4 @@ install:
 - mono nuget.exe restore ApiHttpFormatter.sln
 
 script:
-- xbuild /p:Configuration=Release ApiHttpFormatter.sln
+- xbuild ApiHttpFormatter.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile="Folder build"
