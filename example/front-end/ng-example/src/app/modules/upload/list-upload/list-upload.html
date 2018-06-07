@@ -1,0 +1,68 @@
+<form name="f"
+      novalidate
+      ng-submit="$event.preventDefault()">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <label>User</label> <b class="text-danger">*</b>
+                <div class="form-group">
+                    <input name="fullName"
+                           class="form-control"
+                           ng-model="oModel.author.fullName"
+                           ng-required="true">
+                </div>
+
+            </div>
+
+            <div class="row">
+                <label>Attachments</label> <b class="text-danger">*</b>
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Attachment</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="attachment in oModel.attachments">
+                        <td class="text-center">
+                            {{attachment.name}}
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-danger"
+                                    ng-click="deletePendingFile(attachment)">
+                                <span class="fa fa-trash"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input class="form-control"
+                                   type="file"
+                                   nv-file-select=""
+                                   uploader="fileUploader"/>
+
+                            <input name="attachment" class="hidden" ng-value="true"
+                                   ng-model="bIsEmptyAttachment"
+                                   ng-function-validate="is-empty-list"
+                                   ng-function-validate-is-empty-list="bIsEmptyAttachment == false">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <button type="button"
+                            class="btn btn-primary"
+                            ng-disabled="f.$invalid"
+                            ng-click="clickUpload()">
+                        Upload
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

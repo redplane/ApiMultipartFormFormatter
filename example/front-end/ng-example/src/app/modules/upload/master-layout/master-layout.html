@@ -1,0 +1,27 @@
+<div class="wrapper">
+    <div class="col-lg-3">
+        <ul class="nav nav-pills nav-stacked">
+            <li role="presentation"
+                ui-sref="basic-upload"
+                ui-sref-active="active">
+                <a href>Basic upload</a>
+            </li>
+
+            <li role="presentation"
+                ui-sref="list-upload"
+                ui-sref-active="active">
+                <a href>Attachments list upload</a>
+            </li>
+
+            <li role="presentation"
+                ui-sref="nested-info-upload"
+                ui-sref-active="active">
+                <a href>Nested info upload</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-lg-9">
+        <ui-view></ui-view>
+    </div>
+</div>

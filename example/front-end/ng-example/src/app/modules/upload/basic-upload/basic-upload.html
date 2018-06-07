@@ -1,0 +1,42 @@
+<form name="f"
+      novalidate
+      ng-submit="$event.preventDefault()">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <label>User</label> <b class="text-danger">*</b>
+                <div class="form-group">
+                    <input name="fullName"
+                           class="form-control"
+                           ng-model="oModel.author.fullName"
+                           ng-required="true">
+                </div>
+
+            </div>
+
+            <div class="row">
+                <label>Attachment</label> <b class="text-danger">*</b>
+                <div class="form-group">
+                    <input name="attachment"
+                           class="form-control"
+                           type="file"
+                           nv-file-select=""
+                           ng-model="oModel.attachment"
+                           uploader="fileUploader"
+                           ng-required="true"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <button type="button"
+                            class="btn btn-primary"
+                            ng-disabled="f.$invalid"
+                            ng-click="clickUpload()">
+                        Upload
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
