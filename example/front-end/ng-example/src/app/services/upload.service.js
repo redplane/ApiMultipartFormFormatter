@@ -18,8 +18,8 @@ module.exports = (ngModule) => {
                 };
 
                 return $http.post(fullUrl, f, options)
-                    .then((basicUploadResponse) => {
-                        return basicUploadResponse.data;
+                    .then((uploadResponse) => {
+                        return uploadResponse.data;
                     });
             },
 
@@ -43,6 +43,27 @@ module.exports = (ngModule) => {
                 return $http.post(fullUrl, f, options)
                     .then((basicUploadResponse) => {
                         return basicUploadResponse.data;
+                    });
+            },
+
+
+            nestedInfoUpload: (attachment, profileName, profileAttachment) => {
+                const fullUrl = `${apiUrlConstant.apiBaseUrl}/${apiUrlConstant.upload.nestedInfoUpload}`;
+
+                let f = new FormData();
+                f.append('attachment', attachment);
+                f.append('profile[name]', profileName);
+                f.append('profile[attachment]', profileAttachment);
+
+                let options = {
+                    headers: {
+                        'Content-Type': undefined
+                    }
+                };
+
+                return $http.post(fullUrl, f, options)
+                    .then((uploadResponse) => {
+                        return uploadResponse.data;
                     });
             }
 

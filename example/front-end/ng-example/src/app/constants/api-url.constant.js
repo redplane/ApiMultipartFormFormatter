@@ -4,7 +4,8 @@ module.exports = (ngModule) => {
 
         upload:{
             basicUpload: 'api/upload/basic-upload',
-            listUpload: 'api/upload/attachments-list-upload'
+            listUpload: 'api/upload/attachments-list-upload',
+            nestedInfoUpload: 'api/upload/nested-info-upload'
         }
     })
 };

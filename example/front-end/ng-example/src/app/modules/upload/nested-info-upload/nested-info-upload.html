@@ -1,10 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<form name="f"
+      novalidate
+      ng-submit="$event.preventDefault()">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
 
-</body>
-</html>
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th>Parent component</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input
+                                   class="form-control"
+                                   type="file"
+                                   nv-file-select=""
+                                   uploader="parentUploader"
+
+                                   ng-required="true"/>
+
+                            <input name="attachment"
+                                   hidden
+                                   ng-model="bIsEmptyAttachment"
+                                   ng-function-validate="is-empty-attachment"
+                                   ng-function-validate-is-empty-attachment="!bIsEmptyAttachment">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th class="text-center" colspan="2">Child component</th>
+                    </tr>
+                    <tr>
+                        <th>Profile name</th>
+                        <th>Profile attachment</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input class="form-control"
+                                   ng-model="oModel.profile.name">
+                        </td>
+                        <td>
+                            <input class="form-control"
+                                   type="file"
+                                   nv-file-select=""
+                                   uploader="childUploader"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <button type="button"
+                            class="btn btn-primary"
+                            ng-disabled="f.$invalid"
+                            ng-click="clickUpload()">
+                        Upload
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
