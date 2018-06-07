@@ -18,8 +18,8 @@ install:
 - mono nuget.exe restore ApiHttpFormatter.sln
 
 script:
-#- xbuild ApiHttpFormatter.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile="Folder build"
-- msbuild ApiHttpFormatter.sln /p:DeployOnBuild=true /p:PublishProfile="Folder build"
+- xbuild /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile="Folder build" ApiHttpFormatter.sln
+#- msbuild ApiHttpFormatter.sln /p:DeployOnBuild=true /p:PublishProfile="Folder build"
 
 before_deploy:
 - cd example/back-end/ApiBackEnd/bin/Release/PublishOutput

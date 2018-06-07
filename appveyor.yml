@@ -7,3 +7,6 @@ before_build:
 # Build phrase
 build:
  publish_wap: true
+
+before_deploy:
+ - msbuild /p:DeployOnBuild=true /p:PublishProfile="Folder build" ApiHttpFormatter.sln
