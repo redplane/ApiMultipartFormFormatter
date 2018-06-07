@@ -1,12 +1,19 @@
-configuration: Release
+version: 1.0.{build}
+image: Visual Studio 2017
+build_script:
+- cmd: >-
+    nuget restore
 
-# Before build phrase
-before_build:
- - nuget restore
-    
-# Build phrase
-build:
- publish_wap: true
-
-before_deploy:
- - msbuild /p:DeployOnBuild=true /p:PublishProfile="Folder build" ApiHttpFormatter.sln
+    msbuild /p:DeployOnBuild=true /p:PublishProfile="Folder build" ApiHttpFormatter.sln
+artifacts:
+- path: ./example/back-end/ApiBackEnd/bin/Release/PublishOutput
+  name: Azure deployment
+  type: WebDeployPackage
+deploy:
+- provider: WebDeploy
+  server: https://apimultipartformdataservice.scm.azurewebsites.net:443/msdeploy.axd?site=ApiMultipartFormDataService
+  website: ApiMultipartFormDataService
+  username: $ApiMultipartFormDataService
+  password:
+    secure: BMVUyCtkJ9EcXWjJxv1rSkUezXyEGE098lDnGlAAcx959P8zTSfhiT9WVb0o/1EX++h7FP1ZILge3Qun4t4klw==
+  artifact: Azure deployment
