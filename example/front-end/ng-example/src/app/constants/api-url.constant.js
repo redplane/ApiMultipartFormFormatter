@@ -1,6 +1,6 @@
 module.exports = (ngModule) => {
     ngModule.constant('apiUrlConstant', {
-        apiBaseUrl: 'http://localhost:51506',
+        apiBaseUrl: API_ENDPOINT,
 
         upload:{
             basicUpload: 'api/upload/basic-upload',

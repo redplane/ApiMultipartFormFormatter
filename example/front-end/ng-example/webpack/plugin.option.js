@@ -62,7 +62,7 @@ exports = module.exports = {
         // Items list.
         const oSourceItems = ['assets'];
         let oCopiedItems = [];
-        for (let item of oSourceItems){
+        for (let item of oSourceItems) {
             oCopiedItems.push({
                 from: path.resolve(paths.app, item),
                 to: path.resolve(paths.dist, item)
@@ -85,6 +85,22 @@ exports = module.exports = {
             Rx: 'rxjs'
         }));
 
+        //#endregion
+
+        //#region Define plugin
+
+        if (!bProductionMode) {
+            plugins.push(new webpack.DefinePlugin({
+                'API_ENDPOINT': JSON.stringify('http://localhost:51506')
+            }));
+        } else {
+            plugins.push(new webpack.DefinePlugin({
+                'API_ENDPOINT': JSON.stringify('https://apimultipartformdataservice.azurewebsites.net')
+            }));
+        }
+
+        //#endregion
+
         //#region Html plugin
 
         //Automatically inject chunks into html files.
@@ -95,9 +111,7 @@ exports = module.exports = {
 
         //#endregion
 
-        //#endregion
-
-        if (bProductionMode){
+        if (bProductionMode) {
             // Annotate plugin.
             plugins.push(new ngAnnotatePlugin({add: true}));
 

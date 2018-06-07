@@ -1,6 +1,6 @@
 language: csharp
 solution: ApiHttpFormatter.sln
-mono: 5.4.1
+mono: 5.12.0
 
 # Caching phrase.
 cache:

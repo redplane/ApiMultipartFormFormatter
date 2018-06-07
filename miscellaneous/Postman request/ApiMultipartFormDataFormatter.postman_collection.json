@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "1fc47e2a-d941-4bd4-8b92-9301bd63fef3",
+		"name": "ApiMultipartFormDataFormatter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Basic upload",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "null"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "author[fullName]",
+							"value": "Nguyen Duy Linh",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "attachment",
+							"description": "",
+							"type": "file"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/upload/basic-upload",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"upload",
+						"basic-upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload attachments list",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "attachments[0]",
+							"value": "",
+							"description": "",
+							"type": "file"
+						},
+						{
+							"key": "attachments[1]",
+							"value": "",
+							"description": "",
+							"type": "file"
+						},
+						{
+							"key": "attachments[2]",
+							"value": "",
+							"description": "",
+							"type": "file"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/upload/attachments-list-upload",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"upload",
+						"attachments-list-upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Nested info upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "attachment",
+							"value": "",
+							"description": "",
+							"type": "file"
+						},
+						{
+							"key": "profile[name]",
+							"value": "Profile 001",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "profile[attachment]",
+							"value": "",
+							"description": "",
+							"type": "file"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/upload/nested-info-upload",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"upload",
+						"nested-info-upload"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "4b661820-e4f3-4d13-ac7c-6953838aa7f9",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "5869c4a4-ddc0-4ca5-b16b-d506185df0b0",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
