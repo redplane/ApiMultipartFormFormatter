@@ -1,7 +1,10 @@
-﻿using System.Web.Http;
+﻿using System.Linq;
+using System.Net.Http.Formatting;
+using System.Web.Http;
 using ApiMultiPartFormData;
+using Newtonsoft.Json.Serialization;
 
-namespace HttpFormatter.Test
+namespace ApiBackEnd
 {
     public static class WebApiConfig
     {
@@ -18,6 +21,11 @@ namespace HttpFormatter.Test
                 new {id = RouteParameter.Optional}
             );
 
+            // Using camel-cased naming convention.
+            var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
+            jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            // Register multipart/form-data formatter.
             config.Formatters.Add(new MultipartFormDataFormatter());
         }
     }
