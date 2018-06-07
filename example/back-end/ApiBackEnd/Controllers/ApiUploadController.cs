@@ -23,10 +23,10 @@ namespace ApiBackEnd.Controllers
                 info = new BasicUploadViewModel();
                 Validate(info);
             }
-
+            
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
+            
             var messages = new List<string>();
             messages.Add($"Author information: {info.Author.FullName}");
             messages.Add($"Attachment information: (Mime) {info.Attachment.MediaType} - (File name) {info.Attachment.Name}");
