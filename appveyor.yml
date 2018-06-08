@@ -1,10 +1,25 @@
 version: 1.0.{build}
 image: Visual Studio 2017
 
+only_commits:
+ files:
+  - lib/ApiMultipartFormDataFormatter/
+  - example/back-end/ApiBackEnd/
 
+environment:
+  matrix:
+  - projectRelativePath: '"./example/back-end/ApiBackEnd/ApiBackEnd.csproj"'
+    deployOnBuild: true
+    publishProfile: '"Folder build"'
+  - projectRelativePath: ./lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj
+    deployOnBuild: false
+    publishProfile: '""'
+    
 build_script:
-- nuget restore
-- msbuild "./example/back-end/ApiBackEnd/ApiBackEnd.csproj" /p:DeployOnBuild=true /p:PublishProfile="Folder build"
+- cmd: >-
+    nuget restore
+
+    msbuild %projectRelativePath% /p:DeployOnBuild=%deployOnBuild% /p:PublishProfile=%publishProfile%
 
 artifacts:
 - path: ./example/back-end/ApiBackEnd/bin/Release/PublishOutput
