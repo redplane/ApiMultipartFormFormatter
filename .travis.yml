@@ -1,31 +1,35 @@
-language: csharp
-solution: ApiHttpFormatter.sln
-mono: 5.12.0
-
+language: node_js
+node_js:
+- 9.8.0
 # Caching phrase.
 cache:
  directories:
-  - packages
+  - node_modules
+
+env:
+ global:
+  # FIREBASE_TOKEN.
+  - secure: "GA1LOEsmIinAHJBDTAQ1wL8SFm+JKwZCU6Yxn/5hQv8w8Y5wIDlwY1opaW3ZW7EjeAzsuvWWOnmCBo4sS260ZuQJDmHhUOK+JOPD+mmmkQ7TG2YfpZJ3xUrACX7Zyi4Xfn6om1N+vHJYj5jWIG6eo4ieqDS3s9nN/EYZ+PdvXhPTJ939WdyAbKIfvdbEwZF4y7ABm4bFfdaIH3imPlsenl8iLCISyhABH34OFDf2XVFnST+kLMefvdNXTZ3/EsWNVnBId0N/pgdrK8nV48kvJVsiS8JCNa6PRl2gWsjuI06iccnNkevxY/k2TMxFx/ni53cv99CIkB85crsvwFQJWHrwRWEdryTtrYNGbm8CG4DQFvmLFK+z5hqwGa0SHs4kNslPrEYXr+1mPRzoaU6Dcn+yLYF7cTK9sRSoeSuACYZQZ+3N/FhWcO3vT2AEQ4KTLkdkCeqa5NqgXwGsNfi7J1jhIZUmsqQ6/0poS74E7zzs+JHIpzaDPYAwQef3RtZ3EfXn4Kuq3/Udbd+pRtIJ7H23BHtQTtKfylUIawCwPhnpTGKLYfBqYSKIQo6PDw9+qMRQaKEyAZKDly5mUwpjajsDaI2M+EQIe44hW063Op/jrpwZvY43eC2qe1cv/aiQbb7mJHSmL3FLyWNJD3ji6dsHpsmVCECF8WG7ovgKQeA="
   
-# Install prepration phrase.
-#before_install:
-#- sudo apt-get install mono-complete
+# Dependency installation phrase.
+before_install:
+- cd "./example/front-end/ng-example"
 
-# Installation phrase.
 install:
-- curl -L -o nuget.exe https://dist.nuget.org/win-x86-commandline/v3.3.0/nuget.exe 
-#https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-- mono nuget.exe restore ApiHttpFormatter.sln
+- npm i npm@latest -g
+#- npm audit
+- npm install
 
+before_script:
+- npm install -g firebase-tools
+
+# Build phrase
 script:
-- xbuild /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile="Folder build" ApiHttpFormatter.sln
-#- msbuild ApiHttpFormatter.sln /p:DeployOnBuild=true /p:PublishProfile="Folder build"
+- npm run build
 
-before_deploy:
-- cd example/back-end/ApiBackEnd/bin/Release/PublishOutput
+# Custom deployment phrase.
+after_script:
+# Deploy website to firebase cloud.
+- firebase deploy --project ng-api-multipart-formdata --public ./src/dist --token $FIREBASE_TOKEN
 
-deploy:
- provider: azure_web_apps
- skip_cleanup: true
- verbose: true
- 
+

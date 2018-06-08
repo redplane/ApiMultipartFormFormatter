@@ -1,14 +1,16 @@
 version: 1.0.{build}
 image: Visual Studio 2017
-build_script:
-- cmd: >-
-    nuget restore
 
-    msbuild /p:DeployOnBuild=true /p:PublishProfile="Folder build" ApiHttpFormatter.sln
+
+build_script:
+- nuget restore
+- msbuild "./example/back-end/ApiBackEnd/ApiBackEnd.csproj" /p:DeployOnBuild=true /p:PublishProfile="Folder build"
+
 artifacts:
 - path: ./example/back-end/ApiBackEnd/bin/Release/PublishOutput
   name: Azure deployment
   type: WebDeployPackage
+  
 deploy:
 - provider: WebDeploy
   server: https://apimultipartformdataservice.scm.azurewebsites.net:443/msdeploy.axd?site=ApiMultipartFormDataService
