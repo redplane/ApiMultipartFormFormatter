@@ -1,4 +1,4 @@
-# ng-api-multipart-formdata
+# ng-api-multipart-formdata [![Build Status](https://travis-ci.org/redplane/ApiMultipartFormFormatter.svg?branch=master)](https://travis-ci.org/redplane/ApiMultipartFormFormatter)
 
 ## Description:
 * This is the example to show how to integrate `AngularJS` with [ApiMultipartFormFormatter](https://github.com/redplane/ApiMultipartFormFormatter).
