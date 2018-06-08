@@ -1,4 +1,4 @@
-# ApiMultipartFormDataFormatter [![Build Status](https://travis-ci.org/redplane/ApiMultipartFormFormatter.svg?branch=master)](https://travis-ci.org/redplane/ApiMultipartFormFormatter)
+# ApiMultipartFormDataFormatter [![Build status](https://ci.appveyor.com/api/projects/status/cwyutunb3xh8clik?svg=true)](https://ci.appveyor.com/project/redplane/apimultipartformformatter)
 
 ## Features:
 
