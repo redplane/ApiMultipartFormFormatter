@@ -1,28 +1,19 @@
 import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
-import {RouterModule, Routes} from "@angular/router";
+import {RouterModule, Routes} from '@angular/router';
 
 //#region Properties
 
 // Application routes configuration.
 export const routes: Routes = [
   {
+    path: 'upload',
+    loadChildren: 'modules/upload/upload.module#UploadModule'
+  },
+  {
     path: '',
-    children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: '/dashboard'
-      },
-      {
-        path: 'dashboard',
-        loadChildren: 'modules/dashboard/dashboard.module#DashboardModule',
-      },
-      {
-        path: 'login',
-        loadChildren: 'modules/account/account.module#AccountModule'
-      }
-    ]
+    pathMatch: 'full',
+    redirectTo: 'upload/basic'
   }
 ];
 
@@ -35,7 +26,7 @@ export const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {enableTracing: false})
   ],
-  exports:[
+  exports: [
     RouterModule
   ],
   bootstrap: [AppComponent]

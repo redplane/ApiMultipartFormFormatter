@@ -1,0 +1,30 @@
+<navigation-bar></navigation-bar>
+
+<div class="container-wrapper">
+  <!--Vertical navigation-->
+  <div class="col-lg-3">
+    <ul class="nav nav-pills nav-stacked">
+      <li role="presentation"
+          [routerLink]="['/upload/basic']"
+          routerLinkActive="active">
+        <a href="javascript:void(0);">Basic upload</a>
+      </li>
+      <li role="presentation"
+          routerLink="/upload/attachment-list"
+          routerLinkActive="active">
+        <a href="javascript:void(0);">Attachments upload</a>
+      </li>
+      <li role="presentation"
+          routerLink="/upload/nested-info"
+          routerLinkActive="active">
+        <a href="javascript:void(0);">Nested object upload</a>
+      </li>
+    </ul>
+  </div>
+
+  <!--Content area-->
+  <div class="col-lg-9">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

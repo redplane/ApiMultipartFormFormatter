@@ -22,15 +22,11 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/admin-lte/dist/css/AdminLTE.min.css",
-              "node_modules/admin-lte/dist/css/skins/skin-blue-light.min.css",
               "node_modules/font-awesome/css/font-awesome.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",
-              "node_modules/jquery-slimscroll/jquery.slimscroll.js",
-              "node_modules/bootstrap/dist/js/bootstrap.js",
-              "node_modules/admin-lte/dist/js/adminlte.js"
+              "node_modules/bootstrap/dist/js/bootstrap.js"
             ]
           },
           "configurations": {
