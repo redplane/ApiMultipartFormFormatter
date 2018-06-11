@@ -17,16 +17,16 @@ export class BasicUploadComponent {
 
   //#region Properties
 
-  private readonly _basicFileUploader;
+  public _basicFileUploader: FileUploader;
 
   // Model for information binding.
-  private _oModel: BasicUploadViewModel;
+  public _oModel: BasicUploadViewModel;
 
   // Whether file list is empty or not.
-  private _bIsFileListAvailable: boolean = false;
+  public _bIsFileListAvailable: boolean = false;
 
   // List of messages responded by api.
-  private _messages: Array<string>;
+  public _messages: Array<string>;
 
   @ViewChild('mdApiResponse')
   mdApiResponse: ModalDirective;

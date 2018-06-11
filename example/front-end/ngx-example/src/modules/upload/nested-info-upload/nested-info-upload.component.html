@@ -1,1 +1,93 @@
-Nested info upload
+<div class="col-lg-12">
+
+  <form name="nestedInfoUploadForm"
+        novalidate
+        #f="ngForm">
+    <div class="row">
+      <div class="form-group">
+        <ul>
+          <li>
+            <div class="input-group">
+            <span class="input-group-addon">
+              <span>Attachment</span>
+            </span>
+              <input type="file"
+                     class="form-control"
+                     ng2FileSelect
+                     (onFileSelected)="ngOnAttachmentSelected($event)"
+                     [uploader]="_attachmentUploader"/>
+
+              <input name="attachmentCounter"
+                     type="number"
+                     step="1"
+                     class="hidden"
+                     [(ngModel)]="_iAttachmentCounter"
+                     value-validator="0"
+                     value-validator-operator=">">
+            </div>
+          </li>
+          <li>
+          <li>
+            <b>Profile</b>
+            <ul>
+              <li>
+                <div class="form-group">
+                  <div class="input-group">
+              <span class="input-group-addon">
+                <span>Name</span>
+              </span>
+                    <input name="profileName" class="form-control" [(ngModel)]="_oModel.profile.name">
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="input-group">
+              <span class="input-group-addon">
+                <span>Attachment</span>
+              </span>
+                  <input type="file"
+                         class="form-control"
+                         ng2FileSelect
+                         (onFileSelected)="ngOnProfileAttachmentSelected($event)"
+                         [uploader]="_profileAttachmentUploader"/>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <button class="btn btn-primary"
+                [disabled]="f.invalid"
+                (click)="ngOnSubmitClicked()">
+          <span>Upload</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div bsModal
+     #mdApiResponse="bs-modal"
+     class="modal fade"
+     tabindex="-1"
+     role="dialog" aria-labelledby="dialog-child-name">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-child-name" class="modal-title pull-left">API Response</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="ngOnModalBeingHidden()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li *ngFor="let message of _messages">{{message}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

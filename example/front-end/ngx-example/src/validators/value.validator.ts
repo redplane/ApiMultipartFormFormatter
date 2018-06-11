@@ -21,6 +21,8 @@ export class ValueValidator implements Validator {
   // Value of control.
   private _value: any;
 
+  // Comparision operator.
+  private _operator: string;
 
   @Input('value-validator')
   public get fnGetValidatorValue(): any {
@@ -30,6 +32,18 @@ export class ValueValidator implements Validator {
   @Input('value-validator')
   public set fnSetValidatorValue(v: any) {
     this._value = v;
+    if (this._onChange)
+      this._onChange();
+  }
+
+  @Input('value-validator-operator')
+  public get fnGetOperator(): string {
+    return this._operator;
+  }
+
+  @Input('value-validator-operator')
+  public set fnSetOperator(v: string) {
+    this._operator = v;
     if (this._onChange)
       this._onChange();
   }
@@ -51,13 +65,42 @@ export class ValueValidator implements Validator {
   validate(abstractControl: AbstractControl): ValidationErrors | null {
     // Get current value of control.
     let controlValue = abstractControl.value;
-    console.log(`Value: ${this._value} == ${controlValue} == ${this._value === controlValue}`);
-    if (this._value === controlValue)
-      return null;
+
+    switch (this._operator){
+      case '<':
+        console.log(`Control value: ${controlValue} < Value: ${this._value} = ${controlValue < this._value}`);
+        if (controlValue < this._value)
+          return null;
+        break;
+
+      case '<=':
+        console.log(`Control value: ${controlValue} <= Value: ${this._value} = ${controlValue <= this._value}`);
+        if (controlValue <= this._value)
+          return null;
+        break;
+
+      case '>=':
+        console.log(`Control value: ${controlValue} >= Value: ${this._value} = ${controlValue >= this._value}`);
+        if (controlValue >= this._value)
+          return null;
+        break;
+
+      case '>':
+        console.log(`Control value: ${controlValue} > Value: ${this._value} = ${controlValue > this._value}`);
+        if (controlValue > this._value)
+          return null;
+        break;
+
+      default:
+        console.log(`Control value: ${controlValue} == Value: ${this._value} = ${controlValue == this._value}`);
+        if (controlValue == this._value)
+          return null;
+        break;
+    }
 
     return {
       'value-validation': true
-    }
+    };
   }
 
   //#endregion

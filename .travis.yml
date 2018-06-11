@@ -1,35 +1,64 @@
-language: node_js
-node_js:
-- 9.8.0
-# Caching phrase.
-cache:
- directories:
-  - node_modules
+sudo: required
+matrix:
+ include:
+  - language: node_js
+    node_js:
+    - 9.8.0
+    env:
+     global:
+     - secure: "eytZJhR6cmDAE/C05+IxyjDLSNYq9DnIhheeGckw4j3gsHr9GWobb06Rv8R/oCOYygZD2vRtNWGnuZkgu0UHgPGy8VWrkoA4O951Hn6ExLFe/ElUDq6g5gG022W7dgU4rpWmLyDYkQM2oYHgwpEtxkW/GyRpUyCTcK7JoGN1CwPIjmB972sOWytRdlHwNZ9mt95VFfkMEroO9iOrAcTS6WUKkTBuoX/IopUzAnEEHwFvDXs9wwoQpgt0ASemXsEy5KCSsOR3hE0tXn1j/E2wAfY3OcR40BeAYniqLWpKZLhT352ZSR5SCcno2qXACGTyAQKXDOCMHLKmRSGT3lC/0DAXPSqJQ+T3CNjBKMwqcJXkj8GDl2O7PpoufhuLnV0J3LJZdLOfd1D7LqB7EIbwobL0pANU//X/UFchQsycFTowpAruYMx6W0xAq5yVG3XkMRff63XVj4An4OmfhzkICbfdz1RuFD2mlECBfGEXsG+ZPDsIyrc2+p4N/0Jl5KppKely/ghNIVyhCo3YbSeT3xXrms6tZ5YPcVeFki9d6omjjkwoxP4QWDhiufYMDrxlK5nw34opY71ZLhLmdV54+RRrbCtYeM4HMUHnxPq6PLuzg6SSQ1VGTnTqbesfeBuQ2Fl0yDXPx2RQTnDBkd8faomZRhGLA2IXB2rPJJMkNtw="
 
-env:
- global:
-  # FIREBASE_TOKEN.
-  - secure: "GA1LOEsmIinAHJBDTAQ1wL8SFm+JKwZCU6Yxn/5hQv8w8Y5wIDlwY1opaW3ZW7EjeAzsuvWWOnmCBo4sS260ZuQJDmHhUOK+JOPD+mmmkQ7TG2YfpZJ3xUrACX7Zyi4Xfn6om1N+vHJYj5jWIG6eo4ieqDS3s9nN/EYZ+PdvXhPTJ939WdyAbKIfvdbEwZF4y7ABm4bFfdaIH3imPlsenl8iLCISyhABH34OFDf2XVFnST+kLMefvdNXTZ3/EsWNVnBId0N/pgdrK8nV48kvJVsiS8JCNa6PRl2gWsjuI06iccnNkevxY/k2TMxFx/ni53cv99CIkB85crsvwFQJWHrwRWEdryTtrYNGbm8CG4DQFvmLFK+z5hqwGa0SHs4kNslPrEYXr+1mPRzoaU6Dcn+yLYF7cTK9sRSoeSuACYZQZ+3N/FhWcO3vT2AEQ4KTLkdkCeqa5NqgXwGsNfi7J1jhIZUmsqQ6/0poS74E7zzs+JHIpzaDPYAwQef3RtZ3EfXn4Kuq3/Udbd+pRtIJ7H23BHtQTtKfylUIawCwPhnpTGKLYfBqYSKIQo6PDw9+qMRQaKEyAZKDly5mUwpjajsDaI2M+EQIe44hW063Op/jrpwZvY43eC2qe1cv/aiQbb7mJHSmL3FLyWNJD3ji6dsHpsmVCECF8WG7ovgKQeA="
+    cache:
+     directories:
+     - "node_modules"
+
+    before_install:
+    - cd "./example/front-end/ngx-example"
+
+    install:
+    - npm i npm@latest -g
+    - npm install
+
+    before_script:
+    - npm install -g firebase-tools
+
+    script:
+    - npm build --prod
+
+    after_script:
+    - firebase deploy --project ngx-multipart-form-data --public dist --token=$FIREBASE_NGX_EXAMPLE
+
+  - language: node_js
+    node_js:
+     - 9.8.0
+    # Caching phrase.
+    cache:
+     directories:
+     - node_modules
+
+    env:
+     global:
+     # FIREBASE_TOKEN.
+     - secure: "GA1LOEsmIinAHJBDTAQ1wL8SFm+JKwZCU6Yxn/5hQv8w8Y5wIDlwY1opaW3ZW7EjeAzsuvWWOnmCBo4sS260ZuQJDmHhUOK+JOPD+mmmkQ7TG2YfpZJ3xUrACX7Zyi4Xfn6om1N+vHJYj5jWIG6eo4ieqDS3s9nN/EYZ+PdvXhPTJ939WdyAbKIfvdbEwZF4y7ABm4bFfdaIH3imPlsenl8iLCISyhABH34OFDf2XVFnST+kLMefvdNXTZ3/EsWNVnBId0N/pgdrK8nV48kvJVsiS8JCNa6PRl2gWsjuI06iccnNkevxY/k2TMxFx/ni53cv99CIkB85crsvwFQJWHrwRWEdryTtrYNGbm8CG4DQFvmLFK+z5hqwGa0SHs4kNslPrEYXr+1mPRzoaU6Dcn+yLYF7cTK9sRSoeSuACYZQZ+3N/FhWcO3vT2AEQ4KTLkdkCeqa5NqgXwGsNfi7J1jhIZUmsqQ6/0poS74E7zzs+JHIpzaDPYAwQef3RtZ3EfXn4Kuq3/Udbd+pRtIJ7H23BHtQTtKfylUIawCwPhnpTGKLYfBqYSKIQo6PDw9+qMRQaKEyAZKDly5mUwpjajsDaI2M+EQIe44hW063Op/jrpwZvY43eC2qe1cv/aiQbb7mJHSmL3FLyWNJD3ji6dsHpsmVCECF8WG7ovgKQeA="
   
-# Dependency installation phrase.
-before_install:
-- cd "./example/front-end/ng-example"
+     # Dependency installation phrase.
+     before_install:
+     - cd "./example/front-end/ng-example"
 
-install:
-- npm i npm@latest -g
-#- npm audit
-- npm install
+     install:
+     - npm i npm@latest -g
+     - npm install
 
-before_script:
-- npm install -g firebase-tools
+     before_script:
+     - npm install -g firebase-tools
 
-# Build phrase
-script:
-- npm run build
+     # Build phrase
+     script:
+     - npm run build
 
-# Custom deployment phrase.
-after_script:
-# Deploy website to firebase cloud.
-- firebase deploy --project ng-api-multipart-formdata --public ./src/dist --token $FIREBASE_TOKEN
+     # Custom deployment phrase.
+     after_script:
+     # Deploy website to firebase cloud.
+     - firebase deploy --project ng-api-multipart-formdata --public ./src/dist --token $FIREBASE_TOKEN
 
 
