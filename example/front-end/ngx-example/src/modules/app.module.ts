@@ -12,6 +12,7 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {HttpLoaderFactory} from '../factories/ngx-translate.factory';
 import {GuardModule} from '../guards/guard.module';
 import {SharedModule} from './shared/shared.module';
+import {ToastrModule} from 'ngx-toastr';
 
 //#region Module declaration
 
@@ -32,6 +33,7 @@ import {SharedModule} from './shared/shared.module';
     }),
 
     // Application modules.
+    ToastrModule.forRoot(),
     GuardModule.forRoot(),
     ServiceModule.forRoot(),
 

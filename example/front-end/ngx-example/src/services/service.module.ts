@@ -1,10 +1,14 @@
 import {NgModule, ModuleWithProviders} from '@angular/core';
-import {IAccountService} from '../interfaces/services/account-service.interface';
-import {AccountService} from './account.service';
 import {IAuthenticationService} from '../interfaces/services/authentication-service.interface';
 import {AuthenticationService} from './authentication.service';
+import {UploadService} from './upload.service';
+import {HttpClientModule} from '@angular/common/http';
 
-@NgModule({})
+@NgModule({
+  imports:[
+    HttpClientModule
+  ]
+})
 
 export class ServiceModule {
 
@@ -14,7 +18,7 @@ export class ServiceModule {
     return {
       ngModule: ServiceModule,
       providers: [
-        {provide: 'IAccountService', useClass: AccountService},
+        {provide: 'IUploadService', useClass: UploadService},
         {provide: 'IAuthenticationService', useClass: AuthenticationService}
       ]
     };

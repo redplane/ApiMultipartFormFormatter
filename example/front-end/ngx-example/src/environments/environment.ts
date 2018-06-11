@@ -6,5 +6,6 @@ import 'zone.js/dist/zone-error';
 
 export const environment = {
   production: false,
-  baseUrl: 'http://dxzxrjg36bzcbpete.stoplight-proxy.io'
+
+  baseUrl: 'http://localhost:51506'
 };
