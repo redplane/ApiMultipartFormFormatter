@@ -5,14 +5,14 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("FormMultipartEncodedMediaTypeFormatter")]
+[assembly: AssemblyTitle("ApiMultipartFormDataFormatter")]
 [assembly:
     AssemblyDescription(
         "A library for binding custom types (including files) when sending and receiving multipart encoded form data")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Alexander Kozlovskiy")]
-[assembly: AssemblyProduct("FormMultipartEncodedMediaTypeFormatter")]
-[assembly: AssemblyCopyright("Copyright © Alexander Kozlovskiy 2014")]
+[assembly: AssemblyCompany("Freelance")]
+[assembly: AssemblyProduct("ApiMultipartFormDataFormatter")]
+[assembly: AssemblyCopyright("Nguyen Duy Linh")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

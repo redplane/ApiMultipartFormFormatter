@@ -143,11 +143,17 @@ namespace ApiMultiPartFormData
             if (parameters == null || parameters.Count < 1)
                 return;
 
+            // Go through every part of parameters.
+            // If the parameter name is : Items[0][list]. Parsed params will be : Items, 0, list.
             for (var index = 0; index < parameters.Count; index++)
             {
+                // Find the next parameter index.
+                // If the current parameter is : Item, the next param will be : 0
+                var iNextIndex = index + 1;
+
                 // Find parameter key.
                 var key = parameters[index];
-                
+
                 // Numeric key is always about array.
                 if (IsNumeric(key))
                 {
@@ -160,25 +166,24 @@ namespace ApiMultiPartFormData
                         return;
 
                     // Find the index of parameter.
-                    var iCollectionIndex = 0;
-                    if (!int.TryParse(key, out iCollectionIndex))
+                    if (!int.TryParse(key, out var iCollectionIndex))
                         return;
 
                     // Add new property into list.
                     object val = null;
 
                     // This is the last key.
-                    if (index + 1 >= parameters.Count)
+                    if (iNextIndex >= parameters.Count)
                     {
-                        InitiateArrayMember(pointer, iCollectionIndex, propertyInfo, value);
+                        AddArrayMember(pointer, iCollectionIndex, propertyInfo, value);
                         return;
                     }
 
-                    val = InitiateArrayMember(pointer, iCollectionIndex, propertyInfo);
+                    val = AddArrayMember(pointer, iCollectionIndex, propertyInfo);
                     pointer = val;
 
                     // Find the property information of the next key.
-                    var nextKey = parameters[index + 1];
+                    var nextKey = parameters[iNextIndex];
                     propertyInfo = FindInstanceProperty(pointer, nextKey);
                     continue;
                 }
@@ -191,7 +196,7 @@ namespace ApiMultiPartFormData
                     return;
 
                 // This is the last parameter.
-                if (index + 1 >= parameters.Count)
+                if (iNextIndex >= parameters.Count)
                 {
                     propertyInfo.SetValue(pointer, Convert.ChangeType(value, propertyInfo.PropertyType));
                     return;
@@ -215,7 +220,8 @@ namespace ApiMultiPartFormData
                     if (IsList(propertyInfo.PropertyType))
                     {
                         pointer = propertyInfo.GetValue(pointer);
-                        InitiateArrayMember(pointer, -1, propertyInfo, value);
+                        if (iNextIndex >= parameters.Count)
+                            AddArrayMember(pointer, -1, propertyInfo, value);
                         continue;
                     }
 
@@ -233,12 +239,20 @@ namespace ApiMultiPartFormData
         /// <param name="propertyInfo"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        private object InitiateArrayMember(object pointer, int iCollectionIndex, PropertyInfo propertyInfo, object value = null)
+        private object AddArrayMember(object pointer, int iCollectionIndex, PropertyInfo propertyInfo, object value = null)
         {
-            var itemCount = (int)propertyInfo.PropertyType.GetProperty("Count").GetValue(pointer, null);
+            // Current member is an array, normally, it will have count property.
+            var itemCountProperty = propertyInfo.PropertyType.GetProperty("Count");
+            if (itemCountProperty == null)
+                return null;
+
+            // Find items number in the list.
+            var itemCount = (int)itemCountProperty.GetValue(pointer, null);
             var genericArguments = propertyInfo.PropertyType.GetGenericArguments();
 
-            //var iGenericListArgumentTotal = propertyInfo.PropertyType.GetMethod("Count").Invoke(pointer, new[] { null });
+            // Current index is invalid to the array, this means we will add a new item to the list.
+            // For example, the current array has 1 element, and the iCollectionIndex is 1.
+            // The item at the index is invalid, therefore, new item will be created.
             if (iCollectionIndex < 0 || iCollectionIndex > itemCount - 1)
             {
                 object listItem = null;
@@ -246,18 +260,28 @@ namespace ApiMultiPartFormData
                     listItem = value;
                 else
                     listItem = Activator.CreateInstance(propertyInfo.PropertyType.GetGenericArguments()[0]);
-                propertyInfo.PropertyType.GetMethod("Add").Invoke(pointer, new[] { listItem });
+
+                // Find the add method.
+                var addProperty = propertyInfo.PropertyType.GetMethod("Add");
+                if (addProperty != null)
+                    addProperty.Invoke(pointer, new[] { listItem });
                 return listItem;
             }
 
-            var commandSelectItem = typeof(Enumerable)
-                .GetMethod("ElementAt")
-                .MakeGenericMethod(genericArguments[0]);
+            // If the collection index is valid.
+            // For example, list contains 2 element, and we are accessing the first element. This is ok, we can do it by searching for that element and set the property value.
+            var findElementProperty = typeof(Enumerable)
+                .GetMethod("ElementAt");
 
-            // Find item at specific index.
-            return commandSelectItem.Invoke(pointer, new[] { pointer, iCollectionIndex });
+            if (findElementProperty != null)
+            {
+                var item = findElementProperty.MakeGenericMethod(genericArguments[0]);
+                return item.Invoke(pointer, new[] { pointer, iCollectionIndex });
+            }
+
+            return null;
         }
-        
+
 
         /// <summary>
         /// Find property information of an instance by using property name.
