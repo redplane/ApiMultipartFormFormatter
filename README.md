@@ -8,7 +8,7 @@
 To use this custom media format in your WEB API 2 project. Please following these steps:
 
  * Install the lastest nuget package by using command `Install-Package ApiMultipartFormDataFormatter`.
- * Open WebApiConfig.cs file and add the following command: `config.Formatters.Add(new ApiMultipartFormDataFormatter());`
+ * Open WebApiConfig.cs file and add the following command: `config.Formatters.Add(new MultipartFormDataFormatter());`
  	* For example:
  	```
     public static void Register(HttpConfiguration config)
@@ -24,7 +24,7 @@ To use this custom media format in your WEB API 2 project. Please following thes
             new {id = RouteParameter.Optional}
         );
 
-        config.Formatters.Add(new ApiMultipartFormDataFormatter());
+        config.Formatters.Add(new MultipartFormDataFormatter());
     }
     ``` 	
     
@@ -96,8 +96,25 @@ public class AccountRegistrationViewModel
 * Currently, this formatter cannot deal with interfaces such as: IAccount, IList, IEnumerable, ... To use it with a collection, please specify : List, Enumerable, ....
 * For a collection, please use List, Enumerable, ... instead of [] (array). This feature will be updated later.
 
-## NOTE:
+## Change log:
+* 1.0.0:
+    * Initial release.
+
+* 1.0.1:
+    * Fixed issue about list serialization, mentioned [here](https://github.com/redplane/ApiMultipartFormFormatter/issues/2)
+
+* 1.0.2:
+    * Incorrect release version. Please skip this.
+
+* 1.0.3:
+    * Prevent dependencies such as `NewtonSoft.Json`, ... from being compiled and included in release nuget package. Therefore, the package size is smaller.
+    * Prevent dependencies from being removed when `ApiMultipartFormDataFormatter` nuget is uninstalled.
+
+## IMPORTANT NOTE:
 * While sending the request, please make sure not to attach `Content-Type` in header or make `Content-Type` be `NULL` 
+* `ApiMultipartFormDataFormatter` is obsolete and will be removed in version after 1.0.3. Please use `MultipartFormDataFormatter` instead.
+
+
 ### Images:
 
 [Postman request](http://i.imgur.com/q8Elrwv.png)

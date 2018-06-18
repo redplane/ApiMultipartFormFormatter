@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ApiStudentController.cs" />
     <Compile Include="Controllers\ApiUploadController.cs" />
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Models\User.cs" />
@@ -108,8 +109,10 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\BasicUploadViewModel.cs" />
     <Compile Include="ViewModels\ClientResponseViewModel.cs" />
+    <Compile Include="ViewModels\StudentViewModel.cs" />
     <Compile Include="ViewModels\UploadAttachmentListViewModel.cs" />
     <Compile Include="ViewModels\UploadNestedInfoViewModel.cs" />
+    <Compile Include="ViewModels\UploadStudentViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
