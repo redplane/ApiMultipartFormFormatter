@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 using System.Web.Http;
-using ApiBackEnd.ViewModels;
+using MultipartFormDataMyGet.ViewModels;
 
-namespace ApiBackEnd.Controllers
+namespace MultipartFormDataMyGet.Controllers
 {
     [RoutePrefix("api/upload")]
     public class ApiUploadController : ApiController
@@ -23,12 +22,11 @@ namespace ApiBackEnd.Controllers
                 info = new BasicUploadViewModel();
                 Validate(info);
             }
-            
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+
             var messages = new List<string>();
-            messages.Add($"Author information: {info.Author.FullName}");
             messages.Add($"Attachment information: (Mime) {info.Attachment.MediaType} - (File name) {info.Attachment.Name}");
 
             return Ok(new ClientResponseViewModel(messages));
@@ -53,11 +51,6 @@ namespace ApiBackEnd.Controllers
                 return BadRequest(ModelState);
 
             var messages = new List<string>();
-            if (info.Author == null)
-                messages.Add("No author information has been uploaded");
-            else
-                messages.Add($"Author information: {info.Author.FullName}");
-
             foreach (var attachment in info.Attachments)
                 messages.Add($"Attachment information: (Mime) {attachment.MediaType} - (File name) {attachment.Name}");
 
@@ -86,22 +79,9 @@ namespace ApiBackEnd.Controllers
             var attachment = info.Attachment;
             messages.Add($"Root attachment information: (Mime) {attachment.MediaType} - (File name) {attachment.Name}");
 
-            var profile = info.Profile;
-            if (profile != null)
-            {
-                messages.Add($"Profile has been uploaded.");
-                messages.Add($"Profile name : {profile.Name}");
-
-                var profileAttachment = profile.Attachment;
-                messages.Add(
-                    $"Profile attachment information: (Mime) {profileAttachment.MediaType} - (File name) {profileAttachment.Name}");
-            }
-            else
-                messages.Add("No profile is added");
-            
             return Ok(new ClientResponseViewModel(messages));
         }
-        
+
 
         #endregion
     }

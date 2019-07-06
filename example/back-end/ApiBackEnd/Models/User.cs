@@ -6,6 +6,8 @@ namespace ApiBackEnd.Models
     {
         #region Properties
 
+        public string Classification { get; set; }
+
         public string FullName { get; set; }
         
         #endregion

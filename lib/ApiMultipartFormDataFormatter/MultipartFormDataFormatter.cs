@@ -11,9 +11,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Dependencies;
-using ApiMultiPartFormData.Interfaces;
 using ApiMultiPartFormData.Models;
 using ApiMultiPartFormData.Services.Implementations;
+using ApiMultiPartFormData.Services.Interfaces;
 
 namespace ApiMultiPartFormData
 {
@@ -203,7 +203,7 @@ namespace ApiMultiPartFormData
 
                     // Find the index of parameter.
                     if (!int.TryParse(key, out var iCollectionIndex))
-                        return;
+                        iCollectionIndex = -1;
 
                     // Add new property into list.
                     object val = null;
@@ -240,7 +240,7 @@ namespace ApiMultiPartFormData
                     return;
                 }
 
-                // Find property value.
+                // Find targeted value.
                 var targetedValue = propertyInfo.GetValue(pointer);
 
                 // Value doesn't exist.
@@ -253,21 +253,20 @@ namespace ApiMultiPartFormData
 
                     propertyInfo.SetValue(pointer, targetedValue);
                     pointer = targetedValue;
+                    continue;
                 }
-                else
-                {
-                    // Value is list.
-                    if (IsList(propertyInfo.PropertyType))
-                    {
-                        pointer = propertyInfo.GetValue(pointer);
-                        if (iNextIndex >= parameters.Count)
-                            AddArrayMember(pointer, -1, propertyInfo, value);
-                        continue;
-                    }
 
-                    // Go to next key
-                    pointer = targetedValue;
+                // Value is list.
+                if (IsList(propertyInfo.PropertyType))
+                {
+                    pointer = propertyInfo.GetValue(pointer);
+                    if (iNextIndex >= parameters.Count)
+                        AddArrayMember(pointer, -1, propertyInfo, value);
+                    continue;
                 }
+
+                // Go to next key
+                pointer = targetedValue;
             }
         }
 
@@ -276,20 +275,28 @@ namespace ApiMultiPartFormData
         /// </summary>
         /// <returns></returns>
         protected Task<object> BuildRequestModelValueAsync(PropertyInfo propertyInfo, object value,
-            IEnumerable<object> services)
+            IList<object> services)
         {
-            IMultiPartFormDataModelBinderService[] availableServices;
-            if (services is IEnumerable<IMultiPartFormDataModelBinderService> multiPartFormDataModelBinderServices)
-                availableServices = multiPartFormDataModelBinderServices.ToArray();
-            else
-                availableServices = new IMultiPartFormDataModelBinderService[]
-                    {new BaseMultiPartFormDataModelBinderService()};
-
             // Output property value.
             var outputPropertyValue = value;
+            var hasModelBinderCalled = false;
 
-            foreach (var availableService in availableServices)
-                outputPropertyValue = availableService.BuildModel(propertyInfo, outputPropertyValue);
+            foreach (var availableService in services)
+            {
+                if (availableService == null ||
+                    !(availableService is IMultiPartFormDataModelBinderService multiPartFormDataModelBinderService))
+                    continue;
+
+                outputPropertyValue = multiPartFormDataModelBinderService.BuildModel(propertyInfo, outputPropertyValue);
+                hasModelBinderCalled = true;
+            }
+
+            // Model binder hasn't been called.
+            if (!hasModelBinderCalled)
+            {
+                outputPropertyValue = new BaseMultiPartFormDataModelBinderService()
+                    .BuildModel(propertyInfo, outputPropertyValue);
+            }
 
             return Task.FromResult(outputPropertyValue);
         }
@@ -394,8 +401,7 @@ namespace ApiMultiPartFormData
             if (!type.IsGenericType)
                 return false;
 
-            var genericTypeDefinition = type.GetGenericTypeDefinition();
-            return genericTypeDefinition == typeof(List<>);
+            return type.GetInterface(typeof(IEnumerable<>).FullName) != null;
         }
 
         /// <summary>
@@ -407,8 +413,9 @@ namespace ApiMultiPartFormData
             if (FindContentDispositionParametersInterceptor == null)
                 return contentDispositionName.Replace("[", ",")
                     .Replace("]", ",")
+                    .Replace(".", ",")
                     .Split(',')
-                    .Where(x => !string.IsNullOrEmpty(x))
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
                     .ToList();
 
             return FindContentDispositionParametersInterceptor(contentDispositionName);

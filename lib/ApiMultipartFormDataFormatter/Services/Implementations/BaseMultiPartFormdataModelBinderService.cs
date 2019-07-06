@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
-using ApiMultiPartFormData.Interfaces;
+using ApiMultiPartFormData.Services.Interfaces;
 
 namespace ApiMultiPartFormData.Services.Implementations
 {
@@ -23,6 +24,7 @@ namespace ApiMultiPartFormData.Services.Implementations
             // Get property type.
             var propertyType = propertyInfo.PropertyType;
 
+            // Property is GUID.
             if (propertyType == typeof(Guid) && Guid.TryParse(value.ToString(), out var guid))
                 return guid;
 

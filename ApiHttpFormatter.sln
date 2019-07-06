@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{D1AF8BFE-0E72-47BD-815A-EACCC58B3698}"
 EndProject
@@ -11,13 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "miscellaneous", "miscellane
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiMultiPartFormData", "lib\ApiMultipartFormDataFormatter\ApiMultiPartFormData.csproj", "{1F851995-9C6B-4B34-82AF-AC4E075F00C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AttributeParser", "miscellaneous\AttributeParser\AttributeParser.csproj", "{690646DF-E2E1-4E9C-BAE6-D6474AD2FF69}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "back-end", "back-end", "{33256EF5-1C56-410B-B0C4-2C5F096B894D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "front-end", "front-end", "{00F660F1-4945-4A34-81A6-1643AC415861}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiBackEnd", "example\back-end\ApiBackEnd\ApiBackEnd.csproj", "{3A670874-7BD9-4534-8E82-209532C73EA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "multipart-formdata-my-get", "miscellaneous\multipart-formdata-my-get\multipart-formdata-my-get.csproj", "{FEBDABB3-D980-4F04-A4F5-1D34E4F249A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,24 +29,24 @@ Global
 		{1F851995-9C6B-4B34-82AF-AC4E075F00C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F851995-9C6B-4B34-82AF-AC4E075F00C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F851995-9C6B-4B34-82AF-AC4E075F00C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{690646DF-E2E1-4E9C-BAE6-D6474AD2FF69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{690646DF-E2E1-4E9C-BAE6-D6474AD2FF69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{690646DF-E2E1-4E9C-BAE6-D6474AD2FF69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{690646DF-E2E1-4E9C-BAE6-D6474AD2FF69}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3A670874-7BD9-4534-8E82-209532C73EA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3A670874-7BD9-4534-8E82-209532C73EA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A670874-7BD9-4534-8E82-209532C73EA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A670874-7BD9-4534-8E82-209532C73EA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEBDABB3-D980-4F04-A4F5-1D34E4F249A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEBDABB3-D980-4F04-A4F5-1D34E4F249A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEBDABB3-D980-4F04-A4F5-1D34E4F249A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEBDABB3-D980-4F04-A4F5-1D34E4F249A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1F851995-9C6B-4B34-82AF-AC4E075F00C2} = {D1AF8BFE-0E72-47BD-815A-EACCC58B3698}
-		{690646DF-E2E1-4E9C-BAE6-D6474AD2FF69} = {9F31F168-29BE-4963-B65B-9E83FE2319B6}
 		{33256EF5-1C56-410B-B0C4-2C5F096B894D} = {B4C2717A-E126-4D7B-92D5-A3F892AEF116}
 		{00F660F1-4945-4A34-81A6-1643AC415861} = {B4C2717A-E126-4D7B-92D5-A3F892AEF116}
 		{3A670874-7BD9-4534-8E82-209532C73EA3} = {33256EF5-1C56-410B-B0C4-2C5F096B894D}
+		{FEBDABB3-D980-4F04-A4F5-1D34E4F249A4} = {9F31F168-29BE-4963-B65B-9E83FE2319B6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {10EA0904-FDA3-42B7-848A-BA812777A2AE}

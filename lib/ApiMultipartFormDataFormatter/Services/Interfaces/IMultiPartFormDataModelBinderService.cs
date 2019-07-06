@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace ApiMultiPartFormData.Interfaces
+namespace ApiMultiPartFormData.Services.Interfaces
 {
     public interface IMultiPartFormDataModelBinderService
     {
