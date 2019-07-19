@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using ApiMultiPartFormData.Services.Interfaces;
 
@@ -22,12 +23,34 @@ namespace ApiMultiPartFormData.Services.Implementations
 
             // Get property type.
             var propertyType = propertyInfo.PropertyType;
+            var underlyingType = Nullable.GetUnderlyingType(propertyType);
 
             // Property is GUID.
-            if ((propertyType == typeof(Guid) || propertyType == typeof(Guid?)) && Guid.TryParse(value.ToString(), out var guid))
+            if ((propertyType == typeof(Guid) || underlyingType == typeof(Guid)) && Guid.TryParse(value.ToString(), out var guid))
                 return guid;
 
+            // Property is Enum.
+            if (propertyType.IsEnum)
+                return convertToEnum(propertyType, value.ToString());
+            if (underlyingType != null && underlyingType.IsEnum)
+                return convertToEnum(underlyingType, value.ToString());
+
             return Convert.ChangeType(value, propertyType);
+        }
+
+        object convertToEnum(Type type, string val)
+        {
+//            if (type.GetEnumNames().Contains(val, StringComparer.InvariantCultureIgnoreCase))
+//                return Enum.Parse(type, val, true);
+//
+//            if (!int.TryParse(val, out var num)) return null;
+
+//            return Enum.ToObject(type, num);
+
+            if (int.TryParse(val, out var num))
+                return Enum.ToObject(type, num);
+
+            return Enum.Parse(type, val, true);
         }
 
         #endregion
