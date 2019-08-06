@@ -1,18 +1,8 @@
 ﻿namespace ApiMultiPartFormData.Models
 {
-    public class HttpFile
+    public class HttpFile : HttpFileBase
     {
         #region Properties
-
-        /// <summary>
-        ///     Name of file.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        ///     Type of file.
-        /// </summary>
-        public string MediaType { get; set; }
 
         /// <summary>
         ///     Serialized byte stream of file.
