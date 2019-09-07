@@ -8,9 +8,12 @@
     <owners>Linh Nguyen</owners>
     <projectUrl>https://github.com/redplane/ApiMultipartFormFormatter</projectUrl>
     <iconUrl>http://icons.veryicon.com/png/System/Sticker%20Pack%201/Package.png</iconUrl>
+    <license type="expression">MIT</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>An enhanced formatter for multipart/form-data data in web api 2. This package can deal with nested properties and files.</description>
-    <releaseNotes>Prevented dependency libraries from being compiled and included into the release package.</releaseNotes>
+    <releaseNotes>
+      New features and bug fixing.
+    </releaseNotes>
     <copyright>Copyright 2018</copyright>
     <tags>multipart multipart/form-data form-data formatter</tags>
     <dependencies>
