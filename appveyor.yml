@@ -7,30 +7,58 @@ only_commits:
   - example/back-end/ApiBackEnd/
 
 environment:
+  global:
+    azureWebDemoAccountName:
+      secure: 7a7dXUDl0K2pF+j2TcKMYM3EoBQA9CM0GAe3OIqevlc=
+
+    azureWebDemoAccountPassword:
+      secure: BMVUyCtkJ9EcXWjJxv1rSkUezXyEGE098lDnGlAAcx959P8zTSfhiT9WVb0o/1EX++h7FP1ZILge3Qun4t4klw==
+
+    myGetApiKey:
+      secure: 0HqMlO4KT03m1Obda0ta46zbO1EgtiSouotet2O7J7QU5SMEJfrv+GgM0cuNPL9l
+
   matrix:
   - projectRelativePath: '"./example/back-end/ApiBackEnd/ApiBackEnd.csproj"'
     deployOnBuild: true
     publishProfile: '"Folder build"'
+    buildConfiguration: 'Release'
+    
   - projectRelativePath: ./lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj
     deployOnBuild: false
     publishProfile: '""'
+    buildConfiguration: 'Debug'
     
 build_script:
 - cmd: >-
     nuget restore
 
-    msbuild %projectRelativePath% /p:DeployOnBuild=%deployOnBuild% /p:PublishProfile=%publishProfile%
+    msbuild %projectRelativePath% /p:DeployOnBuild=%deployOnBuild% /p:PublishProfile=%publishProfile%  /p:Configuration=%buildConfiguration%
 
 artifacts:
 - path: ./example/back-end/ApiBackEnd/bin/Release/PublishOutput
   name: Azure deployment
   type: WebDeployPackage
-  
+
+- path: .lib/ApiMultipartFormDataFormatter/bin/Debug/ApiMultipartFormDataFormatter.*.nupkg
+  name: Nuget deployment
+  type: NuGetPackage
+
 deploy:
+  # Demo website deployment.
 - provider: WebDeploy
   server: https://apimultipartformdataservice.scm.azurewebsites.net:443/msdeploy.axd?site=ApiMultipartFormDataService
   website: ApiMultipartFormDataService
-  username: $ApiMultipartFormDataService
-  password:
-    secure: BMVUyCtkJ9EcXWjJxv1rSkUezXyEGE098lDnGlAAcx959P8zTSfhiT9WVb0o/1EX++h7FP1ZILge3Qun4t4klw==
+  username: %azureWebDemoAccountName%
+  password: %azureWebDemoAccountPassword%
   artifact: Azure deployment
+  on:
+    branch: feature
+
+  # MyGet deployment.
+- provider: NuGet
+  server: https://www.myget.org/F/apimultipartformdataformatter
+  api_key: %myGetApiKey%
+  skip_symbols: false
+  artifact: Nuget deployment
+  on:
+    branch: feature

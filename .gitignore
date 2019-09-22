@@ -1,0 +1,10 @@
+/lib/ApiMultipartFormDataFormatter/bin
+/lib/ApiMultipartFormDataFormatter/obj
+/.vs
+/example/back-end/ApiBackEnd/obj
+/example/back-end/ApiBackEnd/bin
+/miscellaneous/multipart-formdata-my-get/obj
+/miscellaneous/multipart-formdata-my-get/bin
+/packages
+/example/back-end/ApiBackEnd/ApiBackEnd.csproj.user
+/miscellaneous/multipart-formdata-my-get/multipart-formdata-my-get.csproj.user

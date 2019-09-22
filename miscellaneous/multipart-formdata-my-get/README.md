@@ -11,7 +11,7 @@
 ### WEB API 2 implementation:
 To use this custom media format in your WEB API 2 project. Please following these steps:
 
- * Install the lastest nuget package by using command `Install-Package ApiMultipartFormDataFormatter`.
+ * Install the lastest nuget package by using command `Install-Package ApiMultipartFormDataFormatter` or find it on [nuget.org](https://www.nuget.org/packages/ApiMultipartFormDataFormatter/)
  * Open WebApiConfig.cs file and add the following command: `config.Formatters.Add(new MultipartFormDataFormatter());`
  
  	**WebApiConfig.cs:**

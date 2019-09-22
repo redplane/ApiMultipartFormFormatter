@@ -10,6 +10,8 @@ namespace MultipartFormDataMyGet.ViewModels
 
         public Guid Id { get; set; }
 
+        public Guid? AttachmentId { get; set; }
+
         /// <summary>
         /// Attachment.
         /// </summary>

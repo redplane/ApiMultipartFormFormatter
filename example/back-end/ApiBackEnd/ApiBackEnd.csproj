@@ -115,6 +115,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ApiStudentController.cs" />
     <Compile Include="Controllers\ApiUploadController.cs" />
+    <Compile Include="Enumerations\StudentTypes.cs" />
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
