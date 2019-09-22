@@ -142,6 +142,10 @@ public class BaseMultiPartFormDataModelBinderService : IMultiPartFormDataModelBi
 
 ## Change log:
 
+* 2.1.0:
+	- Supported extended binding support from [pull request #6](https://github.com/redplane/ApiMultipartFormFormatter/pull/6) by [everfrown](https://github.com/everfrown)
+	
+	
 * 1.0.4:
     * Fixed bug [#3](https://github.com/redplane/ApiMultipartFormFormatter/issues/3) : *Bad request while trying casting string to GUID*
     * Added `IMultiPartFormDataModelBinderService` for intercepting model serialization.  

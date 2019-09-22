@@ -17,31 +17,28 @@ environment:
     myGetApiKey:
       secure: 0HqMlO4KT03m1Obda0ta46zbO1EgtiSouotet2O7J7QU5SMEJfrv+GgM0cuNPL9l
 
-  matrix:
-  - projectRelativePath: '"./example/back-end/ApiBackEnd/ApiBackEnd.csproj"'
-    deployOnBuild: true
-    publishProfile: '"Folder build"'
-    buildConfiguration: 'Release'
-    
-  - projectRelativePath: ./lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj
-    deployOnBuild: false
-    publishProfile: '""'
-    buildConfiguration: 'Debug'
-    
-build_script:
-- cmd: >-
-    nuget restore
+    nugetApiKey:
+      secure: 7CpOZ0B3KsW3sFmCSb3XxHFpba52HEH5gGkb7g9NK93AkTkl339pjo6AkDsDUboa
 
-    msbuild %projectRelativePath% /p:DeployOnBuild=%deployOnBuild% /p:PublishProfile=%publishProfile%  /p:Configuration=%buildConfiguration%
+build_script:
+  # Restore nuget packages.
+  - nuget restore
+
+  # Build demo page
+  - msbuild "./example/back-end/ApiBackEnd/ApiBackEnd.csproj" /p:DeployOnBuild=true /p:PublishProfile="Folder build"  /p:Configuration="Release"
+
+  # Build library.
+  - msbuild "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" /p:Configuration="Debug"
+  - nuget pack "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" -OutputDirectory "./lib/ApiMultipartFormDataFormatter/bin/Debug"
 
 artifacts:
 - path: ./example/back-end/ApiBackEnd/bin/Release/PublishOutput
   name: Azure deployment
   type: WebDeployPackage
 
-- path: .lib/ApiMultipartFormDataFormatter/bin/Debug/ApiMultipartFormDataFormatter.*.nupkg
+- path: lib/ApiMultipartFormDataFormatter/bin/Debug/ApiMultipartFormDataFormatter.*.nupkg
   name: Nuget deployment
-  type: NuGetPackage
+  type: WebDeployPackage
 
 deploy:
   # Demo website deployment.
@@ -62,3 +59,11 @@ deploy:
   artifact: Nuget deployment
   on:
     branch: feature
+
+  # Nuget deployment.
+- provider: NuGet
+  api_key: $(myGetApiKey)
+  skip_symbols: false
+  artifact: Nuget deployment
+  on:
+    branch: master

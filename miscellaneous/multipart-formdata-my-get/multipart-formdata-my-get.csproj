@@ -45,7 +45,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ApiMultiPartFormData, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ApiMultipartFormDataFormatter.2.1.0\lib\net45\ApiMultiPartFormData.dll</HintPath>
+      <HintPath>packages\ApiMultipartFormDataFormatter.2.1.0\lib\net45\ApiMultiPartFormData.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data.DataSetExtensions" />
