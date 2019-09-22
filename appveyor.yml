@@ -48,8 +48,8 @@ deploy:
 - provider: WebDeploy
   server: https://apimultipartformdataservice.scm.azurewebsites.net:443/msdeploy.axd?site=ApiMultipartFormDataService
   website: ApiMultipartFormDataService
-  username: %azureWebDemoAccountName%
-  password: %azureWebDemoAccountPassword%
+  username: $(azureWebDemoAccountName)
+  password: $(azureWebDemoAccountPassword)
   artifact: Azure deployment
   on:
     branch: feature
@@ -57,7 +57,7 @@ deploy:
   # MyGet deployment.
 - provider: NuGet
   server: https://www.myget.org/F/apimultipartformdataformatter
-  api_key: %myGetApiKey%
+  api_key: $(myGetApiKey)
   skip_symbols: false
   artifact: Nuget deployment
   on:
