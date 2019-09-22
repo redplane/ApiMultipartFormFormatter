@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using ApiMultiPartFormData.Models;
+using MultipartFormDataMyGet.Enums;
 
 namespace MultipartFormDataMyGet.ViewModels
 {
@@ -17,6 +18,8 @@ namespace MultipartFormDataMyGet.ViewModels
         /// </summary>
         [Required]
         public HttpFile Attachment { get; set; }
+
+        public StudentTypes Type { get; set; }
 
         #endregion
     }
