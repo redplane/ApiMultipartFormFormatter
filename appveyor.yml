@@ -62,7 +62,7 @@ deploy:
 
   # Nuget deployment.
 - provider: NuGet
-  api_key: $(myGetApiKey)
+  api_key: $(nugetApiKey)
   skip_symbols: false
   artifact: Nuget deployment
   on:
