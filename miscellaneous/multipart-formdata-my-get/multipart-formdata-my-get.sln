@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "multipart-formdata-my-get", "multipart-formdata-my-get.csproj", "{FEBDABB3-D980-4F04-A4F5-1D34E4F249A4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FEBDABB3-D980-4F04-A4F5-1D34E4F249A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEBDABB3-D980-4F04-A4F5-1D34E4F249A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEBDABB3-D980-4F04-A4F5-1D34E4F249A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEBDABB3-D980-4F04-A4F5-1D34E4F249A4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B66C057C-76A8-4548-900E-507B416CDFBA}
+	EndGlobalSection
+EndGlobal

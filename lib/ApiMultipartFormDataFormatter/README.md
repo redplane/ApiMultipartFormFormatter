@@ -142,11 +142,20 @@ public class BaseMultiPartFormDataModelBinderService : IMultiPartFormDataModelBi
 
 ## Change log:
 
+* 2.1.0:
+    * Merge [pull request 6](https://github.com/redplane/ApiMultipartFormFormatter/pull/6) created by [everfrown](https://github.com/everfrown) which supported extended data types binding such as: 
+        - enum (string or number)
+        - guid
+        - and nullable value types
+    
+    * Removed ApiMultipartFormDataFormatter.cs class. Please use [MultipartFormDataFormatter.cs](https://github.com/redplane/ApiMultipartFormFormatter/blob/master/lib/ApiMultipartFormDataFormatter/MultipartFormDataFormatter.cs) instead.
+
 * 1.0.4:
     * Fixed bug [#3](https://github.com/redplane/ApiMultipartFormFormatter/issues/3) : *Bad request while trying casting string to GUID*
     * Added `IMultiPartFormDataModelBinderService` for intercepting model serialization.  
     * `ApiMultipartFormDataFormatter` now is obsoleted. An exception is thrown if this class is used. Please using `MultipartFormDataFormatter` instead.
-    * `FindContentDispositionParametersInterceptor`: Allow developer to custmize how parameter will be serialized. Please take a look at [MultipartFormDataFormatter.cs](https://github.com/redplane/ApiMultipartFormFormatter/blob/master/lib/ApiMultipartFormDataFormatter/MultipartFormDataFormatter.cs).
+    * `FindContentDispositionParametersInterceptor`: Allow developer to custmize how parameter will be serialized. Please take a look at [MultipartFormDataFormatter.cs](https://github.com/redplane/ApiMultipartFormFormatter/blob/master/lib/ApiMultipartFormDataFormatter/MultipartFormDataFormatter.cs)
+    
 * 1.0.3:
     * Prevent dependencies such as `NewtonSoft.Json`, ... from being compiled and included in release nuget package. Therefore, the package size is smaller.
     * Prevent dependencies from being removed when `ApiMultipartFormDataFormatter` nuget is uninstalled.

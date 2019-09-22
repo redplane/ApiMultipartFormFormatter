@@ -45,7 +45,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ApiMultiPartFormData, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\ApiMultipartFormDataFormatter.2.0.0\lib\net45\ApiMultiPartFormData.dll</HintPath>
+      <HintPath>packages\ApiMultipartFormDataFormatter.2.1.0\lib\net45\ApiMultiPartFormData.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -89,6 +89,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\UploadController.cs" />
+    <Compile Include="Enums\StudentTypes.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

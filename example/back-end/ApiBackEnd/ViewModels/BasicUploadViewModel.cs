@@ -11,6 +11,8 @@ namespace ApiBackEnd.ViewModels
 
         public Guid Id { get; set; }
 
+        public Guid? AttachmentId { get; set; }
+
         /// <summary>
         /// Author information.
         /// </summary>

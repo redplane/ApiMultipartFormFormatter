@@ -7,30 +7,63 @@ only_commits:
   - example/back-end/ApiBackEnd/
 
 environment:
-  matrix:
-  - projectRelativePath: '"./example/back-end/ApiBackEnd/ApiBackEnd.csproj"'
-    deployOnBuild: true
-    publishProfile: '"Folder build"'
-  - projectRelativePath: ./lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj
-    deployOnBuild: false
-    publishProfile: '""'
-    
-build_script:
-- cmd: >-
-    nuget restore
+  global:
+    azureWebDemoAccountName:
+      secure: 7a7dXUDl0K2pF+j2TcKMYM3EoBQA9CM0GAe3OIqevlc=
 
-    msbuild %projectRelativePath% /p:DeployOnBuild=%deployOnBuild% /p:PublishProfile=%publishProfile%
+    azureWebDemoAccountPassword:
+      secure: BMVUyCtkJ9EcXWjJxv1rSkUezXyEGE098lDnGlAAcx959P8zTSfhiT9WVb0o/1EX++h7FP1ZILge3Qun4t4klw==
+
+    myGetApiKey:
+      secure: 0HqMlO4KT03m1Obda0ta46zbO1EgtiSouotet2O7J7QU5SMEJfrv+GgM0cuNPL9l
+
+    nugetApiKey:
+      secure: 7CpOZ0B3KsW3sFmCSb3XxHFpba52HEH5gGkb7g9NK93AkTkl339pjo6AkDsDUboa
+
+build_script:
+  # Restore nuget packages.
+  - nuget restore
+
+  # Build demo page
+  - msbuild "./example/back-end/ApiBackEnd/ApiBackEnd.csproj" /p:DeployOnBuild=true /p:PublishProfile="Folder build"  /p:Configuration="Release"
+
+  # Build library.
+  - msbuild "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" /p:Configuration="Debug"
+  - nuget pack "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" -OutputDirectory "./lib/ApiMultipartFormDataFormatter/bin/Debug"
 
 artifacts:
 - path: ./example/back-end/ApiBackEnd/bin/Release/PublishOutput
   name: Azure deployment
   type: WebDeployPackage
-  
+
+- path: lib/ApiMultipartFormDataFormatter/bin/Debug/ApiMultipartFormDataFormatter.*.nupkg
+  name: Nuget deployment
+  type: WebDeployPackage
+
 deploy:
+  # Demo website deployment.
 - provider: WebDeploy
   server: https://apimultipartformdataservice.scm.azurewebsites.net:443/msdeploy.axd?site=ApiMultipartFormDataService
   website: ApiMultipartFormDataService
-  username: $ApiMultipartFormDataService
-  password:
-    secure: BMVUyCtkJ9EcXWjJxv1rSkUezXyEGE098lDnGlAAcx959P8zTSfhiT9WVb0o/1EX++h7FP1ZILge3Qun4t4klw==
+  username: $(azureWebDemoAccountName)
+  password: $(azureWebDemoAccountPassword)
   artifact: Azure deployment
+  on:
+    branch: feature
+
+  # MyGet deployment.
+- provider: NuGet
+  server: https://www.myget.org/F/apimultipartformdataformatter
+  api_key: $(myGetApiKey)
+  skip_symbols: false
+  artifact: Nuget deployment
+  on:
+    branch: feature
+
+  # Nuget deployment.
+- provider: NuGet
+  api_key: $(myGetApiKey)
+  skip_symbols: false
+  artifact: Nuget deployment
+  on:
+    branch: master
