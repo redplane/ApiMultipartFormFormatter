@@ -121,6 +121,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\NotImplementedMultipartFormDataModelBinderService.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\BasicUploadStreamedViewModel.cs" />
     <Compile Include="ViewModels\BasicUploadViewModel.cs" />
     <Compile Include="ViewModels\ClientResponseViewModel.cs" />
     <Compile Include="ViewModels\StudentViewModel.cs" />

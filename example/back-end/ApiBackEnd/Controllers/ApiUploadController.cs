@@ -35,6 +35,30 @@ namespace ApiBackEnd.Controllers
         }
 
         /// <summary>
+        /// Upload attachment to service end-point using streaming.
+        /// </summary>
+        /// <returns></returns>
+        [Route("basic-upload-streamed")]
+        [HttpPost]
+        public IHttpActionResult BasicUploadStreamed(BasicUploadStreamedViewModel info)
+        {
+            if (info == null)
+            {
+                info = new BasicUploadStreamedViewModel();
+                Validate(info);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var messages = new List<string>();
+            messages.Add($"Author information: {info.Author.FullName}");
+            messages.Add($"Attachment information: (Mime) {info.StreamedAttachment.MediaType} - (File name) {info.StreamedAttachment.Name}");
+
+            return Ok(new ClientResponseViewModel(messages));
+        }
+
+        /// <summary>
         /// Upload a list of attachment with author information.
         /// </summary>
         /// <param name="info"></param>

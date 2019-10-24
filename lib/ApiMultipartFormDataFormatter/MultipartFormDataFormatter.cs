@@ -125,17 +125,27 @@ namespace ApiMultiPartFormData
 
                         // Content is a file.
                         // File retrieved from client-side.
-                        HttpFile file;
+
+                        HttpFileBase file = null;
 
                         // set null if no content was submitted to have support for [Required]
                         if (httpContent.Headers.ContentLength.GetValueOrDefault() > 0)
-                            file = new HttpFile(
-                                httpContent.Headers.ContentDisposition.FileName.Trim('"'),
-                                httpContent.Headers.ContentType.MediaType,
-                                await httpContent.ReadAsByteArrayAsync()
-                            );
-                        else
-                            file = null;
+                        {
+                            if (IsStreamingRequested(instance, contentParameter))
+                            {
+                                file = new StreamedHttpFile(
+                                    httpContent.Headers.ContentDisposition.FileName.Trim('"'),
+                                    httpContent.Headers.ContentType.MediaType,
+                                    await httpContent.ReadAsStreamAsync());
+                            }
+                            else
+                            {
+                                file = new HttpFile(
+                                    httpContent.Headers.ContentDisposition.FileName.Trim('"'),
+                                    httpContent.Headers.ContentType.MediaType,
+                                    await httpContent.ReadAsByteArrayAsync());
+                            }
+                        }
 
                         await BuildRequestModelAsync(instance, parameterParts, file, dependencyScope);
                     }
@@ -378,6 +388,11 @@ namespace ApiMultiPartFormData
                 instance.GetType()
                     .GetProperties()
                     .FirstOrDefault(x => name.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        private bool IsStreamingRequested(object instance, string contentParameter)
+        {
+            return instance.GetType().GetProperty(contentParameter)?.PropertyType == typeof(StreamedHttpFile);
         }
 
         /// <summary>

@@ -53,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\HttpFileBase.cs" />
+    <Compile Include="Models\StreamedHttpFile.cs" />
     <Compile Include="Services\Implementations\BaseMultiPartFormDataModelBinderService.cs" />
     <Compile Include="Services\Interfaces\IMultiPartFormDataModelBinderService.cs" />
     <Compile Include="Models\HttpFile.cs" />
