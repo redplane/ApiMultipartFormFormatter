@@ -19,20 +19,15 @@ using ApiMultiPartFormData.Services.Interfaces;
 
 namespace ApiMultiPartFormData
 {
-    /// <summary>
-    ///     Handler for content disposition name analyzer.
-    /// </summary>
-    /// <param name="contentDispositionName"></param>
-    /// <returns></returns>
-    public delegate List<string> FindContentDispositionParametersHandler(string contentDispositionName);
-
     public class MultipartFormDataFormatter : MediaTypeFormatter
     {
         #region Constructor
 
-        public MultipartFormDataFormatter(IEnumerable<IModelBinderService> modelBinderServices = null)
+        public MultipartFormDataFormatter(IEnumerable<IModelBinderService> modelBinderServices = null,
+            IEnumerable<ICollectionBinderService> collectionBinderServices = null)
         {
             _modelBinderServices = modelBinderServices?.ToArray();
+            _collectionBinderServices = collectionBinderServices?.ToArray();
 
             if (_modelBinderServices == null || _modelBinderServices.Length < 1)
             {
@@ -45,6 +40,14 @@ namespace ApiMultiPartFormData
                 };
             }
 
+            if (_collectionBinderServices == null || _collectionBinderServices.Length < 1)
+            {
+                _collectionBinderServices = new ICollectionBinderService[]
+                {
+                    new DefaultCollectionBinderService()
+                };
+            }
+
             // Register multipart/form-data as the supported media type.
             SupportedMediaTypes.Add(new MediaTypeHeaderValue(SupportedMediaType));
         }
@@ -54,6 +57,8 @@ namespace ApiMultiPartFormData
         #region Properties
 
         private readonly IModelBinderService[] _modelBinderServices;
+
+        private readonly ICollectionBinderService[] _collectionBinderServices;
 
         private const string SupportedMediaType = "multipart/form-data";
 
@@ -94,10 +99,10 @@ namespace ApiMultiPartFormData
         /// <param name="type"></param>
         /// <param name="stream"></param>
         /// <param name="content"></param>
-        /// <param name="formatterLogger"></param>
+        /// <param name="logger"></param>
         /// <returns></returns>
         public override async Task<object> ReadFromStreamAsync(Type type, Stream stream, HttpContent content,
-            IFormatterLogger formatterLogger)
+            IFormatterLogger logger)
         {
             // Type is invalid.
             if (type == null)
@@ -107,61 +112,54 @@ namespace ApiMultiPartFormData
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
-            // Find dependency resolver.
-            var dependencyResolver = GlobalConfiguration.Configuration.DependencyResolver;
-            if (dependencyResolver == null)
-                throw new ArgumentException("Dependency resolver is required.");
-
-            using (var dependencyScope = dependencyResolver.BeginScope())
+            try
             {
-                try
+                // load multipart data into memory 
+                var multipartProvider = await content.ReadAsMultipartAsync();
+                var httpContents = multipartProvider.Contents;
+
+                // Create an instance from specific type.
+                var instance = Activator.CreateInstance(type);
+
+                foreach (var httpContent in httpContents)
                 {
-                    // load multipart data into memory 
-                    var multipartProvider = await content.ReadAsMultipartAsync();
-                    var httpContents = multipartProvider.Contents;
+                    // Find parameter from content deposition.
+                    var contentParameter = httpContent.Headers.ContentDisposition.Name.Trim('"');
+                    var parameterParts = FindContentDispositionParameters(contentParameter);
 
-                    // Create an instance from specific type.
-                    var instance = Activator.CreateInstance(type);
-
-                    foreach (var httpContent in httpContents)
+                    // Content is a parameter, not a file.
+                    if (string.IsNullOrEmpty(httpContent.Headers.ContentDisposition.FileName))
                     {
-                        // Find parameter from content deposition.
-                        var contentParameter = httpContent.Headers.ContentDisposition.Name.Trim('"');
-                        var parameterParts = FindContentDispositionParameters(contentParameter);
-
-                        // Content is a parameter, not a file.
-                        if (string.IsNullOrEmpty(httpContent.Headers.ContentDisposition.FileName))
-                        {
-                            var value = await httpContent.ReadAsStringAsync();
-                            await BuildRequestModelAsync(instance, parameterParts, value);
-                            continue;
-                        }
-
-                        // Content is a file.
-                        // File retrieved from client-side.
-
-                        HttpFileBase file = null;
-
-                        // set null if no content was submitted to have support for [Required]
-                        if (httpContent.Headers.ContentLength.GetValueOrDefault() > 0)
-                            file = new HttpFileBase(
-                                httpContent.Headers.ContentDisposition.FileName.Trim('"'),
-                                await httpContent.ReadAsStreamAsync(),
-                                httpContent.Headers.ContentType.MediaType);
-
-                        await BuildRequestModelAsync(instance, parameterParts, file);
+                        var value = await httpContent.ReadAsStringAsync();
+                        await BuildRequestModelAsync(instance, parameterParts, value);
+                        continue;
                     }
 
-                    return instance;
+                    // Content is a file.
+                    // File retrieved from client-side.
+
+                    HttpFileBase file = null;
+
+                    // set null if no content was submitted to have support for [Required]
+                    if (httpContent.Headers.ContentLength.GetValueOrDefault() > 0)
+                        file = new HttpFileBase(
+                            httpContent.Headers.ContentDisposition.FileName.Trim('"'),
+                            await httpContent.ReadAsStreamAsync(),
+                            httpContent.Headers.ContentType.MediaType);
+
+                    await BuildRequestModelAsync(instance, parameterParts, file);
                 }
-                catch (Exception e)
-                {
-                    if (formatterLogger == null)
-                        throw;
-                    formatterLogger.LogError(string.Empty, e);
-                    return GetDefaultValueForType(type);
-                }
+
+                return instance;
             }
+            catch (Exception e)
+            {
+                if (logger == null)
+                    throw;
+                logger.LogError(string.Empty, e);
+                return GetDefaultValueForType(type);
+            }
+
         }
 
         /// <summary>
@@ -210,27 +208,24 @@ namespace ApiMultiPartFormData
                     if (!int.TryParse(key, out var iCollectionIndex))
                         iCollectionIndex = -1;
 
-                    // Add new property into list.
-                    object val = null;
-
                     // This is the last key.
                     if (iNextIndex >= parameters.Count)
                     {
-                        AddArrayMember(pointer, iCollectionIndex, propertyInfo, value);
+                        await AddCollectionItemAsync(pointer, iCollectionIndex, propertyInfo, value);
                         return;
                     }
 
-                    val = AddArrayMember(pointer, iCollectionIndex, propertyInfo);
+                    var val = await AddCollectionItemAsync(pointer, iCollectionIndex, propertyInfo);
                     pointer = val;
 
                     // Find the property information of the next key.
                     var nextKey = parameters[iNextIndex];
-                    propertyInfo = FindPropertyInfoFromPointer(pointer, nextKey);
+                    propertyInfo = GetCaseInsensitiveProperty(pointer, nextKey);
                     continue;
                 }
 
                 // Find property of the current key.
-                propertyInfo = FindPropertyInfoFromPointer(pointer, key);
+                propertyInfo = GetCaseInsensitiveProperty(pointer, key);
 
                 // Property doesn't exist.
                 if (propertyInfo == null)
@@ -240,7 +235,7 @@ namespace ApiMultiPartFormData
                 if (iNextIndex >= parameters.Count)
                 {
                     var modelValue =
-                        await BuildRequestModelValueAsync(propertyInfo, value);
+                        await BuildParameterAsync(propertyInfo.PropertyType, value);
 
                     propertyInfo.SetValue(pointer, modelValue);
                     return;
@@ -254,7 +249,7 @@ namespace ApiMultiPartFormData
                 {
                     // Initiate property value.
                     targetedValue =
-                        await BuildRequestModelValueAsync(propertyInfo,
+                        await BuildParameterAsync(propertyInfo.PropertyType,
                             Activator.CreateInstance(propertyInfo.PropertyType));
 
                     propertyInfo.SetValue(pointer, targetedValue);
@@ -267,7 +262,7 @@ namespace ApiMultiPartFormData
                 {
                     pointer = propertyInfo.GetValue(pointer);
                     if (iNextIndex >= parameters.Count)
-                        AddArrayMember(pointer, -1, propertyInfo, value);
+                        await AddCollectionItemAsync(pointer, -1, propertyInfo, value);
                     continue;
                 }
 
@@ -277,13 +272,16 @@ namespace ApiMultiPartFormData
         }
 
         /// <summary>
-        ///     Find property value from property type and raw value.
+        ///     Build model parameter asynchronously.
         /// </summary>
         /// <returns></returns>
-        protected async Task<object> BuildRequestModelValueAsync(PropertyInfo propertyInfo, object value, CancellationToken cancellationToken = default)
+        protected async Task<object> BuildParameterAsync(Type propertyType, object value, CancellationToken cancellationToken = default)
         {
             // Output property value.
             var outputPropertyValue = value;
+
+            if (propertyType == null)
+                return outputPropertyValue;
 
             if (_modelBinderServices == null || _modelBinderServices.Length < 1)
                 return outputPropertyValue;
@@ -291,13 +289,48 @@ namespace ApiMultiPartFormData
             foreach (var availableService in _modelBinderServices)
             {
                 if (availableService == null ||
-                    !(availableService is IMultiPartFormDataModelBinderService multiPartFormDataModelBinderService))
+                    !(availableService is IModelBinderService multiPartFormDataModelBinderService))
                     continue;
 
                 try
                 {
                     var builtModel =
-                        await multiPartFormDataModelBinderService.BuildModelAsync(propertyInfo, value,
+                        await multiPartFormDataModelBinderService.BuildModelAsync(propertyType, value,
+                            cancellationToken);
+
+                    outputPropertyValue = builtModel;
+                }
+                catch (UnhandledParameterException)
+                {
+                }
+            }
+
+            return outputPropertyValue;
+        }
+
+        /// <summary>
+        ///     Build model collection asynchronously.
+        /// </summary>
+        /// <returns></returns>
+        protected async Task<object> BuildCollectionAsync(PropertyInfo propertyInfo, object value,
+            CancellationToken cancellationToken = default)
+        {
+            // Output property value.
+            var outputPropertyValue = value;
+
+            if (!IsList(propertyInfo.PropertyType))
+                return Task.FromResult((object)null);
+
+            foreach (var availableCollectionBinderService in _collectionBinderServices)
+            {
+                if (availableCollectionBinderService == null ||
+                    !(availableCollectionBinderService is ICollectionBinderService collectionBinderService))
+                    continue;
+
+                try
+                {
+                    var builtModel =
+                        await collectionBinderService.BuildModelAsync(propertyInfo, value,
                             cancellationToken);
 
                     outputPropertyValue = builtModel;
@@ -318,7 +351,7 @@ namespace ApiMultiPartFormData
         /// <param name="propertyInfo"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        private object AddArrayMember(object pointer, int iCollectionIndex, PropertyInfo propertyInfo,
+        protected virtual async Task<object> AddCollectionItemAsync(object pointer, int iCollectionIndex, PropertyInfo propertyInfo,
             object value = null)
         {
             // Current member is an array, normally, it will have count property.
@@ -343,17 +376,17 @@ namespace ApiMultiPartFormData
             if (genericArgument == null)
                 return null;
 
+            var defaultItem = Activator.CreateInstance(genericArguments[0]);
+            object listItem = defaultItem;
+
+            if (value != null)
+                listItem = await BuildParameterAsync(defaultItem.GetType(), value);
+
             // Current index is invalid to the array, this means we will add a new item to the list.
             // For example, the current array has 1 element, and the iCollectionIndex is 1.
             // The item at the index is invalid, therefore, new item will be created.
             if (iCollectionIndex < 0 || iCollectionIndex > itemCount - 1)
             {
-                object listItem;
-                if (value != null)
-                    listItem = value;
-                else
-                    listItem = Activator.CreateInstance(genericArguments[0]);
-
                 // Find the add method.
                 var addProperty = propertyInfo.PropertyType.GetMethod(nameof(IList.Add));
                 if (addProperty != null)
@@ -368,7 +401,7 @@ namespace ApiMultiPartFormData
 
             if (elementAtMethod != null)
             {
-                var item = elementAtMethod.MakeGenericMethod(genericArguments[0]);
+                var item = elementAtMethod.MakeGenericMethod(genericArguments);
                 return item.Invoke(pointer, new[] { pointer, iCollectionIndex });
             }
 
@@ -381,7 +414,7 @@ namespace ApiMultiPartFormData
         /// <param name="instance"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        protected PropertyInfo FindPropertyInfoFromPointer(object instance, string name)
+        protected PropertyInfo GetCaseInsensitiveProperty(object instance, string name)
         {
             return
                 instance.GetType()

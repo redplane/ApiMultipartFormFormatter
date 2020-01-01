@@ -9,24 +9,17 @@ using ApiMultiPartFormData.Services.Interfaces;
 
 namespace ApiMultiPartFormData.Services.Implementations
 {
-    public class DefaultMultiPartFormDataModelBinderService : IMultiPartFormDataModelBinderService
+    public class DefaultMultiPartFormDataModelBinderService : IModelBinderService
     {
         #region Methods
 
-        /// <summary>
-        /// <inheritdoc />
-        /// </summary>
-        /// <param name="propertyInfo"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public virtual object BuildModel(PropertyInfo propertyInfo, object value)
+        public virtual object BuildModel(Type propertyType, object value)
         {
             // Property is not defined.
-            if (propertyInfo == null)
+            if (propertyType == null)
                 return null;
 
             // Get property type.
-            var propertyType = propertyInfo.PropertyType;
             var underlyingType = Nullable.GetUnderlyingType(propertyType);
 
             // Other Nullable types
@@ -46,9 +39,9 @@ namespace ApiMultiPartFormData.Services.Implementations
             }
         }
 
-        public virtual Task<object> BuildModelAsync(PropertyInfo propertyInfo, object value, CancellationToken cancellationToken = default)
+        public virtual Task<object> BuildModelAsync(Type propertyType, object value, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(BuildModel(propertyInfo, value));
+            return Task.FromResult(BuildModel(propertyType, value));
         }
 
         #endregion

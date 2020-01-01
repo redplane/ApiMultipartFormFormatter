@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,21 +9,20 @@ using ApiMultiPartFormData.Services.Interfaces;
 
 namespace ApiMultiPartFormData.Services.Implementations
 {
-    public class EnumModelBinderService : IMultiPartFormDataModelBinderService
+    public class EnumModelBinderService : IModelBinderService
     {
         public object BuildModel(PropertyInfo propertyInfo, object value)
         {
             throw new NotImplementedException();
         }
 
-        public Task<object> BuildModelAsync(PropertyInfo propertyInfo, object value,
+        public Task<object> BuildModelAsync(Type propertyType, object value,
             CancellationToken cancellationToken = default)
         {
             if (value == null)
                 throw new UnhandledParameterException();
 
             // Get property type.
-            var propertyType = propertyInfo.PropertyType;
             var underlyingType = Nullable.GetUnderlyingType(propertyType);
 
             // Property is Enum.

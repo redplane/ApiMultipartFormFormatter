@@ -10,3 +10,4 @@
 /miscellaneous/multipart-formdata-my-get/multipart-formdata-my-get.csproj.user
 /miscellaneous/multipart-formdata-my-get/.vs
 /miscellaneous/multipart-formdata-my-get/packages
+/lib/ApiMultipartFormDataFormatter/*.user

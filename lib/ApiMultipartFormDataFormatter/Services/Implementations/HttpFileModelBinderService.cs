@@ -8,7 +8,7 @@ using ApiMultiPartFormData.Services.Interfaces;
 
 namespace ApiMultiPartFormData.Services.Implementations
 {
-    public class HttpFileModelBinderService : IMultiPartFormDataModelBinderService
+    public class HttpFileModelBinderService : IModelBinderService
     {
         #region Methods
 
@@ -17,7 +17,7 @@ namespace ApiMultiPartFormData.Services.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<object> BuildModelAsync(PropertyInfo propertyInfo, object value,
+        public Task<object> BuildModelAsync(Type propertyType, object value,
             CancellationToken cancellationToken = default)
         {
             if (value == null)
@@ -25,9 +25,6 @@ namespace ApiMultiPartFormData.Services.Implementations
 
             if (!(value is HttpFileBase httpFileBase))
                 throw new UnhandledParameterException();
-
-            // Get property type.
-            var propertyType = propertyInfo.PropertyType;
 
             if (propertyType != typeof(HttpFile))
                 throw new UnhandledParameterException();

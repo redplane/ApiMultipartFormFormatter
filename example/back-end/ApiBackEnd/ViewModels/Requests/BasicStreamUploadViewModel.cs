@@ -1,15 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ApiBackEnd.Enumerations;
 using ApiBackEnd.Models;
 using ApiMultiPartFormData.Models;
 
-namespace ApiBackEnd.ViewModels
+namespace ApiBackEnd.ViewModels.Requests
 {
-    public class BasicUploadStreamedViewModel
+    public class StreamBasicUploadViewModel
     {
         #region Properties
 
         public Guid Id { get; set; }
+
+        public Guid? UserId { get; set; }
+
+        public List<StudentTypes> StudentTypes { get; set; }
 
         /// <summary>
         /// Author information.
@@ -21,7 +27,9 @@ namespace ApiBackEnd.ViewModels
         /// Attachment.
         /// </summary>
         [Required]
-        public StreamedHttpFile StreamedAttachment { get; set; }
+        public HttpFileBase Attachment { get; set; }
+
+        public Dictionary<string, string> AdditionalInfo { get; set; }
 
         #endregion
     }

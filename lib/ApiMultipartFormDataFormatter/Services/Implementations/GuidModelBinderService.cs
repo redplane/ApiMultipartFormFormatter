@@ -7,7 +7,7 @@ using ApiMultiPartFormData.Services.Interfaces;
 
 namespace ApiMultiPartFormData.Services.Implementations
 {
-    public class GuidModelBinderService : IMultiPartFormDataModelBinderService
+    public class GuidModelBinderService : IModelBinderService
     {
         #region Methods
 
@@ -16,14 +16,13 @@ namespace ApiMultiPartFormData.Services.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<object> BuildModelAsync(PropertyInfo propertyInfo, object value,
+        public Task<object> BuildModelAsync(Type propertyType, object value,
             CancellationToken cancellationToken = default)
         {
             if (value == null)
                 throw new UnhandledParameterException();
 
             // Get property type.
-            var propertyType = propertyInfo.PropertyType;
             var underlyingType = Nullable.GetUnderlyingType(propertyType);
 
             // Property is GUID.

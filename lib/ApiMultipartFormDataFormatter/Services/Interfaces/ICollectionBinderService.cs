@@ -1,9 +1,10 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ApiMultiPartFormData.Services.Interfaces
 {
-    public interface IMultiPartFormDataModelBinderService : IModelBinderService
+    public interface ICollectionBinderService
     {
         #region Methods
 
@@ -12,8 +13,9 @@ namespace ApiMultiPartFormData.Services.Interfaces
         /// </summary>
         /// <param name="propertyInfo"></param>
         /// <param name="value"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        object BuildModel(PropertyInfo propertyInfo, object value);
+        Task<object> BuildModelAsync(PropertyInfo propertyInfo, object value, CancellationToken cancellationToken = default);
 
         #endregion
     }
