@@ -1,18 +1,33 @@
-﻿namespace ApiMultiPartFormData.Models
+﻿using System.IO;
+
+namespace ApiMultiPartFormData.Models
 {
-    public abstract class HttpFileBase
+    public class HttpFileBase
     {
         #region Properties
 
         /// <summary>
         ///     Name of file.
         /// </summary>
-        public string Name { get; set; }
+        public string FileName { get; }
 
-        /// <summary>
-        ///     Type of file.
-        /// </summary>
-        public string MediaType { get; set; }
+        public Stream InputStream { get; }
+
+        public string ContentType { get; }
+
+        public long ContentLength { get; }
+
+        #endregion
+
+        #region Constructor
+
+        public HttpFileBase(string fileName, Stream inputStream, string contentType)
+        {
+            FileName = fileName;
+            InputStream = inputStream;
+            ContentType = contentType;
+            ContentLength = inputStream.Length;
+        }
 
         #endregion
     }

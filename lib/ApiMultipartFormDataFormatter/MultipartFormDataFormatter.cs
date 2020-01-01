@@ -8,9 +8,11 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Dependencies;
+using ApiMultiPartFormData.Exceptions;
 using ApiMultiPartFormData.Models;
 using ApiMultiPartFormData.Services.Implementations;
 using ApiMultiPartFormData.Services.Interfaces;
@@ -28,11 +30,21 @@ namespace ApiMultiPartFormData
     {
         #region Constructor
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="MultipartFormDataFormatter" /> class.
-        /// </summary>
-        public MultipartFormDataFormatter()
+        public MultipartFormDataFormatter(IEnumerable<IModelBinderService> modelBinderServices = null)
         {
+            _modelBinderServices = modelBinderServices?.ToArray();
+
+            if (_modelBinderServices == null || _modelBinderServices.Length < 1)
+            {
+                _modelBinderServices = new IModelBinderService[]
+                {
+                    new DefaultMultiPartFormDataModelBinderService(),
+                    new GuidModelBinderService(),
+                    new EnumModelBinderService(),
+                    new HttpFileModelBinderService()
+                };
+            }
+
             // Register multipart/form-data as the supported media type.
             SupportedMediaTypes.Add(new MediaTypeHeaderValue(SupportedMediaType));
         }
@@ -41,12 +53,14 @@ namespace ApiMultiPartFormData
 
         #region Properties
 
+        private readonly IModelBinderService[] _modelBinderServices;
+
         private const string SupportedMediaType = "multipart/form-data";
 
         /// <summary>
         ///     Interceptor for handling content disposition content name.
         /// </summary>
-        public FindContentDispositionParametersHandler FindContentDispositionParametersInterceptor { get; set; }
+        public Func<string, List<string>> FindContentDispositionParametersInterceptor { get; set; }
 
         #endregion
 
@@ -119,7 +133,7 @@ namespace ApiMultiPartFormData
                         if (string.IsNullOrEmpty(httpContent.Headers.ContentDisposition.FileName))
                         {
                             var value = await httpContent.ReadAsStringAsync();
-                            await BuildRequestModelAsync(instance, parameterParts, value, dependencyScope);
+                            await BuildRequestModelAsync(instance, parameterParts, value);
                             continue;
                         }
 
@@ -130,24 +144,12 @@ namespace ApiMultiPartFormData
 
                         // set null if no content was submitted to have support for [Required]
                         if (httpContent.Headers.ContentLength.GetValueOrDefault() > 0)
-                        {
-                            if (IsStreamingRequested(instance, contentParameter))
-                            {
-                                file = new StreamedHttpFile(
-                                    httpContent.Headers.ContentDisposition.FileName.Trim('"'),
-                                    httpContent.Headers.ContentType.MediaType,
-                                    await httpContent.ReadAsStreamAsync());
-                            }
-                            else
-                            {
-                                file = new HttpFile(
-                                    httpContent.Headers.ContentDisposition.FileName.Trim('"'),
-                                    httpContent.Headers.ContentType.MediaType,
-                                    await httpContent.ReadAsByteArrayAsync());
-                            }
-                        }
+                            file = new HttpFileBase(
+                                httpContent.Headers.ContentDisposition.FileName.Trim('"'),
+                                await httpContent.ReadAsStreamAsync(),
+                                httpContent.Headers.ContentType.MediaType);
 
-                        await BuildRequestModelAsync(instance, parameterParts, file, dependencyScope);
+                        await BuildRequestModelAsync(instance, parameterParts, file);
                     }
 
                     return instance;
@@ -168,9 +170,7 @@ namespace ApiMultiPartFormData
         /// <param name="model"></param>
         /// <param name="parameters"></param>
         /// <param name="value"></param>
-        /// <param name="dependencyScope"></param>
-        protected async Task BuildRequestModelAsync(object model, IList<string> parameters, object value,
-            IDependencyScope dependencyScope)
+        protected async Task BuildRequestModelAsync(object model, IList<string> parameters, object value)
         {
             // Initiate model pointer.
             var pointer = model;
@@ -183,11 +183,6 @@ namespace ApiMultiPartFormData
 
             if (parameters == null || parameters.Count < 1)
                 return;
-
-            // Get request model binders service.
-            var multipartFormDataModelBinderServices =
-                dependencyScope.GetServices(typeof(IMultiPartFormDataModelBinderService))
-                    .ToList();
 
             // Go through every part of parameters.
             // If the parameter name is : Items[0][list]. Parsed params will be : Items, 0, list.
@@ -245,7 +240,8 @@ namespace ApiMultiPartFormData
                 if (iNextIndex >= parameters.Count)
                 {
                     var modelValue =
-                        await BuildRequestModelValueAsync(propertyInfo, value, multipartFormDataModelBinderServices);
+                        await BuildRequestModelValueAsync(propertyInfo, value);
+
                     propertyInfo.SetValue(pointer, modelValue);
                     return;
                 }
@@ -259,7 +255,7 @@ namespace ApiMultiPartFormData
                     // Initiate property value.
                     targetedValue =
                         await BuildRequestModelValueAsync(propertyInfo,
-                            Activator.CreateInstance(propertyInfo.PropertyType), multipartFormDataModelBinderServices);
+                            Activator.CreateInstance(propertyInfo.PropertyType));
 
                     propertyInfo.SetValue(pointer, targetedValue);
                     pointer = targetedValue;
@@ -284,31 +280,34 @@ namespace ApiMultiPartFormData
         ///     Find property value from property type and raw value.
         /// </summary>
         /// <returns></returns>
-        protected Task<object> BuildRequestModelValueAsync(PropertyInfo propertyInfo, object value,
-            IList<object> services)
+        protected async Task<object> BuildRequestModelValueAsync(PropertyInfo propertyInfo, object value, CancellationToken cancellationToken = default)
         {
             // Output property value.
             var outputPropertyValue = value;
-            var hasModelBinderCalled = false;
 
-            foreach (var availableService in services)
+            if (_modelBinderServices == null || _modelBinderServices.Length < 1)
+                return outputPropertyValue;
+
+            foreach (var availableService in _modelBinderServices)
             {
                 if (availableService == null ||
                     !(availableService is IMultiPartFormDataModelBinderService multiPartFormDataModelBinderService))
                     continue;
 
-                outputPropertyValue = multiPartFormDataModelBinderService.BuildModel(propertyInfo, outputPropertyValue);
-                hasModelBinderCalled = true;
+                try
+                {
+                    var builtModel =
+                        await multiPartFormDataModelBinderService.BuildModelAsync(propertyInfo, value,
+                            cancellationToken);
+
+                    outputPropertyValue = builtModel;
+                }
+                catch (UnhandledParameterException)
+                {
+                }
             }
 
-            // Model binder hasn't been called.
-            if (!hasModelBinderCalled)
-            {
-                outputPropertyValue = new BaseMultiPartFormDataModelBinderService()
-                    .BuildModel(propertyInfo, outputPropertyValue);
-            }
-
-            return Task.FromResult(outputPropertyValue);
+            return outputPropertyValue;
         }
 
         /// <summary>
@@ -382,17 +381,12 @@ namespace ApiMultiPartFormData
         /// <param name="instance"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        private PropertyInfo FindPropertyInfoFromPointer(object instance, string name)
+        protected PropertyInfo FindPropertyInfoFromPointer(object instance, string name)
         {
             return
                 instance.GetType()
                     .GetProperties()
                     .FirstOrDefault(x => name.Equals(x.Name, StringComparison.InvariantCultureIgnoreCase));
-        }
-
-        private bool IsStreamingRequested(object instance, string contentParameter)
-        {
-            return instance.GetType().GetProperty(contentParameter)?.PropertyType == typeof(StreamedHttpFile);
         }
 
         /// <summary>
