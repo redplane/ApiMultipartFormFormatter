@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Text;
@@ -108,6 +110,41 @@ namespace ApiMultiPartFormData.UnitTest
             }
 
             Assert.AreEqual(student.ParentId?.ToString("D"), parentId);
+        }
+
+        [Test]
+        public void UploadStudentWithChildIds_Returns_StudentWithChildIds()
+        {
+            var childIds = new LinkedList<Guid>();
+            childIds.AddLast(Guid.NewGuid());
+            childIds.AddLast(Guid.NewGuid());
+
+            var logger = new Mock<IFormatterLogger>();
+            logger.Setup(x => x.LogError(It.IsAny<string>(), It.IsAny<Exception>()));
+
+            var multipartFormDataFormatter = new MultipartFormDataFormatter();
+            var multipartFormContent = new MultipartFormDataContent("---wwww-wwww-wwww-boundary-----");
+
+            var index = 0;
+            foreach (var childId in childIds)
+            {
+                multipartFormContent.Add(new StringContent(childId.ToString("D"), Encoding.UTF8), $"{nameof(StudentViewModel.ChildIds)}[{index}]");
+                index++;
+            }
+
+            var uploadedModel = multipartFormDataFormatter
+                .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
+                multipartFormContent, logger.Object)
+                .Result;
+
+            if (!(uploadedModel is StudentViewModel student))
+            {
+                Assert.IsInstanceOf<StudentViewModel>(uploadedModel);
+                return;
+            }
+
+            for (var childId = 0; childId < childIds.Count; childId++)
+                Assert.AreEqual(childIds.ElementAt(childId), student.ChildIds[childId]);
         }
     }
 }
