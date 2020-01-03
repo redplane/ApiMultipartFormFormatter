@@ -91,6 +91,7 @@
     <Compile Include="AttachmentUploadTests.cs" />
     <Compile Include="GuidUploadTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\ProfileViewModel.cs" />
     <Compile Include="ViewModels\StudentViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

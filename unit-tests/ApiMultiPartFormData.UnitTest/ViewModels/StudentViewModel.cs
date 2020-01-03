@@ -16,5 +16,7 @@ namespace ApiMultiPartFormData.UnitTest.ViewModels
         public string FullName { get; set; }
 
         public HttpFileBase Photo { get; set; }
+
+        public ProfileViewModel Profile { get; set; }
     }
 }
