@@ -12,11 +12,6 @@ namespace ApiMultiPartFormData.Services.Implementations
     {
         #region Methods
 
-        public object BuildModel(PropertyInfo propertyInfo, object value)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<object> BuildModelAsync(Type propertyType, object value,
             CancellationToken cancellationToken = default)
         {

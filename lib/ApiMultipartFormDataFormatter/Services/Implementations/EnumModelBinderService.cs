@@ -47,10 +47,17 @@ namespace ApiMultiPartFormData.Services.Implementations
 
         protected virtual object ConvertToEnum(Type type, string val)
         {
-            if (int.TryParse(val, out var num))
-                return Enum.ToObject(type, num);
+            object handledEnum = null;
 
-            return Enum.Parse(type, val, true);
+            if (int.TryParse(val, out var num))
+                handledEnum = Enum.ToObject(type, num);
+            else
+                handledEnum = Enum.Parse(type, val, true);
+
+            if (!Enum.IsDefined(type, handledEnum))
+                throw new UnhandledParameterException();
+
+            return handledEnum;
         }
     }
 }
