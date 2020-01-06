@@ -11,17 +11,9 @@ namespace ApiMultiPartFormData.Services.Implementations
     {
         #region Methods
 
-        public object BuildModel(PropertyInfo propertyInfo, object value)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<object> BuildModelAsync(Type propertyType, object value,
             CancellationToken cancellationToken = default)
         {
-            if (value == null)
-                throw new UnhandledParameterException();
-
             // Get property type.
             var underlyingType = Nullable.GetUnderlyingType(propertyType);
 
@@ -30,8 +22,12 @@ namespace ApiMultiPartFormData.Services.Implementations
                 return Task.FromResult((object) guid);
 
             if (underlyingType == typeof(Guid))
-                if (Guid.TryParse(value.ToString(), out guid))
-                    return Task.FromResult((object) guid);
+            {
+                if (Guid.TryParse(value?.ToString(), out guid))
+                    return Task.FromResult((object)guid);
+
+                return Task.FromResult((object)default);
+            }
 
             throw new UnhandledParameterException();
         }
