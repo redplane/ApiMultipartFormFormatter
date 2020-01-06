@@ -13,3 +13,8 @@
 /lib/ApiMultipartFormDataFormatter/*.user
 /unit-tests/ApiMultiPartFormData.UnitTest/obj
 /unit-tests/ApiMultiPartFormData.UnitTest/bin
+/ApiBackEnd.UnitTest/obj
+/ApiBackEnd.UnitTest/bin
+/unit-tests/ApiBackEnd.UnitTest/obj
+/unit-tests/ApiBackEnd.UnitTest/bin
+/unit-tests/ApiBackEnd.UnitTest/*.user

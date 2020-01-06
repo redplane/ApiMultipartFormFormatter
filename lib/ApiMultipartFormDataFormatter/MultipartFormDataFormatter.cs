@@ -23,11 +23,9 @@ namespace ApiMultiPartFormData
     {
         #region Constructor
 
-        public MultipartFormDataFormatter(IEnumerable<IModelBinderService> modelBinderServices = null,
-            IEnumerable<ICollectionBinderService> collectionBinderServices = null)
+        public MultipartFormDataFormatter(IEnumerable<IModelBinderService> modelBinderServices = null)
         {
             _modelBinderServices = modelBinderServices?.ToArray();
-            _collectionBinderServices = collectionBinderServices?.ToArray();
 
             if (_modelBinderServices == null || _modelBinderServices.Length < 1)
             {
@@ -40,13 +38,6 @@ namespace ApiMultiPartFormData
                 };
             }
 
-            if (_collectionBinderServices == null || _collectionBinderServices.Length < 1)
-            {
-                _collectionBinderServices = new ICollectionBinderService[]
-                {
-                    new DefaultCollectionBinderService()
-                };
-            }
 
             // Register multipart/form-data as the supported media type.
             SupportedMediaTypes.Add(new MediaTypeHeaderValue(SupportedMediaType));
@@ -57,8 +48,6 @@ namespace ApiMultiPartFormData
         #region Properties
 
         private readonly IModelBinderService[] _modelBinderServices;
-
-        private readonly ICollectionBinderService[] _collectionBinderServices;
 
         private const string SupportedMediaType = "multipart/form-data";
 
@@ -296,41 +285,6 @@ namespace ApiMultiPartFormData
                 {
                     var builtModel =
                         await multiPartFormDataModelBinderService.BuildModelAsync(propertyType, value,
-                            cancellationToken);
-
-                    outputPropertyValue = builtModel;
-                }
-                catch (UnhandledParameterException)
-                {
-                }
-            }
-
-            return outputPropertyValue;
-        }
-
-        /// <summary>
-        ///     Build model collection asynchronously.
-        /// </summary>
-        /// <returns></returns>
-        protected async Task<object> BuildCollectionAsync(PropertyInfo propertyInfo, object value,
-            CancellationToken cancellationToken = default)
-        {
-            // Output property value.
-            var outputPropertyValue = value;
-
-            if (!IsList(propertyInfo.PropertyType))
-                return Task.FromResult((object)null);
-
-            foreach (var availableCollectionBinderService in _collectionBinderServices)
-            {
-                if (availableCollectionBinderService == null ||
-                    !(availableCollectionBinderService is ICollectionBinderService collectionBinderService))
-                    continue;
-
-                try
-                {
-                    var builtModel =
-                        await collectionBinderService.BuildModelAsync(propertyInfo, value,
                             cancellationToken);
 
                     outputPropertyValue = builtModel;

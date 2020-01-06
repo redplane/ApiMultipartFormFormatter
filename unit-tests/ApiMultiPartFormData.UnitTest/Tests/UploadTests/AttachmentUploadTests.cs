@@ -4,12 +4,11 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Reflection;
-using System.Text;
 using ApiMultiPartFormData.UnitTest.ViewModels;
 using Moq;
 using NUnit.Framework;
 
-namespace ApiMultiPartFormData.UnitTest
+namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
 {
     [TestFixture]
     public class AttachmentUploadTests

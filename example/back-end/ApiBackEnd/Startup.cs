@@ -4,6 +4,7 @@ using Microsoft.Owin;
 using Owin;
 
 [assembly: OwinStartup(typeof(Startup))]
+
 namespace ApiBackEnd
 {
     public class Startup
@@ -15,7 +16,7 @@ namespace ApiBackEnd
 
             // Register web api configuration.
             WebApiConfig.Register(httpConfiguration);
-            
+
             // Register web API module.
             app.UseWebApi(httpConfiguration);
         }

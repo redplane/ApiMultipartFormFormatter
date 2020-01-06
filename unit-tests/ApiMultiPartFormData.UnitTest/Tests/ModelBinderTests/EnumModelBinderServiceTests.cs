@@ -3,7 +3,7 @@ using ApiMultiPartFormData.Services.Implementations;
 using ApiMultiPartFormData.UnitTest.Enums;
 using NUnit.Framework;
 
-namespace ApiMultiPartFormData.UnitTest
+namespace ApiMultiPartFormData.UnitTest.Tests.ModelBinderTests
 {
     [TestFixture]
     public class EnumModelBinderServiceTests

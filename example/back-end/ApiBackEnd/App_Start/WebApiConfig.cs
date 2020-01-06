@@ -2,9 +2,7 @@
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using ApiBackEnd.Services;
 using ApiMultiPartFormData;
-using ApiMultiPartFormData.Services.Interfaces;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Newtonsoft.Json.Serialization;

@@ -52,12 +52,10 @@
   <ItemGroup>
     <Compile Include="Exceptions\UnhandledParameterException.cs" />
     <Compile Include="Models\HttpFileBase.cs" />
-    <Compile Include="Services\Implementations\DefaultCollectionBinderService.cs" />
     <Compile Include="Services\Implementations\DefaultMultiPartFormDataModelBinderService.cs" />
     <Compile Include="Services\Implementations\EnumModelBinderService.cs" />
     <Compile Include="Services\Implementations\HttpFileModelBinderService.cs" />
     <Compile Include="Services\Implementations\GuidModelBinderService.cs" />
-    <Compile Include="Services\Interfaces\ICollectionBinderService.cs" />
     <Compile Include="Services\Interfaces\IModelBinderService.cs" />
     <Compile Include="Models\HttpFile.cs" />
     <Compile Include="MultipartFormDataFormatter.cs" />

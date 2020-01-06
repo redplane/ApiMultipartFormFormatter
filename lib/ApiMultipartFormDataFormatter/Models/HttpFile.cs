@@ -10,11 +10,13 @@ namespace ApiMultiPartFormData.Models
         /// <summary>
         ///     Name of file.
         /// </summary>
+        [Obsolete("Please use FileName property instead.")]
         public string Name => FileName;
 
         /// <summary>
         ///     Type of file.
         /// </summary>
+        [Obsolete("Please use ContentType property instead.")]
         public string MediaType => ContentType;
 
         /// <summary>

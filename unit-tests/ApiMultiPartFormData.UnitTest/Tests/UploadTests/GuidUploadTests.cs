@@ -8,9 +8,8 @@ using System.Text;
 using ApiMultiPartFormData.UnitTest.ViewModels;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
-namespace ApiMultiPartFormData.UnitTest
+namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
 {
     [TestFixture]
     public class GuidUploadTests
