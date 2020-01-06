@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ApiBackEnd.Enumerations;
 using ApiMultiPartFormData.Models;
 
 namespace ApiBackEnd.ViewModels.Requests
@@ -23,6 +24,10 @@ namespace ApiBackEnd.ViewModels.Requests
         public HttpFileBase Attachment { get; set; }
 
         public List<HttpFile> Attachments { get; set; }
+
+        public Qualities NonNullableQuality { get; set; }
+
+        public Qualities? NullableQuality { get; set; }
 
         public List<Guid> Ids { get; set; }
 

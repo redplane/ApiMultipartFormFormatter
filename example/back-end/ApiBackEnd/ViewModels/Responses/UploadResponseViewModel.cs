@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ApiBackEnd.Enumerations;
 using ApiBackEnd.ViewModels.Requests;
 
 namespace ApiBackEnd.ViewModels.Responses
@@ -21,6 +22,10 @@ namespace ApiBackEnd.ViewModels.Responses
 
         public List<Guid> Ids { get; set; }
 
+        public Qualities NonNullableQuality { get; set; }
+
+        public Qualities? NullableQuality { get; set; }
+
         #endregion
 
         #region Constructor
@@ -33,7 +38,9 @@ namespace ApiBackEnd.ViewModels.Responses
         {
             Id = model.Id;
             AttachmentId = model.AttachmentId;
-            Profile = new ProfileResponseViewModel(model.Profile);
+
+            if (model.Profile != null)
+                Profile = new ProfileResponseViewModel(model.Profile);
 
             if (model.Attachment != null)
                 Attachment = new HttpFileBaseResponseViewModel(model.Attachment);
@@ -43,6 +50,8 @@ namespace ApiBackEnd.ViewModels.Responses
                     .ToList();
 
             Ids = model.Ids;
+            NonNullableQuality = model.NonNullableQuality;
+            NullableQuality = model.NullableQuality;
         }
 
         #endregion

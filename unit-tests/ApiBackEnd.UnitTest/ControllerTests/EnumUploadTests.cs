@@ -1,20 +1,22 @@
-﻿using ApiBackEnd.Controllers;
-using ApiBackEnd.ViewModels.Requests;
-using ApiBackEnd.ViewModels.Responses;
-using NUnit.Framework;
-using NUnit.Framework.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Routing;
+using ApiBackEnd.Controllers;
+using ApiBackEnd.Enumerations;
+using ApiBackEnd.ViewModels;
+using ApiBackEnd.ViewModels.Requests;
+using ApiBackEnd.ViewModels.Responses;
 using Autofac;
+using NUnit.Framework;
+using NUnit.Framework.Internal;
 
 namespace ApiBackEnd.UnitTest.ControllerTests
 {
     [TestFixture]
-    public class GuidUploadTests
+    public class EnumUploadTests
     {
         #region Installations
 
@@ -36,11 +38,11 @@ namespace ApiBackEnd.UnitTest.ControllerTests
                     apiUploadController.Configuration.Routes.MapHttpRoute(
                         "DefaultApi",
                         "api/{controller}/{id}",
-                        new {id = RouteParameter.Optional});
+                        new { id = RouteParameter.Optional });
 
                     apiUploadController.RequestContext.RouteData = new HttpRouteData(
                         new HttpRoute(),
-                        new HttpRouteValueDictionary {{"controller", "products"}});
+                        new HttpRouteValueDictionary { { "controller", "products" } });
 
                     instance.ReplaceInstance(apiUploadController);
                 })
@@ -57,103 +59,91 @@ namespace ApiBackEnd.UnitTest.ControllerTests
 
         #endregion
 
-        #region Methods
-
-        [Test]
-        public async Task SubmitValidGuidToNonNullableId_Returns_ResultWithValidId()
-        {
-            var controller = _container.Resolve<ApiUploadController>();
-
-            var uploadModel = new UploadRequestViewModel();
-            uploadModel.Id = Guid.NewGuid();
-
-            var actionResult = controller.BasicUpload(uploadModel);
-            var httpResponseMessage = await actionResult.ExecuteAsync(default);
-            var uploadResponseModel = await httpResponseMessage.Content.ReadAsAsync<UploadResponseViewModel>();
-
-            Assert.AreEqual(uploadModel.Id, uploadResponseModel.Id);
-        }
-
-        [Test]
-        public async Task SubmitEmptyGuidToNonNullableId_Returns_ResultWithEmptyId()
-        {
-            var controller = _container.Resolve<ApiUploadController>();
-
-            var uploadModel = new UploadRequestViewModel();
-            uploadModel.Id = Guid.Empty;
-
-            var actionResult = controller.BasicUpload(uploadModel);
-            var httpResponseMessage = await actionResult.ExecuteAsync(default);
-            var uploadResponseModel = await httpResponseMessage.Content.ReadAsAsync<UploadResponseViewModel>();
-
-            Assert.AreEqual(uploadModel.Id, uploadResponseModel.Id);
-        }
-
-        [Test]
-        public async Task SubmitEmptyGuidToNullableId_Returns_ResultWithEmptyAttachmentId()
-        {
-            var controller = _container.Resolve<ApiUploadController>();
-
-            var uploadModel = new UploadRequestViewModel();
-            uploadModel.AttachmentId = null;
-
-            var actionResult = controller.BasicUpload(uploadModel);
-            var httpResponseMessage = await actionResult.ExecuteAsync(default);
-            var uploadResponseModel = await httpResponseMessage.Content.ReadAsAsync<UploadResponseViewModel>();
-
-            Assert.IsNull(uploadResponseModel.AttachmentId);
-        }
-
-        [Test]
-        public async Task SubmitValidGuidToNullableId_Returns_ResultWithValidAttachmentId()
-        {
-            var controller = _container.Resolve<ApiUploadController>();
-
-            var uploadModel = new UploadRequestViewModel();
-            uploadModel.AttachmentId = Guid.NewGuid();
-
-            var actionResult = controller.BasicUpload(uploadModel);
-            var httpResponseMessage = await actionResult.ExecuteAsync(default);
-            var uploadResponseModel = await httpResponseMessage.Content.ReadAsAsync<UploadResponseViewModel>();
-
-            Assert.AreEqual(uploadModel.AttachmentId, uploadResponseModel.AttachmentId);
-        }
-
-        [Test]
-        public async Task SubmitInvalidGuidsList_Returns_ResultWithNullGuidsList()
-        {
-            var controller = _container.Resolve<ApiUploadController>();
-
-            var uploadModel = new UploadRequestViewModel();
-            uploadModel.Ids = null;
-
-            var actionResult = controller.BasicUpload(uploadModel);
-            var httpResponseMessage = await actionResult.ExecuteAsync(default);
-            var uploadResponseModel = await httpResponseMessage.Content.ReadAsAsync<UploadResponseViewModel>();
-
-            Assert.IsNull(uploadResponseModel.Ids);
-        }
-
-        [Test]
-        public async Task SubmitValidGuidsList_Returns_ResultWithValidGuidsList()
-        {
-            var controller = _container.Resolve<ApiUploadController>();
-
-            var uploadModel = new UploadRequestViewModel();
-            uploadModel.Ids = new List<Guid>(){Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()};
-
-            var actionResult = controller.BasicUpload(uploadModel);
-            var httpResponseMessage = await actionResult.ExecuteAsync(default);
-            var uploadResponseModel = await httpResponseMessage.Content.ReadAsAsync<UploadResponseViewModel>();
-
-            Assert.AreSame(uploadModel.Ids, uploadResponseModel.Ids);
-        }
-
-        #endregion
 
         #region Properties
 
         private IContainer _container;
+
+        #endregion
+
+        #region Methods
+
+        [Test]
+        public async Task UploadValidQualityIntoNonNullableQuality_Returns_ValidQualityEnum()
+        {
+            var controller = _container.Resolve<ApiUploadController>();
+
+            var uploadModel = new UploadRequestViewModel();
+            uploadModel.NonNullableQuality = Qualities.Best;
+
+            var actionResult = controller.BasicUpload(uploadModel);
+            var httpResponseMessage = await actionResult.ExecuteAsync(default);
+            var uploadResponseModel = await httpResponseMessage.Content.ReadAsAsync<UploadResponseViewModel>();
+
+            Assert.AreEqual(uploadModel.NonNullableQuality, uploadResponseModel.NonNullableQuality);
+        }
+
+        [Test]
+        public async Task UploadValidQualityIntoProfileNonNullableQuality_Returns_ValidProfileQualityEnum()
+        {
+            var controller = _container.Resolve<ApiUploadController>();
+
+            var uploadModel = new UploadRequestViewModel();
+            uploadModel.Profile = new ProfileViewModel();
+            uploadModel.Profile.NonNullableQuality = Qualities.Average;
+
+            var actionResult = controller.BasicUpload(uploadModel);
+            var httpResponseMessage = await actionResult.ExecuteAsync(default);
+            var uploadResponseModel = await httpResponseMessage.Content.ReadAsAsync<UploadResponseViewModel>();
+
+            Assert.AreEqual(uploadModel.Profile.NonNullableQuality, uploadResponseModel.Profile.NonNullableQuality);
+        }
+
+        [Test]
+        public async Task UploadNullQualityIntoNullableQuality_Returns_NullQuality()
+        {
+            var controller = _container.Resolve<ApiUploadController>();
+
+            var uploadModel = new UploadRequestViewModel();
+            uploadModel.NullableQuality = null;
+
+            var actionResult = controller.BasicUpload(uploadModel);
+            var httpResponseMessage = await actionResult.ExecuteAsync(default);
+            var uploadResponseModel = await httpResponseMessage.Content.ReadAsAsync<UploadResponseViewModel>();
+
+            Assert.IsNull(uploadResponseModel.NullableQuality);
+        }
+
+        [Test]
+        public async Task UploadValidQualityIntoNullableQuality_Returns_ValidQuality()
+        {
+            var controller = _container.Resolve<ApiUploadController>();
+
+            var uploadModel = new UploadRequestViewModel();
+            uploadModel.NullableQuality = Qualities.Average;
+
+            var actionResult = controller.BasicUpload(uploadModel);
+            var httpResponseMessage = await actionResult.ExecuteAsync(default);
+            var uploadResponseModel = await httpResponseMessage.Content.ReadAsAsync<UploadResponseViewModel>();
+
+            Assert.AreEqual(uploadModel.NullableQuality, uploadResponseModel.NullableQuality);
+        }
+
+        [Test]
+        public async Task UploadValidQualityIntoProfileQualities_Returns_ValidProfileQualities()
+        {
+            var controller = _container.Resolve<ApiUploadController>();
+
+            var uploadModel = new UploadRequestViewModel();
+            uploadModel.Profile = new ProfileViewModel();
+            uploadModel.Profile.Qualities = new List<Qualities>(){Qualities.Average, Qualities.Bad, Qualities.Best};
+
+            var actionResult = controller.BasicUpload(uploadModel);
+            var httpResponseMessage = await actionResult.ExecuteAsync(default);
+            var uploadResponseModel = await httpResponseMessage.Content.ReadAsAsync<UploadResponseViewModel>();
+
+            Assert.AreSame(uploadModel.Profile.Qualities, uploadResponseModel.Profile.Qualities);
+        }
 
         #endregion
     }
