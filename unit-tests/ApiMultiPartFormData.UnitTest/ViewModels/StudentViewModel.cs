@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ApiMultiPartFormData.Models;
+using ApiMultiPartFormData.UnitTest.Enums;
 using NUnit.Framework;
 
 namespace ApiMultiPartFormData.UnitTest.ViewModels
@@ -16,5 +17,9 @@ namespace ApiMultiPartFormData.UnitTest.ViewModels
         public string FullName { get; set; }
 
         public HttpFileBase Photo { get; set; }
+
+        public StudentTypes Type { get; set; }
+
+        public StudentTypes? NullableStudentType { get; set; }
     }
 }
