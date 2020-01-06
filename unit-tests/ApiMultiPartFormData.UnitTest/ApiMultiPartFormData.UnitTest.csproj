@@ -88,11 +88,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AttachmentUploadTests.cs" />
+    <Compile Include="Tests\UploadTests\AttachmentUploadTests.cs" />
+    <Compile Include="Tests\ModelBinderTests\EnumModelBinderServiceTests.cs" />
     <Compile Include="Enums\StudentTypes.cs" />
-    <Compile Include="EnumUploadTests.cs" />
-    <Compile Include="GuidUploadTests.cs" />
+    <Compile Include="Tests\ModelBinderTests\GuidModelBinderServiceTests.cs" />
+    <Compile Include="Tests\UploadTests\EnumUploadTests.cs" />
+    <Compile Include="Tests\UploadTests\GuidUploadTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\ProfileViewModel.cs" />
     <Compile Include="ViewModels\StudentViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

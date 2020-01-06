@@ -18,6 +18,8 @@ namespace ApiMultiPartFormData.UnitTest.ViewModels
 
         public HttpFileBase Photo { get; set; }
 
+        public ProfileViewModel Profile { get; set; }
+
         public StudentTypes Type { get; set; }
 
         public StudentTypes? NullableStudentType { get; set; }

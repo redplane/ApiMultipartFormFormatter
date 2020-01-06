@@ -11,11 +11,6 @@ namespace ApiMultiPartFormData.Services.Implementations
 {
     public class EnumModelBinderService : IModelBinderService
     {
-        public object BuildModel(PropertyInfo propertyInfo, object value)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<object> BuildModelAsync(Type propertyType, object value,
             CancellationToken cancellationToken = default)
         {
@@ -27,7 +22,17 @@ namespace ApiMultiPartFormData.Services.Implementations
 
             // Property is Enum.
             if (propertyType.IsEnum)
-                return Task.FromResult(ConvertToEnum(propertyType, value.ToString()));
+            {
+                try
+                {
+                    var handledValue = ConvertToEnum(propertyType, value.ToString());
+                    return Task.FromResult(handledValue);
+                }
+                catch
+                {
+                    throw new UnhandledParameterException();
+                }
+            }
 
             if (underlyingType != null && underlyingType.IsEnum)
             {
@@ -42,10 +47,17 @@ namespace ApiMultiPartFormData.Services.Implementations
 
         protected virtual object ConvertToEnum(Type type, string val)
         {
-            if (int.TryParse(val, out var num))
-                return Enum.ToObject(type, num);
+            object handledEnum = null;
 
-            return Enum.Parse(type, val, true);
+            if (int.TryParse(val, out var num))
+                handledEnum = Enum.ToObject(type, num);
+            else
+                handledEnum = Enum.Parse(type, val, true);
+
+            if (!Enum.IsDefined(type, handledEnum))
+                throw new UnhandledParameterException();
+
+            return handledEnum;
         }
     }
 }
