@@ -18,5 +18,7 @@ namespace ApiMultiPartFormData.UnitTest.ViewModels
         public HttpFileBase Attachment { get; set; }
 
         public HttpFile BufferedAttachment { get; set; }
+
+        public List<HttpFileBase> Photos { get; set; }
     }
 }

@@ -20,8 +20,13 @@ namespace ApiMultiPartFormData.UnitTest.ViewModels
 
         public ProfileViewModel Profile { get; set; }
 
+        public List<ProfileViewModel> Profiles { get; set; }
+
         public StudentTypes Type { get; set; }
 
         public StudentTypes? NullableStudentType { get; set; }
+
+        public List<HttpFileBase> Photos { get; set; }
+
     }
 }

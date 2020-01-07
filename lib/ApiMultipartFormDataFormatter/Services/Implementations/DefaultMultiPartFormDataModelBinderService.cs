@@ -31,6 +31,9 @@ namespace ApiMultiPartFormData.Services.Implementations
 
             try
             {
+                if (value == null)
+                    return Activator.CreateInstance(propertyType);
+
                 return Convert.ChangeType(value, propertyType);
             }
             catch (InvalidCastException)

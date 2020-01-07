@@ -21,6 +21,11 @@ namespace ApiMultiPartFormData.Models
 
         #region Constructor
 
+        internal HttpFileBase()
+        {
+
+        }
+
         public HttpFileBase(string fileName, Stream inputStream, string contentType)
         {
             FileName = fileName;

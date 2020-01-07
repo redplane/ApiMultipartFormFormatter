@@ -326,15 +326,8 @@ namespace ApiMultiPartFormData
             // Get the first argument.
             var genericArgument = genericArguments[0];
 
-            // No generic argument has been found.
-            if (genericArgument == null)
-                return null;
-
-            var defaultItem = Activator.CreateInstance(genericArguments[0]);
-            object listItem = defaultItem;
-
-            if (value != null)
-                listItem = await BuildParameterAsync(defaultItem.GetType(), value);
+            // Build item to add to list.
+            var listItem = await BuildParameterAsync(genericArgument, value);
 
             // Current index is invalid to the array, this means we will add a new item to the list.
             // For example, the current array has 1 element, and the iCollectionIndex is 1.
