@@ -31,6 +31,10 @@ build_script:
   - msbuild "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" /p:Configuration="Debug"
   - nuget pack "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" -OutputDirectory "./lib/ApiMultipartFormDataFormatter/bin/Debug"
 
+test:
+  assemblies:
+    - '**\unit-tests\ApiMultiPartFormData.UnitTest\bin\Debug\*.UnitTest.dll'
+
 artifacts:
 - path: ./example/back-end/ApiBackEnd/bin/Release/PublishOutput
   name: Azure deployment
@@ -49,7 +53,8 @@ deploy:
   password: $(AZURE_WEB_ACCOUNT_PASSWORD)
   artifact: Azure deployment
   on:
-    branch: feature
+    branch:
+      - /rc-.*/
 
   # MyGet deployment.
 - provider: NuGet
@@ -58,7 +63,8 @@ deploy:
   skip_symbols: false
   artifact: Nuget deployment
   on:
-    branch: feature
+    branch:
+      - /rc-.*/
 
   # Nuget deployment.
 - provider: NuGet
@@ -66,4 +72,5 @@ deploy:
   skip_symbols: false
   artifact: Nuget deployment
   on:
-    branch: master
+    branch:
+      - /release-.*/

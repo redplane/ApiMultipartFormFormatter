@@ -3,7 +3,7 @@
   <metadata>
     <id>ApiMultipartFormDataFormatter</id>
     <title>MultipartFormDataFormatter</title>
-	<version>2.1.0</version>
+    <version>3.0.0-Preview-001</version>
     <authors>Linh Nguyen</authors>
     <owners>Linh Nguyen</owners>
     <projectUrl>https://github.com/redplane/ApiMultipartFormFormatter</projectUrl>
@@ -12,10 +12,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>An enhanced formatter for multipart/form-data data in web api 2. This package can deal with nested properties and files.</description>
     <releaseNotes>
-      - Supported extended type mentioned in pull request: https://github.com/redplane/ApiMultipartFormFormatter/pull/6
+      Please refer to https://github.com/redplane/ApiMultipartFormFormatter for a completed release notes list.
     </releaseNotes>
     <copyright>Copyright 2018</copyright>
-    <tags>multipart multipart/form-data form-data formatter</tags>
+    <tags>multipart multipart/form-data form-data formatter multipart web api</tags>
     <dependencies>
       <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.2" />
       <dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.2"/>
