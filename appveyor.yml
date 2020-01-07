@@ -33,7 +33,7 @@ build_script:
 
 test:
   assemblies:
-    - '**\unit-tests\ApiMultiPartFormData.UnitTest\bin\Debug\*.UnitTest.dll'
+    - '**\*.UnitTest.dll'
 
 artifacts:
 - path: ./example/back-end/ApiBackEnd/bin/Release/PublishOutput
