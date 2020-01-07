@@ -23,6 +23,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="README.md" target="ReadMe.md"></file>
+    <file src="../../README.md" target="ReadMe.md"></file>
   </files>
 </package>

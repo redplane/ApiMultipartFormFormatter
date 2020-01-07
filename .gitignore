@@ -18,3 +18,4 @@
 /unit-tests/ApiBackEnd.UnitTest/obj
 /unit-tests/ApiBackEnd.UnitTest/bin
 /unit-tests/ApiBackEnd.UnitTest/*.user
+/nuget.exe
