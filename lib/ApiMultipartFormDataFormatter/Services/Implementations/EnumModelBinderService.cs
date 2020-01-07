@@ -12,7 +12,7 @@ namespace ApiMultiPartFormData.Services.Implementations
     public class EnumModelBinderService : IModelBinderService
     {
         public Task<object> BuildModelAsync(Type propertyType, object value,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             if (value == null)
                 throw new UnhandledParameterException();

@@ -42,7 +42,7 @@ namespace ApiMultiPartFormData.Services.Implementations
             }
         }
 
-        public virtual Task<object> BuildModelAsync(Type propertyType, object value, CancellationToken cancellationToken = default)
+        public virtual Task<object> BuildModelAsync(Type propertyType, object value, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.FromResult(BuildModel(propertyType, value));
         }

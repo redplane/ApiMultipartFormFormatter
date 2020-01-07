@@ -17,7 +17,7 @@ namespace ApiMultiPartFormData.Services.Interfaces
         /// <param name="value"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<object> BuildModelAsync(Type propertyType, object value, CancellationToken cancellationToken = default);
+        Task<object> BuildModelAsync(Type propertyType, object value, CancellationToken cancellationToken = default(CancellationToken));
 
         #endregion
     }

@@ -264,7 +264,7 @@ namespace ApiMultiPartFormData
         ///     Build model parameter asynchronously.
         /// </summary>
         /// <returns></returns>
-        protected async Task<object> BuildParameterAsync(Type propertyType, object value, CancellationToken cancellationToken = default)
+        protected async Task<object> BuildParameterAsync(Type propertyType, object value, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Output property value.
             var outputPropertyValue = value;
