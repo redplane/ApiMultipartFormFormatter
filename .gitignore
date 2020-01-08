@@ -19,3 +19,5 @@
 /unit-tests/ApiBackEnd.UnitTest/bin
 /unit-tests/ApiBackEnd.UnitTest/*.user
 /nuget.exe
+/unit-tests/ApiBackEnd.UnitTests/obj
+/unit-tests/ApiBackEnd.UnitTests/bin
