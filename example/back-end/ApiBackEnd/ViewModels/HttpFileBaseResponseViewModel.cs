@@ -19,6 +19,10 @@ namespace ApiBackEnd.ViewModels
 
         #region Constructor
 
+        public HttpFileBaseResponseViewModel()
+        {
+        }
+
         public HttpFileBaseResponseViewModel(HttpFileBase model)
         {
             FileName = model.FileName;

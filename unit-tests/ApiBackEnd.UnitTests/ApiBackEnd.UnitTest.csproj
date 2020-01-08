@@ -79,10 +79,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControllerTests\AttachmentUploadTests.cs" />
+    <Compile Include="ControllerTests\NestedAttachmentUploadTests.cs" />
+    <Compile Include="ControllerTests\NestedEnumUploadTests.cs" />
+    <Compile Include="ControllerTests\EnumUploadTests.cs" />
     <Compile Include="ControllerTests\GuidUploadTests.cs" />
+    <Compile Include="ControllerTests\NestedGuidUploadTests.cs" />
     <Compile Include="Extensions\HttpFileBaseExtensions.cs" />
     <Compile Include="Extensions\RawUploadRequestViewModelExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Implementations\AttachmentService.cs" />
+    <Compile Include="Services\Interfaces\IAttachmentService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\RawProfileViewModel.cs" />
     <Compile Include="ViewModels\RawUploadRequestViewModel.cs" />

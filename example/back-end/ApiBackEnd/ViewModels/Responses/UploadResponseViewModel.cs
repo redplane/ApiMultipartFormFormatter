@@ -26,6 +26,8 @@ namespace ApiBackEnd.ViewModels.Responses
 
         public Qualities? NullableQuality { get; set; }
 
+        public List<Qualities> Qualities { get; set; }
+
         #endregion
 
         #region Constructor
@@ -52,6 +54,10 @@ namespace ApiBackEnd.ViewModels.Responses
             Ids = model.Ids;
             NonNullableQuality = model.NonNullableQuality;
             NullableQuality = model.NullableQuality;
+            Qualities = model.Qualities;
+
+            if (model.Profile != null)
+                Profile = new ProfileResponseViewModel(model.Profile);
         }
 
         #endregion

@@ -29,6 +29,8 @@ namespace ApiBackEnd.ViewModels.Requests
 
         public Qualities? NullableQuality { get; set; }
 
+        public List<Qualities> Qualities { get; set; }
+
         public List<Guid> Ids { get; set; }
 
         #endregion

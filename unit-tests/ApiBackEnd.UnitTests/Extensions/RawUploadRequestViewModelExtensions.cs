@@ -25,7 +25,8 @@ namespace ApiBackEnd.UnitTests.Extensions
 
             if (model.Attachment != null)
             {
-                multipartFormDataContent.Add(model.Attachment.ToByteArrayContent(), nameof(model.Attachment));
+                multipartFormDataContent.Add(model.Attachment
+                    .ToByteArrayContent(nameof(model.Attachment)));
             }
 
             if (model.Attachments != null && model.Attachments.Count > 0)
@@ -33,7 +34,7 @@ namespace ApiBackEnd.UnitTests.Extensions
                 for (var attachmentId = 0; attachmentId < model.Attachments.Count; attachmentId++)
                 {
                     multipartFormDataContent.Add(model.Attachments[attachmentId]
-                        .ToByteArrayContent(), $"{nameof(model.Attachments)}[{attachmentId}]");
+                        .ToByteArrayContent($"{nameof(model.Attachments)}[{attachmentId}]"));
                 }
             }
 
@@ -54,6 +55,15 @@ namespace ApiBackEnd.UnitTests.Extensions
                     multipartFormDataContent.Add(new StringContent(model.Ids[id], Encoding.UTF8), $"{nameof(model.Ids)}[{id}]");
                 }
             }
+
+            if (model.Qualities != null && model.Qualities.Count > 0)
+            {
+                for (var id = 0; id < model.Qualities.Count; id++)
+                    multipartFormDataContent
+                        .Add(new StringContent(model.Qualities[id], Encoding.UTF8), $"{nameof(model.Qualities)}[{id}]");
+            }
+
+            model.Profile?.ExtendHttpContent(multipartFormDataContent, $"{nameof(model.Profile)}.");
 
             return multipartFormDataContent;
         }

@@ -30,6 +30,8 @@ namespace ApiBackEnd.UnitTests.ViewModels
 
         public string NullableQuality { get; set; }
 
+        public List<string> Qualities { get; set; }
+
         public List<string> Ids { get; set; }
 
         #endregion

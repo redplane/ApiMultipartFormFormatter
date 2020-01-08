@@ -57,5 +57,11 @@ namespace ApiBackEnd.ViewModels
         }
 
         #endregion
+
+        #region Methods
+
+
+
+        #endregion
     }
 }

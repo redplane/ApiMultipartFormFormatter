@@ -30,7 +30,8 @@ namespace ApiMultiPartFormData.Services.Implementations
                 }
                 catch
                 {
-                    throw new UnhandledParameterException();
+                    var defaultValue = Activator.CreateInstance(propertyType);
+                    return Task.FromResult(defaultValue);
                 }
             }
 
@@ -39,7 +40,15 @@ namespace ApiMultiPartFormData.Services.Implementations
                 if (string.IsNullOrWhiteSpace(value.ToString()))
                     throw new UnhandledParameterException();
 
-                return Task.FromResult(ConvertToEnum(underlyingType, value.ToString()));
+                try
+                {
+                    var handledValue = ConvertToEnum(underlyingType, value.ToString());
+                    return Task.FromResult(handledValue);
+                }
+                catch (UnhandledParameterException)
+                {
+                    return Task.FromResult((object)null);
+                }
             }
 
             throw new UnhandledParameterException();

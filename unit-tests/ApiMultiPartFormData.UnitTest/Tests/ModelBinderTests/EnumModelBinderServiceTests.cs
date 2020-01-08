@@ -1,4 +1,5 @@
-﻿using ApiMultiPartFormData.Exceptions;
+﻿using System.Threading.Tasks;
+using ApiMultiPartFormData.Exceptions;
 using ApiMultiPartFormData.Services.Implementations;
 using ApiMultiPartFormData.UnitTest.Enums;
 using NUnit.Framework;
@@ -35,21 +36,23 @@ namespace ApiMultiPartFormData.UnitTest.Tests.ModelBinderTests
         }
 
         [Test]
-        public void HandleNonNullableEnumWithInvalidIntegerValue_Throws_UnhandledParameterException()
+        public async Task HandleNonNullableEnumWithInvalidIntegerValue_Returns_DefaultValue()
         {
             var enumModelBinderService = new EnumModelBinderService();
             var invalidValue = "-1";
 
-            Assert.CatchAsync<UnhandledParameterException>(() => enumModelBinderService.BuildModelAsync(typeof(StudentTypes), invalidValue));
+            var handledValue = await enumModelBinderService.BuildModelAsync(typeof(StudentTypes), invalidValue);
+            Assert.AreEqual(default(StudentTypes),  (StudentTypes) handledValue);
         }
 
         [Test]
-        public void HandleNonNullableEnumWithInvalidStringValue_Throws_UnhandledParameterException()
+        public async Task HandleNonNullableEnumWithInvalidStringValue_Returns_DefaultValue()
         {
             var enumModelBinderService = new EnumModelBinderService();
             var invalidValue = "Invalid string";
 
-            Assert.CatchAsync<UnhandledParameterException>(() => enumModelBinderService.BuildModelAsync(typeof(StudentTypes), invalidValue));
+            var handledValue = await enumModelBinderService.BuildModelAsync(typeof(StudentTypes), invalidValue);
+            Assert.AreEqual(default(StudentTypes), (StudentTypes)handledValue);
         }
 
         [Test]
