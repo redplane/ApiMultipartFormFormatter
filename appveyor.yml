@@ -34,6 +34,7 @@ build_script:
 test:
   assemblies:
     - '**\*.UnitTest.dll'
+    - '**\*.UnitTests.dll'
 
 artifacts:
 - path: ./example/back-end/ApiBackEnd/bin/Release/PublishOutput
