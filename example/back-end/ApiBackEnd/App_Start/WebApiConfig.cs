@@ -2,9 +2,7 @@
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using ApiBackEnd.Services;
 using ApiMultiPartFormData;
-using ApiMultiPartFormData.Services.Interfaces;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Newtonsoft.Json.Serialization;
@@ -37,16 +35,20 @@ namespace ApiBackEnd
             //containerBuilder.RegisterType<NotImplementedMultipartFormDataModelBinderService>()
             //    .As<IMultiPartFormDataModelBinderService>();
 
-            var container = containerBuilder.Build();
-            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+            containerBuilder.RegisterType<MultipartFormDataFormatter>()
+                .InstancePerLifetimeScope();
 
+            var container = containerBuilder.Build();
+            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
             // Using camel-cased naming convention.
             var jsonFormatter = config.Formatters.OfType<JsonMediaTypeFormatter>().First();
             jsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             // Register multipart/form-data formatter.
-            config.Formatters.Add(new MultipartFormDataFormatter());
+            var instance =
+                (MultipartFormDataFormatter) config.DependencyResolver.GetService(typeof(MultipartFormDataFormatter));
+            config.Formatters.Add(instance);
         }
     }
 }

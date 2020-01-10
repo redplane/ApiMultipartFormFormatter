@@ -10,3 +10,14 @@
 /miscellaneous/multipart-formdata-my-get/multipart-formdata-my-get.csproj.user
 /miscellaneous/multipart-formdata-my-get/.vs
 /miscellaneous/multipart-formdata-my-get/packages
+/lib/ApiMultipartFormDataFormatter/*.user
+/unit-tests/ApiMultiPartFormData.UnitTest/obj
+/unit-tests/ApiMultiPartFormData.UnitTest/bin
+/ApiBackEnd.UnitTest/obj
+/ApiBackEnd.UnitTest/bin
+/unit-tests/ApiBackEnd.UnitTest/obj
+/unit-tests/ApiBackEnd.UnitTest/bin
+/unit-tests/ApiBackEnd.UnitTest/*.user
+/nuget.exe
+/unit-tests/ApiBackEnd.UnitTests/obj
+/unit-tests/ApiBackEnd.UnitTests/bin

@@ -1,9 +1,9 @@
 ﻿namespace ApiBackEnd.Enumerations
 {
-    public enum StudentTypes
+    public enum Qualities
     {
-        Good,
+        Bad,
         Average,
-        Bad
+        Best
     }
 }

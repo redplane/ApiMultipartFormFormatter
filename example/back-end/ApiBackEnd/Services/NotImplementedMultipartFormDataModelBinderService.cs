@@ -1,13 +1,15 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using ApiMultiPartFormData.Services.Interfaces;
 
 namespace ApiBackEnd.Services
 {
-    public class NotImplementedMultipartFormDataModelBinderService : IMultiPartFormDataModelBinderService
+    public class NotImplementedMultipartFormDataModelBinderService : IModelBinderService
     {
-        public virtual object BuildModel(PropertyInfo propertyInfo, object value)
+        public Task<object> BuildModelAsync(Type propertyType, object value, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

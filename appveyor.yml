@@ -8,16 +8,16 @@ only_commits:
 
 environment:
   global:
-    azureWebDemoAccountName:
+    AZURE_WEB_ACCOUNT_NAME:
       secure: 7a7dXUDl0K2pF+j2TcKMYM3EoBQA9CM0GAe3OIqevlc=
 
-    azureWebDemoAccountPassword:
+    AZURE_WEB_ACCOUNT_PASSWORD:
       secure: BMVUyCtkJ9EcXWjJxv1rSkUezXyEGE098lDnGlAAcx959P8zTSfhiT9WVb0o/1EX++h7FP1ZILge3Qun4t4klw==
 
-    myGetApiKey:
+    MY_GET_API_KEY:
       secure: 0HqMlO4KT03m1Obda0ta46zbO1EgtiSouotet2O7J7QU5SMEJfrv+GgM0cuNPL9l
 
-    nugetApiKey:
+    NUGET_API_KEY:
       secure: 7CpOZ0B3KsW3sFmCSb3XxHFpba52HEH5gGkb7g9NK93AkTkl339pjo6AkDsDUboa
 
 build_script:
@@ -30,6 +30,11 @@ build_script:
   # Build library.
   - msbuild "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" /p:Configuration="Debug"
   - nuget pack "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" -OutputDirectory "./lib/ApiMultipartFormDataFormatter/bin/Debug"
+
+test:
+  assemblies:
+    - '**\*.UnitTest.dll'
+    - '**\*.UnitTests.dll'
 
 artifacts:
 - path: ./example/back-end/ApiBackEnd/bin/Release/PublishOutput
@@ -45,11 +50,12 @@ deploy:
 - provider: WebDeploy
   server: https://apimultipartformdataservice.scm.azurewebsites.net:443/msdeploy.axd?site=ApiMultipartFormDataService
   website: ApiMultipartFormDataService
-  username: $(azureWebDemoAccountName)
-  password: $(azureWebDemoAccountPassword)
+  username: $(AZURE_WEB_ACCOUNT_NAME)
+  password: $(AZURE_WEB_ACCOUNT_PASSWORD)
   artifact: Azure deployment
   on:
-    branch: feature
+    branch:
+      - /rc-.*/
 
   # MyGet deployment.
 - provider: NuGet
@@ -58,7 +64,8 @@ deploy:
   skip_symbols: false
   artifact: Nuget deployment
   on:
-    branch: feature
+    branch:
+      - /rc-.*/
 
   # Nuget deployment.
 - provider: NuGet
@@ -66,4 +73,5 @@ deploy:
   skip_symbols: false
   artifact: Nuget deployment
   on:
-    branch: master
+    branch:
+      - /release-.*/
