@@ -21,3 +21,4 @@
 /nuget.exe
 /unit-tests/ApiBackEnd.UnitTests/obj
 /unit-tests/ApiBackEnd.UnitTests/bin
+/unit-tests/ApiMultiPartFormData.UnitTest/ApiMultiPartFormData.UnitTest.csproj.user

@@ -55,9 +55,6 @@ namespace ApiBackEnd.ViewModels.Responses
             NonNullableQuality = model.NonNullableQuality;
             NullableQuality = model.NullableQuality;
             Qualities = model.Qualities;
-
-            if (model.Profile != null)
-                Profile = new ProfileResponseViewModel(model.Profile);
         }
 
         #endregion

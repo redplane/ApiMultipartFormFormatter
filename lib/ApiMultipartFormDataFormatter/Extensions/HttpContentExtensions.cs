@@ -1,13 +1,13 @@
 ﻿#if NETFRAMEWORK
 using System.Net.Http;
 #elif NETCOREAPP
-using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-
+using Microsoft.Extensions.Primitives;
 #endif
+
 
 namespace ApiMultiPartFormData.Extensions
 {

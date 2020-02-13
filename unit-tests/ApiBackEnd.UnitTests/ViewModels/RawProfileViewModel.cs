@@ -99,7 +99,7 @@ namespace ApiBackEnd.UnitTests.ViewModels
             if (Photo != null)
             {
                 httpContent.Add(Photo.ToByteArrayContent(
-                    $"{prefix}{nameof(NonNullableQuality)}"));
+                    $"{prefix}{nameof(Photo)}"));
             }
 
             if (Photos != null && Photos.Count > 0)

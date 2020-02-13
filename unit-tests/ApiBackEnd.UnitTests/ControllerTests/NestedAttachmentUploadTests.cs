@@ -83,9 +83,9 @@ namespace ApiBackEnd.UnitTests.ControllerTests
                 .Content.ReadAsAsync<UploadResponseViewModel>();
 
             Assert.NotNull(uploadResult);
-            Assert.AreEqual(uploadModel.Profile.Photo.FileName, uploadResult.Attachment.FileName);
-            Assert.AreEqual(uploadModel.Profile.Photo.ContentLength, uploadResult.Attachment.ContentLength);
-            Assert.AreEqual(uploadModel.Profile.Photo.ContentType, uploadResult.Attachment.ContentType);
+            Assert.AreEqual(uploadModel.Profile.Photo.FileName, uploadResult.Profile.Photo.FileName);
+            Assert.AreEqual(uploadModel.Profile.Photo.ContentLength, uploadResult.Profile.Photo.ContentLength);
+            Assert.AreEqual(uploadModel.Profile.Photo.ContentType, uploadResult.Profile.Photo.ContentType);
         }
 
         [Test]

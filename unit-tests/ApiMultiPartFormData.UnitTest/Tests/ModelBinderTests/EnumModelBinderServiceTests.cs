@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using ApiMultiPartFormData.Exceptions;
 using ApiMultiPartFormData.Services.Implementations;
 using ApiMultiPartFormData.UnitTest.Enums;
 using NUnit.Framework;
