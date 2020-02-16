@@ -63,179 +63,209 @@ namespace ApiBackEnd.UnitTests.ControllerTests
         [Test]
         public virtual async Task UploadValidQualityToProfileNonNullableQuality_Returns_ModelWithValidProfileNonNullableQuality()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
 
-            uploadModel.Profile = new RawProfileViewModel();
-            uploadModel.Profile.NonNullableQuality = nameof(Qualities.Best);
+                uploadModel.Profile = new RawProfileViewModel();
+                uploadModel.Profile.NonNullableQuality = nameof(Qualities.Best);
 
-            var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
-                uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
+                    uploadModel.ToMultipartFormDataContent());
 
-            var uploadResult = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var uploadResult = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.AreEqual(Qualities.Best, uploadResult.Profile.NonNullableQuality);
+                Assert.AreEqual(Qualities.Best, uploadResult.Profile.NonNullableQuality);
+            }
         }
 
         [Test]
         public virtual async Task UploadValidIntQualityToProfileNonNullableQuality_Returns_ModelWithProfileValidQuality()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Profile = new RawProfileViewModel();
-            uploadModel.Profile.NonNullableQuality = $"{(int)Qualities.Best}";
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Profile = new RawProfileViewModel();
+                uploadModel.Profile.NonNullableQuality = $"{(int) Qualities.Best}";
 
-            var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
-                uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
+                    uploadModel.ToMultipartFormDataContent());
 
-            var uploadResult = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var uploadResult = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.AreEqual(Qualities.Best, uploadResult.Profile.NonNullableQuality);
+                Assert.AreEqual(Qualities.Best, uploadResult.Profile.NonNullableQuality);
+            }
         }
 
         [Test]
         public virtual async Task UploadInvalidQualityToProfileNonNullableQuality_Returns_ModelWithDefaultProfileQuality()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Profile = new RawProfileViewModel();
-            uploadModel.Profile.NonNullableQuality = "-1";
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Profile = new RawProfileViewModel();
+                uploadModel.Profile.NonNullableQuality = "-1";
 
-            var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
-                uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
+                    uploadModel.ToMultipartFormDataContent());
 
-            var uploadResult = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var uploadResult = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.AreEqual(default(Qualities), uploadResult.Profile.NonNullableQuality);
+                Assert.AreEqual(default(Qualities), uploadResult.Profile.NonNullableQuality);
+            }
         }
 
         [Test]
         public virtual async Task UploadOutOfRangeQualityToProfileNonNullableQuality_Returns_ModelProfileWithDefaultQuality()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Profile = new RawProfileViewModel();
-            uploadModel.Profile.NonNullableQuality = "1000";
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Profile = new RawProfileViewModel();
+                uploadModel.Profile.NonNullableQuality = "1000";
 
-            var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
-                uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
+                    uploadModel.ToMultipartFormDataContent());
 
-            var uploadResult = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var uploadResult = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.AreEqual(default(Qualities), uploadResult.Profile.NonNullableQuality);
+                Assert.AreEqual(default(Qualities), uploadResult.Profile.NonNullableQuality);
+            }
         }
 
         [Test]
         public virtual async Task UploadValidQualityToProfileNullableQuality_Returns_ModelWithUploadedProfileQuality()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Profile = new RawProfileViewModel();
-            uploadModel.Profile.NullableQuality = nameof(Qualities.Best);
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Profile = new RawProfileViewModel();
+                uploadModel.Profile.NullableQuality = nameof(Qualities.Best);
 
-            var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
-                uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
+                    uploadModel.ToMultipartFormDataContent());
 
-            var uploadResult = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var uploadResult = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.AreEqual(Qualities.Best, uploadResult.Profile.NullableQuality);
+                Assert.AreEqual(Qualities.Best, uploadResult.Profile.NullableQuality);
+            }
         }
 
         [Test]
         public virtual async Task UploadValidIntQualityToProfileNullableQuality_Returns_ModelWithUploadedProfileQuality()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Profile = new RawProfileViewModel();
-            uploadModel.Profile.NullableQuality = $"{(int)Qualities.Best}";
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Profile = new RawProfileViewModel();
+                uploadModel.Profile.NullableQuality = $"{(int) Qualities.Best}";
 
-            var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
-                uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
+                    uploadModel.ToMultipartFormDataContent());
 
-            var uploadResult = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var uploadResult = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.AreEqual(Qualities.Best, uploadResult.Profile.NullableQuality);
+                Assert.AreEqual(Qualities.Best, uploadResult.Profile.NullableQuality);
+            }
         }
 
         [Test]
         public virtual async Task UploadEmptyQualityToNullableQuality_Returns_ModelWithNullQuality()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Profile = new RawProfileViewModel();
-            uploadModel.Profile.NullableQuality = "";
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Profile = new RawProfileViewModel();
+                uploadModel.Profile.NullableQuality = "";
 
-            var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
-                uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
+                    uploadModel.ToMultipartFormDataContent());
 
-            var uploadResult = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var uploadResult = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.IsNull(uploadResult.Profile.NullableQuality);
+                Assert.IsNull(uploadResult.Profile.NullableQuality);
+            }
         }
 
         [Test]
         public virtual async Task UploadNegativeQualityToNullableQuality_Returns_ModelWithNullQuality()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Profile = new RawProfileViewModel();
-            uploadModel.Profile.NullableQuality = "-1";
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Profile = new RawProfileViewModel();
+                uploadModel.Profile.NullableQuality = "-1";
 
-            var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
-                uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
+                    uploadModel.ToMultipartFormDataContent());
 
-            var uploadResult = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var uploadResult = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.IsNull(uploadResult.Profile.NullableQuality);
+                Assert.IsNull(uploadResult.Profile.NullableQuality);
+            }
         }
 
         [Test]
         public virtual async Task UploadOutOfRangeQualityToProfileNullableQuality_Returns_ModelWithNullProfileQuality()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Profile = new RawProfileViewModel();
-            uploadModel.Profile.NullableQuality = "10000";
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Profile = new RawProfileViewModel();
+                uploadModel.Profile.NullableQuality = "10000";
 
-            var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
-                uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient.PostAsync(new Uri("api/upload", UriKind.Relative),
+                    uploadModel.ToMultipartFormDataContent());
 
-            var uploadResult = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var uploadResult = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.IsNull(uploadResult.NullableQuality);
+                Assert.IsNull(uploadResult.NullableQuality);
+            }
         }
 
         [Test]
         public virtual async Task UploadValidQualityIntoProfileQualities_Returns_ValidList()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Profile = new RawProfileViewModel();
-            uploadModel.Profile.Qualities = new List<string>();
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Profile = new RawProfileViewModel();
+                uploadModel.Profile.Qualities = new List<string>();
 
-            var values = Enum.GetNames(typeof(Qualities));
-            foreach (var value in values)
-                uploadModel.Profile.Qualities.Add(value);
+                var values = Enum.GetNames(typeof(Qualities));
+                foreach (var value in values)
+                    uploadModel.Profile.Qualities.Add(value);
 
-            var httpResponseMessage = await httpClient
-                .PostAsync(new Uri("api/upload", UriKind.Relative),
-            uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient
+                    .PostAsync(new Uri("api/upload", UriKind.Relative),
+                        uploadModel.ToMultipartFormDataContent());
 
-            var uploadResult = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var uploadResult = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.NotNull(uploadResult.Profile.Qualities);
-            for (var id = 0; id < values.Length; id++)
-                Assert.AreEqual(values[id], uploadResult.Profile.Qualities[id].ToString("G"));
+                Assert.NotNull(uploadResult.Profile.Qualities);
+                for (var id = 0; id < values.Length; id++)
+                    Assert.AreEqual(values[id], uploadResult.Profile.Qualities[id].ToString("G"));
+            }
         }
 
         #endregion

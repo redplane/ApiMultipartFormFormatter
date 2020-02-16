@@ -61,143 +61,167 @@ namespace ApiBackEnd.UnitTests.ControllerTests
         [Test]
         public virtual async Task UploadValidGuidString_Returns_ModelWithValidGuid()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Id = Guid.NewGuid().ToString("D");
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Id = Guid.NewGuid().ToString("D");
 
-            var httpResponseMessage = await httpClient
-                .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient
+                    .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
 
-            var httpResponse = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var httpResponse = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.NotNull(httpResponse);
-            Assert.AreEqual(uploadModel.Id, httpResponse.Id.ToString("D"));
+                Assert.NotNull(httpResponse);
+                Assert.AreEqual(uploadModel.Id, httpResponse.Id.ToString("D"));
+            }
         }
 
         [Test]
         public virtual async Task UploadEmptyGuidString_Returns_ModelWithEmptyGuid()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Id = "";
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Id = "";
 
-            var httpResponseMessage = await httpClient
-                .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient
+                    .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
 
-            var httpResponse = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var httpResponse = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.NotNull(httpResponse);
-            Assert.AreEqual(Guid.Empty.ToString("D"), httpResponse.Id.ToString("D"));
+                Assert.NotNull(httpResponse);
+                Assert.AreEqual(Guid.Empty.ToString("D"), httpResponse.Id.ToString("D"));
+            }
         }
 
         [Test]
         public virtual async Task LeaveIdFieldBlank_Returns_ModelWithEmptyGuid()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
 
-            var httpResponseMessage = await httpClient
-                .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient
+                    .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
 
-            var httpResponse = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var httpResponse = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.NotNull(httpResponse);
-            Assert.AreEqual(Guid.Empty.ToString("D"), httpResponse.Id.ToString("D"));
+                Assert.NotNull(httpResponse);
+                Assert.AreEqual(Guid.Empty.ToString("D"), httpResponse.Id.ToString("D"));
+            }
         }
 
         [Test]
         public virtual async Task UploadValidAttachmentIdIntoNullableGuidField_Returns_ModelWithValidGuid()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.AttachmentId = Guid.NewGuid().ToString("D");
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.AttachmentId = Guid.NewGuid().ToString("D");
 
-            var httpResponseMessage = await httpClient
-                .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient
+                    .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
 
-            var httpResponse = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var httpResponse = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.NotNull(httpResponse?.AttachmentId);
-            Assert.AreEqual(uploadModel.AttachmentId, httpResponse.AttachmentId.Value.ToString("D"));
+                Assert.NotNull(httpResponse?.AttachmentId);
+                Assert.AreEqual(uploadModel.AttachmentId, httpResponse.AttachmentId.Value.ToString("D"));
+            }
         }
 
         [Test]
         public virtual async Task NotIncludeAttachmentIdIntoNullableGuidField_Returns_ModelWithValidGuid()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
 
-            var httpResponseMessage = await httpClient
-                .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient
+                    .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
 
-            var httpResponse = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var httpResponse = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.NotNull(httpResponse);
-            Assert.Null(httpResponse.AttachmentId);
+                Assert.NotNull(httpResponse);
+                Assert.Null(httpResponse.AttachmentId);
+            }
         }
 
         [Test]
         public virtual async Task UploadEmptyAttachmentIdIntoNullableGuidField_Returns_ModelWithNullAttachmentId()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.AttachmentId = "";
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.AttachmentId = "";
 
-            var httpResponseMessage = await httpClient
-                .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient
+                    .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
 
-            var httpResponse = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var httpResponse = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.NotNull(httpResponse);
-            Assert.Null(httpResponse.AttachmentId);
+                Assert.NotNull(httpResponse);
+                Assert.Null(httpResponse.AttachmentId);
+            }
         }
 
 
         [Test]
         public virtual async Task NotIncludeIdsInIds_Returns_ModelWithNullIds()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
 
-            var httpResponseMessage = await httpClient
-                .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient
+                    .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
 
-            var httpResponse = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var httpResponse = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.NotNull(httpResponse);
-            Assert.Null(httpResponse.Ids);
+                Assert.NotNull(httpResponse);
+                Assert.Null(httpResponse.Ids);
+            }
         }
 
         [Test]
         public virtual async Task IncludeIdsInIds_Returns_ModelWithUploadedIds()
         {
-            var httpClient = _container.Resolve<HttpClient>();
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Ids = new List<string>
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
             {
-                Guid.NewGuid().ToString("D"),
-                Guid.NewGuid().ToString("D"),
-                Guid.NewGuid().ToString("D"),
-                Guid.NewGuid().ToString("D")
-            };
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Ids = new List<string>
+                {
+                    Guid.NewGuid().ToString("D"),
+                    Guid.NewGuid().ToString("D"),
+                    Guid.NewGuid().ToString("D"),
+                    Guid.NewGuid().ToString("D")
+                };
 
-            var httpResponseMessage = await httpClient
-                .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
+                var httpResponseMessage = await httpClient
+                    .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
 
-            var httpResponse = await httpResponseMessage.Content
-                .ReadAsAsync<UploadResponseViewModel>();
+                var httpResponse = await httpResponseMessage.Content
+                    .ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.NotNull(httpResponse);
+                Assert.NotNull(httpResponse);
 
-            for (var id = 0; id < uploadModel.Ids.Count; id++)
-                Assert.AreEqual(uploadModel.Ids[id], httpResponse.Ids[id].ToString("D"));
+                for (var id = 0; id < uploadModel.Ids.Count; id++)
+                    Assert.AreEqual(uploadModel.Ids[id], httpResponse.Ids[id].ToString("D"));
+            }
         }
 
         #endregion

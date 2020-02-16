@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Http.SelfHost;
 using ApiBackEnd.UnitTests.Extensions;
 using ApiBackEnd.UnitTests.Services.Implementations;
 using ApiBackEnd.UnitTests.Services.Interfaces;
@@ -10,6 +11,7 @@ using ApiBackEndShared.ViewModels.Responses;
 using ApiMultiPartFormData.Models;
 using Autofac;
 using Microsoft.Owin.Hosting;
+using Microsoft.Owin.Testing;
 using NUnit.Framework;
 
 namespace ApiBackEnd.UnitTests.ControllerTests
@@ -32,16 +34,15 @@ namespace ApiBackEnd.UnitTests.ControllerTests
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            _selfHosted = WebApp.Start<Startup>(BaseUrl);
+            _selfHosted = TestServer.Create<ApiBackEnd.Startup>();
+            var a = (TestServer) _selfHosted;
 
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterType<HttpClient>()
                 .InstancePerLifetimeScope()
                 .OnActivating(instance =>
                 {
-                    var httpClient = new HttpClient();
-                    httpClient.BaseAddress = new Uri(BaseUrl, UriKind.Absolute);
-                    instance.ReplaceInstance(httpClient);
+                    instance.ReplaceInstance(a.HttpClient);
                 });
 
             containerBuilder.RegisterType<AttachmentService>()
@@ -70,7 +71,7 @@ namespace ApiBackEnd.UnitTests.ControllerTests
         {
             var attachmentService = _container.Resolve<IAttachmentService>();
             var attachment = await attachmentService.LoadSampleAttachmentAsync();
-            
+
             var uploadModel = new RawUploadRequestViewModel();
             uploadModel.Profile = new RawProfileViewModel();
             uploadModel.Profile.Photo = attachment;

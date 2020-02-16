@@ -68,50 +68,58 @@ namespace ApiBackEnd.UnitTests.ControllerTests
         [Test]
         public virtual async Task UploadValidAttachment_Returns_AttachmentInfoWhoseInfoSameAsUploadedOne()
         {
-            var attachmentService = _container.Resolve<IAttachmentService>();
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
+            {
+                var attachmentService = lifeTimeScope.Resolve<IAttachmentService>();
 
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Attachment = await attachmentService.LoadSampleAttachmentAsync();
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Attachment = await attachmentService.LoadSampleAttachmentAsync();
 
-            var httpClient = _container.Resolve<HttpClient>();
-            var httpResponseMessage = await httpClient
-                .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var httpResponseMessage = await httpClient
+                    .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
 
-            var uploadResult = await httpResponseMessage
-                .Content.ReadAsAsync<UploadResponseViewModel>();
+                var uploadResult = await httpResponseMessage
+                    .Content.ReadAsAsync<UploadResponseViewModel>();
 
-            Assert.NotNull(uploadResult);
-            Assert.AreEqual(uploadModel.Attachment.FileName, uploadResult.Attachment.FileName);
-            Assert.AreEqual(uploadModel.Attachment.ContentLength, uploadResult.Attachment.ContentLength);
-            Assert.AreEqual(uploadModel.Attachment.ContentType, uploadResult.Attachment.ContentType);
+                Assert.NotNull(uploadResult);
+                Assert.AreEqual(uploadModel.Attachment.FileName, uploadResult.Attachment.FileName);
+                Assert.AreEqual(uploadModel.Attachment.ContentLength, uploadResult.Attachment.ContentLength);
+                Assert.AreEqual(uploadModel.Attachment.ContentType, uploadResult.Attachment.ContentType);
+            }
+
         }
 
         [Test]
         public virtual async Task UploadValidAttachments_Returns_AttachmentsInfoWhoseInfoSameAsUploadedOnes()
         {
-            var attachmentService = _container.Resolve<IAttachmentService>();
-            var sampleAttachment = await attachmentService.LoadSampleAttachmentAsync();
-            
-            var uploadModel = new RawUploadRequestViewModel();
-            uploadModel.Attachments = new List<HttpFile>();
-            uploadModel.Attachments.Add(new HttpFile(sampleAttachment));
-
-            var httpClient = _container.Resolve<HttpClient>();
-            var httpResponseMessage = await httpClient
-                .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
-
-            var uploadResult = await httpResponseMessage
-                .Content.ReadAsAsync<UploadResponseViewModel>();
-
-            Assert.NotNull(uploadResult);
-            Assert.NotNull(uploadResult.Attachments);
-
-            for (var id = 0; id < uploadModel.Attachments.Count; id++)
+            using (var lifeTimeScope = _container.BeginLifetimeScope())
             {
-                Assert.AreEqual(uploadModel.Attachments[id].FileName, uploadResult.Attachments[id].FileName);
-                Assert.AreEqual(uploadModel.Attachments[id].ContentLength, uploadResult.Attachments[id].ContentLength);
-                Assert.AreEqual(uploadModel.Attachments[id].ContentType, uploadResult.Attachments[id].ContentType);
+                var attachmentService = lifeTimeScope.Resolve<IAttachmentService>();
+                var sampleAttachment = await attachmentService.LoadSampleAttachmentAsync();
+
+                var uploadModel = new RawUploadRequestViewModel();
+                uploadModel.Attachments = new List<HttpFile>();
+                uploadModel.Attachments.Add(new HttpFile(sampleAttachment));
+
+                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var httpResponseMessage = await httpClient
+                    .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
+
+                var uploadResult = await httpResponseMessage
+                    .Content.ReadAsAsync<UploadResponseViewModel>();
+
+                Assert.NotNull(uploadResult);
+                Assert.NotNull(uploadResult.Attachments);
+
+                for (var id = 0; id < uploadModel.Attachments.Count; id++)
+                {
+                    Assert.AreEqual(uploadModel.Attachments[id].FileName, uploadResult.Attachments[id].FileName);
+                    Assert.AreEqual(uploadModel.Attachments[id].ContentLength, uploadResult.Attachments[id].ContentLength);
+                    Assert.AreEqual(uploadModel.Attachments[id].ContentType, uploadResult.Attachments[id].ContentType);
+                }
             }
+            
         }
 
         #endregion
