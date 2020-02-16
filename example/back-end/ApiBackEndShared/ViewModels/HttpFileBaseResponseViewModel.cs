@@ -1,6 +1,6 @@
 ﻿using ApiMultiPartFormData.Models;
 
-namespace ApiBackEnd.ViewModels
+namespace ApiBackEndShared.ViewModels
 {
     public class HttpFileBaseResponseViewModel
     {

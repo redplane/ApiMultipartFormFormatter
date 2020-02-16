@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ApiBackEnd.UnitTests.Extensions;
 using ApiBackEnd.UnitTests.ViewModels;
-using ApiBackEnd.ViewModels.Responses;
+using ApiBackEndShared.ViewModels.Responses;
 using Autofac;
 using Microsoft.Owin.Hosting;
 using NUnit.Framework;

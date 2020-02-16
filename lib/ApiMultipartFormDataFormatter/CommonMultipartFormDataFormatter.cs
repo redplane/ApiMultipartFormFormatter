@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
+
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -13,8 +13,10 @@ using ApiMultiPartFormData.Services.Interfaces;
 
 #if NETFRAMEWORK
 using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 #elif NETCOREAPP
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Net.Http.Headers;
 #endif
 
 namespace ApiMultiPartFormData
@@ -22,7 +24,7 @@ namespace ApiMultiPartFormData
 #if NETFRAMEWORK
     public partial class MultipartFormDataFormatter : MediaTypeFormatter
 #else
-    public partial class MultipartFormDataFormatter : IInputFormatter
+    public partial class MultipartFormDataFormatter : InputFormatter
 #endif
     {
         #region Properties
@@ -55,9 +57,7 @@ namespace ApiMultiPartFormData
                 };
             }
 
-#if NETFRAMEWORK
             SupportedMediaTypes.Add(new MediaTypeHeaderValue(SupportedMediaType));
-#endif
         }
 
         #endregion

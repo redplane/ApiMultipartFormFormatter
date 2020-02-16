@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using ApiMultiPartFormData.Models;
 using ApiMultiPartFormData.UnitTest.Enums;
-using NUnit.Framework;
 
 namespace ApiMultiPartFormData.UnitTest.ViewModels
 {

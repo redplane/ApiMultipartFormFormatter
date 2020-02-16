@@ -1,4 +1,4 @@
-﻿namespace ApiBackEnd.Enumerations
+﻿namespace ApiBackEndShared.Enumerations
 {
     public enum Qualities
     {

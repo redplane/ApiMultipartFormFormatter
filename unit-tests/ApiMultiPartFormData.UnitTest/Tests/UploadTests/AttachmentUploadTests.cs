@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NETFRAMEWORK
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Formatting;
@@ -184,3 +185,4 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
     }
 }
+#endif

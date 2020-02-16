@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ApiBackEnd.Enumerations;
+using ApiBackEndShared.Enumerations;
 
-namespace ApiBackEnd.ViewModels
+namespace ApiBackEndShared.ViewModels
 {
     public class ProfileResponseViewModel
     {

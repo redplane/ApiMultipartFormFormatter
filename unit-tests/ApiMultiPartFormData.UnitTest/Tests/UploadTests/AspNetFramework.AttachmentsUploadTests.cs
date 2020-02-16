@@ -1,8 +1,8 @@
-﻿using System;
+﻿#if NETFRAMEWORK
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
@@ -12,17 +12,16 @@ using ApiMultiPartFormData.UnitTest.ViewModels;
 using Autofac;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
 {
     [TestFixture]
-    public class AttachmentsUploadTests
+    public partial class AttachmentsUploadTests : IAttachmentUploadTests
     {
         #region Properties
 
         private IContainer _container;
-        
+
         #endregion
 
         #region Installations
@@ -55,7 +54,6 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         [Test]
         public async Task UploadAttachmentsIntoStudent_Returns_StudentWithAttachments()
         {
-            var logger = _container.Resolve<IFormatterLogger>();
             var multipartFormDataFormatter = _container.Resolve<MultipartFormDataFormatter>();
             var applicationPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var attachmentPath = Path.Combine(applicationPath, "Data", "grapefruit-slice-332-332.jpg");
@@ -74,11 +72,12 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
                 multipartFormContent.Add(content, $"{nameof(StudentViewModel.Photos)}[{i}]", fileNames[i]);
             }
 
+            var logger = _container.Resolve<IFormatterLogger>();
             var handledResult = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(), multipartFormContent, logger);
 
             Assert.IsInstanceOf<StudentViewModel>(handledResult);
-            
+
             var student = handledResult as StudentViewModel;
             Assert.NotNull(student?.Photos);
             Assert.AreEqual(fileNames.Count, student.Photos.Count);
@@ -174,3 +173,4 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         #endregion
     }
 }
+#endif

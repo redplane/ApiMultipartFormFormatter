@@ -5,7 +5,6 @@ using ApiMultiPartFormData.Exceptions;
 using ApiMultiPartFormData.Models;
 using ApiMultiPartFormData.Services.Implementations;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace ApiMultiPartFormData.UnitTest.Tests.ModelBinderTests
 {

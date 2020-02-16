@@ -1,33 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFrameworks>net452;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
-        <PackageId>ApiMultipartFormDataFormatter</PackageId>
-        <Company>Freelance</Company>
-        <Authors>Linh Nguyen</Authors>
-        <Version>3.1.0-Preview-002</Version>
-        <Description>An enhanced formatter for multipart/form-data data in ASP.NET Framework Web API 2 &amp; ASP.NET Core Web API. This package can deal with nested properties and files.</Description>
-        <Copyright>Copyright 2018</Copyright>
-        <PackageTags>multipart multipart/form-data form-data formatter</PackageTags>
-        <PackageReleaseNotes>- Added .net core support</PackageReleaseNotes>
-        <PackageProjectUrl>https://github.com/redplane/ApiMultipartFormFormatter</PackageProjectUrl>
-        <PackageIconUrl>http://icons.veryicon.com/png/System/Sticker%20Pack%201/Package.png</PackageIconUrl>
-        <RepositoryUrl>https://github.com/redplane/ApiMultipartFormFormatter</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE</DefineConstants>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <None Include="..\..\README.md" Link="README.md">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
+  <PropertyGroup>
+    <TargetFrameworks>net452;netcoreapp2.2;netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
+  </PropertyGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Core">
           <Version>2.2.5</Version>
@@ -65,9 +42,10 @@
 	
 	<ItemGroup Condition="'$(TargetFramework)' == 'net452'">
         <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.2" />
-        <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.2" />
-        <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.2" />
     </ItemGroup>
-
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\lib\ApiMultipartFormDataFormatter\ApiMultiPartFormData.csproj" />
+	</ItemGroup>
 
 </Project>

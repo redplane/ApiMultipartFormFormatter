@@ -1,4 +1,4 @@
-﻿namespace ApiBackEnd.ViewModels
+﻿namespace ApiBackEndShared.ViewModels
 {
     public class UserViewModel
     {

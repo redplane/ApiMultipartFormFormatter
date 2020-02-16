@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ApiBackEnd.Enumerations;
-using ApiBackEnd.ViewModels.Requests;
+using ApiBackEndShared.Enumerations;
+using ApiBackEndShared.ViewModels.Requests;
 
-namespace ApiBackEnd.ViewModels.Responses
+namespace ApiBackEndShared.ViewModels.Responses
 {
     public class UploadResponseViewModel
     {

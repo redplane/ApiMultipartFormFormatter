@@ -1,15 +1,17 @@
-﻿using System;
+﻿#if NETFRAMEWORK
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Text;
 using ApiMultiPartFormData.UnitTest.ViewModels;
 using Moq;
 using NUnit.Framework;
 
 #if NETFRAMEWORK
-using System.Net.Http.Formatting;
+
 #endif
 
 namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
@@ -277,3 +279,4 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
     }
 }
+#endif

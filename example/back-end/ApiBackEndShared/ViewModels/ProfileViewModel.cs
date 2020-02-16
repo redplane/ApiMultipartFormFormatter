@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ApiBackEnd.Enumerations;
+using ApiBackEndShared.Enumerations;
 using ApiMultiPartFormData.Models;
 
-namespace ApiBackEnd.ViewModels
+namespace ApiBackEndShared.ViewModels
 {
     public class ProfileViewModel
     {

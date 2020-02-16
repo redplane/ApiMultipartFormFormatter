@@ -8,9 +8,9 @@ using ApiMultiPartFormData.Extensions;
 
 namespace ApiMultiPartFormData
 {
-    public partial class MultipartFormDataFormatter : IInputFormatter
+    public partial class MultipartFormDataFormatter : InputFormatter
     {
-        public bool CanRead(InputFormatterContext context)
+        public override bool CanRead(InputFormatterContext context)
         {
             var type = context.ModelType;
             if (type == null)
@@ -19,7 +19,7 @@ namespace ApiMultiPartFormData
             return true;
         }
 
-        public virtual async Task<InputFormatterResult> ReadAsync(InputFormatterContext context)
+        public override async Task<InputFormatterResult> ReadRequestBodyAsync(InputFormatterContext context)
         {
             var type = context.ModelType;
 
@@ -50,7 +50,7 @@ namespace ApiMultiPartFormData
                 {
                     // Content is a file.
                     // File retrieved from client-side.
-                    var contentParameter = httpFile.ContentDisposition.Trim();
+                    var contentParameter = httpFile.FileName;
                     var parameterParts = FindContentDispositionParameters(contentParameter);
 
                     var file = new HttpFileBase(
@@ -72,20 +72,6 @@ namespace ApiMultiPartFormData
                 var defaultValue = GetDefaultValueForType(type);
                 return InputFormatterResult.Success(defaultValue);
             }
-        }
-
-        /// <summary>Gets the default value for the specified type.</summary>
-        /// <returns>The default value.</returns>
-        /// <param name="type">The type for which to get the default value.</param>
-        public static object GetDefaultValueForType(Type type)
-        {
-            if (type == null)
-                throw new ArgumentException(nameof(type));
-
-            if (type.IsValueType)
-                return Activator.CreateInstance(type);
-
-            return null;
         }
     }
 }

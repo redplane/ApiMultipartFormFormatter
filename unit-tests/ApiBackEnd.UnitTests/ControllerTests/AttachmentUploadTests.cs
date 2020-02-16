@@ -6,12 +6,11 @@ using ApiBackEnd.UnitTests.Extensions;
 using ApiBackEnd.UnitTests.Services.Implementations;
 using ApiBackEnd.UnitTests.Services.Interfaces;
 using ApiBackEnd.UnitTests.ViewModels;
-using ApiBackEnd.ViewModels.Responses;
+using ApiBackEndShared.ViewModels.Responses;
 using ApiMultiPartFormData.Models;
 using Autofac;
 using Microsoft.Owin.Hosting;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace ApiBackEnd.UnitTests.ControllerTests
 {

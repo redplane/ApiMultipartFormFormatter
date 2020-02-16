@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ApiBackEnd.Enumerations;
-using ApiBackEnd.ViewModels;
+﻿using System.Collections.Generic;
 using ApiMultiPartFormData.Models;
 
 namespace ApiBackEnd.UnitTests.ViewModels

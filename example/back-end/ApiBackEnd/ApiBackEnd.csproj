@@ -114,16 +114,9 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ApiUploadController.cs" />
-    <Compile Include="Enumerations\Qualities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\NotImplementedMultipartFormDataModelBinderService.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\HttpFileBaseResponseViewModel.cs" />
-    <Compile Include="ViewModels\ProfileResponseViewModel.cs" />
-    <Compile Include="ViewModels\ProfileViewModel.cs" />
-    <Compile Include="ViewModels\Requests\UploadRequestViewModel.cs" />
-    <Compile Include="ViewModels\Responses\UploadResponseViewModel.cs" />
-    <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -143,6 +136,10 @@
     <ProjectReference Include="..\..\..\lib\ApiMultipartFormDataFormatter\ApiMultiPartFormData.csproj">
       <Project>{1f851995-9c6b-4b34-82af-ac4e075f00c2}</Project>
       <Name>ApiMultiPartFormData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ApiBackEndShared\ApiBackEndShared.csproj">
+      <Project>{166d4510-c090-4f0e-96f5-72839da12347}</Project>
+      <Name>ApiBackEndShared</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

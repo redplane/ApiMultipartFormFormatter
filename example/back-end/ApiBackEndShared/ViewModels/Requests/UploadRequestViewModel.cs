@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using ApiBackEnd.Enumerations;
+using ApiBackEndShared.Enumerations;
+using ApiBackEndShared.Interfaces;
 using ApiMultiPartFormData.Models;
 
-namespace ApiBackEnd.ViewModels.Requests
+namespace ApiBackEndShared.ViewModels.Requests
 {
     public class UploadRequestViewModel
     {

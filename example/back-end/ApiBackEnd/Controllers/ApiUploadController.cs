@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Web.Http;
-using ApiBackEnd.ViewModels;
-using ApiBackEnd.ViewModels.Requests;
-using ApiBackEnd.ViewModels.Responses;
+﻿using System.Web.Http;
+using ApiBackEndShared.ViewModels.Requests;
+using ApiBackEndShared.ViewModels.Responses;
 
 namespace ApiBackEnd.Controllers
 {

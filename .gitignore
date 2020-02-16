@@ -22,3 +22,7 @@
 /unit-tests/ApiBackEnd.UnitTests/obj
 /unit-tests/ApiBackEnd.UnitTests/bin
 /unit-tests/ApiMultiPartFormData.UnitTest/ApiMultiPartFormData.UnitTest.csproj.user
+/example/back-end/ApiBackEndShared/obj
+/example/back-end/ApiBackEndShared/bin
+/example/back-end/ApiBackEndAspNetCore/obj
+/example/back-end/ApiBackEndAspNetCore/bin
