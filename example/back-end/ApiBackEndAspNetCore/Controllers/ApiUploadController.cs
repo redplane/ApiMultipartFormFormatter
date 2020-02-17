@@ -1,16 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ApiBackEndShared.Interfaces;
+using ApiBackEndShared.ViewModels.Requests;
+using ApiBackEndShared.ViewModels.Responses;
 using Microsoft.AspNetCore.Mvc;
-
 namespace ApiBackEndAspNetCore.Controllers
 {
-    public class ApiUploadController : Controller
+    [Route("api/upload")]
+    public class ApiUploadController : Controller, IUploadController
     {
-        public IActionResult Index()
+        /// <summary>
+        ///     Upload attachment to service end-point.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("")]
+        public IActionResult BasicUpload(UploadRequestViewModel model)
         {
-            return View();
+            if (model == null)
+            {
+                model = new UploadRequestViewModel();
+                TryValidateModel(model);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+
+            return Ok(new UploadResponseViewModel(model));
         }
     }
 }

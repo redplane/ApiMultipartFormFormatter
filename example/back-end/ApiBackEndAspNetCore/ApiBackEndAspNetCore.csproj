@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\lib\ApiMultipartFormDataFormatter\ApiMultiPartFormData.csproj" />
+    <ProjectReference Include="..\ApiBackEndShared\ApiBackEndShared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

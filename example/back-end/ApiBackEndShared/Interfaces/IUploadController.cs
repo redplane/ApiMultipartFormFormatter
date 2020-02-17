@@ -1,5 +1,7 @@
 ﻿#if NETFRAMEWORK
 using System.Web.Http;
+#elif NETCOREAPP
+using IHttpActionResult = Microsoft.AspNetCore.Mvc.IActionResult;
 #endif
 using ApiBackEndShared.ViewModels.Requests;
 
