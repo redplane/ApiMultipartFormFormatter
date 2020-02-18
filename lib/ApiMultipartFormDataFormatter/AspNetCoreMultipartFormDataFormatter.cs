@@ -1,10 +1,10 @@
 ﻿#if NETCOREAPP
-
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using ApiMultiPartFormData.Models;
 using ApiMultiPartFormData.Extensions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ApiMultiPartFormData
 {
@@ -29,6 +29,10 @@ namespace ApiMultiPartFormData
 
             try
             {
+                var metaData = context.Metadata;
+                if (metaData.BindingSource != BindingSource.Body)
+                    return InputFormatterResult.NoValue();
+
                 // load multipart data into memory 
                 var httpContents = await context.HttpContext.Request.ReadFormAsync();
 
@@ -50,7 +54,7 @@ namespace ApiMultiPartFormData
                 {
                     // Content is a file.
                     // File retrieved from client-side.
-                    var contentParameter = httpFile.FileName;
+                    var contentParameter = httpFile.Name;
                     var parameterParts = FindContentDispositionParameters(contentParameter);
 
                     var file = new HttpFileBase(

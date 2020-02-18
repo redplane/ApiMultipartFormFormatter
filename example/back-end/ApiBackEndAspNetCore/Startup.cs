@@ -24,9 +24,9 @@ namespace ApiBackEndAspNetCore
                 {
                     options.EnableEndpointRouting = false;
 
-                    options.InputFormatters.Insert(0, new MultipartFormDataFormatter());
+                    options.InputFormatters.Add(new MultipartFormDataFormatter());
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
 
         }

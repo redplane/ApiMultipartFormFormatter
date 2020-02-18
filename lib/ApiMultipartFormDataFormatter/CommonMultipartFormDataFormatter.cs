@@ -57,7 +57,11 @@ namespace ApiMultiPartFormData
                 };
             }
 
+#if NETFRAMEWORK
             SupportedMediaTypes.Add(new MediaTypeHeaderValue(SupportedMediaType));
+#elif NETCOREAPP
+            SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse(SupportedMediaType));
+#endif
         }
 
         #endregion
