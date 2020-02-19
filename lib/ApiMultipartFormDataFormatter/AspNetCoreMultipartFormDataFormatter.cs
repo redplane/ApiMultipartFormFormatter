@@ -30,7 +30,7 @@ namespace ApiMultiPartFormData
             try
             {
                 var metaData = context.Metadata;
-                if (metaData.BindingSource != BindingSource.Body)
+                if (metaData.BindingSource == null || metaData.BindingSource != BindingSource.Body)
                     return InputFormatterResult.NoValue();
 
                 // load multipart data into memory 

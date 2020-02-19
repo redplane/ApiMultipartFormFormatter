@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ApiBackEndAspNetCore.Controllers
 {
     [Route("api/upload")]
+    [ApiController]
     public class ApiUploadController : Controller, IUploadController
     {
         /// <summary>
@@ -12,7 +13,7 @@ namespace ApiBackEndAspNetCore.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("")]
-        public IActionResult BasicUpload([FromBody] UploadRequestViewModel model)
+        public IActionResult BasicUpload(UploadRequestViewModel model)
         {
             if (model == null)
             {
