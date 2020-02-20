@@ -4,7 +4,9 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Text;
+using System.Threading.Tasks;
 using ApiMultiPartFormData.UnitTest.Enums;
+using ApiMultiPartFormData.UnitTest.Tests.Interfaces;
 using ApiMultiPartFormData.UnitTest.ViewModels;
 using Moq;
 using NUnit.Framework;
@@ -12,10 +14,10 @@ using NUnit.Framework;
 namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
 {
     [TestFixture]
-    public class EnumUploadTests
+    public class EnumUploadTests : IEnumUploadTests
     {
         [Test]
-        public void UploadStudentWithTypeEnumAsInteger_Returns_StudentWithTypeEnum()
+        public async Task UploadStudentWithTypeEnumAsInteger_Returns_StudentWithTypeEnum()
         {
             var logger = new Mock<IFormatterLogger>();
             logger.Setup(x => x.LogError(It.IsAny<string>(), It.IsAny<Exception>()));
@@ -26,10 +28,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             var multipartFormContent = new MultipartFormDataContent("---wwww-wwww-wwww-boundary-----");
             multipartFormContent.Add(new StringContent($"{(int)goodStudentType}", Encoding.UTF8), $"{nameof(StudentViewModel.Type)}");
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                    multipartFormContent, logger.Object)
-                .Result;
+                    multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -41,7 +42,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadStudentTypeWithEnumAsText_Returns_StudentWithTypeEnum()
+        public async Task UploadStudentTypeWithEnumAsText_Returns_StudentWithTypeEnum()
         {
             var logger = new Mock<IFormatterLogger>();
             logger.Setup(x => x.LogError(It.IsAny<string>(), It.IsAny<Exception>()));
@@ -52,10 +53,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             var multipartFormContent = new MultipartFormDataContent("---wwww-wwww-wwww-boundary-----");
             multipartFormContent.Add(new StringContent(Enum.GetName(typeof(StudentTypes), goodStudentType), Encoding.UTF8), $"{nameof(StudentViewModel.Type)}");
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                    multipartFormContent, logger.Object)
-                .Result;
+                    multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -67,7 +67,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadStudentTypeWithNullEnumText_Returns_StudentWithNullEnum()
+        public async Task UploadStudentTypeWithNullEnumText_Returns_StudentWithNullEnum()
         {
             var logger = new Mock<IFormatterLogger>();
             logger.Setup(x => x.LogError(It.IsAny<string>(), It.IsAny<Exception>()));
@@ -75,10 +75,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             var multipartFormDataFormatter = new MultipartFormDataFormatter();
             var multipartFormContent = new MultipartFormDataContent("---wwww-wwww-wwww-boundary-----");
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                    multipartFormContent, logger.Object)
-                .Result;
+                    multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -90,7 +89,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadStudentTypeWithEnumText_Returns_StudentWithEnum()
+        public async Task UploadStudentTypeWithEnumText_Returns_StudentWithEnum()
         {
             var logger = new Mock<IFormatterLogger>();
             logger.Setup(x => x.LogError(It.IsAny<string>(), It.IsAny<Exception>()));
@@ -101,10 +100,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             var multipartFormContent = new MultipartFormDataContent("---wwww-wwww-wwww-boundary-----");
             multipartFormContent.Add(new StringContent(Enum.GetName(typeof(StudentTypes), goodStudentType), Encoding.UTF8), $"{nameof(StudentViewModel.NullableStudentType)}");
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                    multipartFormContent, logger.Object)
-                .Result;
+                    multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -112,7 +110,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
                 return;
             }
 
-            Assert.AreEqual(student.NullableStudentType, goodStudentType);
+            Assert.AreEqual(goodStudentType, student.NullableStudentType);
         }
     }
 }

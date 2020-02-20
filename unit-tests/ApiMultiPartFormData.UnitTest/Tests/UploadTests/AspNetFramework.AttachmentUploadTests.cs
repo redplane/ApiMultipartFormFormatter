@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Threading.Tasks;
+using ApiMultiPartFormData.UnitTest.Tests.Interfaces;
 using ApiMultiPartFormData.UnitTest.ViewModels;
 using Moq;
 using NUnit.Framework;
@@ -12,10 +14,10 @@ using NUnit.Framework;
 namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
 {
     [TestFixture]
-    public class AttachmentUploadTests
+    public class AttachmentUploadTests : IAttachmentUploadTests
     {
         [Test]
-        public void UploadStudentWithName_Returns_StudentWithFullName()
+        public async Task UploadStudentWithName_Returns_StudentWithFullName()
         {
             var studentName = "Student-001";
             var logger = new Mock<IFormatterLogger>();
@@ -24,17 +26,16 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             var multipartFormDataFormatter = new MultipartFormDataFormatter();
             var multipartFormContent = new MultipartFormDataContent("---wwww-wwww-wwww-boundary-----");
             multipartFormContent.Add(new StringContent(studentName), nameof(StudentViewModel.FullName));
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                    multipartFormContent, logger.Object)
-                .Result;
+                    multipartFormContent, logger.Object);
 
             Assert.IsInstanceOf<StudentViewModel>(uploadedModel);
             Assert.AreEqual((uploadedModel as StudentViewModel)?.FullName,studentName);
         }
 
         [Test]
-        public void UploadStudentWithPhoto_Returns_StudentWithPhoto()
+        public async Task UploadStudentWithPhoto_Returns_StudentWithPhoto()
         {
             var fileName = $"{Guid.NewGuid():D}.jpg";
             var contentType = "image/jpeg";
@@ -53,10 +54,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             attachment.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             multipartFormContent.Add(attachment, nameof(StudentViewModel.Photo), fileName);
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                    multipartFormContent, logger.Object)
-                .Result;
+                    multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -71,7 +71,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadStudentWithProfilePhoto_Returns_StudentWithProfilePhoto()
+        public async Task UploadStudentWithProfilePhoto_Returns_StudentWithProfilePhoto()
         {
             var fileName = $"{Guid.NewGuid():D}.jpg";
             var contentType = "image/jpeg";
@@ -90,10 +90,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             attachment.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             multipartFormContent.Add(attachment, $"{nameof(StudentViewModel.Profile)}[{nameof(ProfileViewModel.Attachment)}]", fileName);
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                multipartFormContent, logger.Object)
-                .Result;
+                multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -109,7 +108,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadStudentWithProfilePhoto_Returns_ProfilePhotoIsValidStream()
+        public async Task UploadStudentWithProfilePhoto_Returns_ProfilePhotoIsValidStream()
         {
             var fileName = $"{Guid.NewGuid():D}.jpg";
             var contentType = "image/jpeg";
@@ -128,10 +127,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             attachment.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             multipartFormContent.Add(attachment, $"{nameof(StudentViewModel.Profile)}[{nameof(ProfileViewModel.Attachment)}]", fileName);
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                multipartFormContent, logger.Object)
-                .Result;
+                multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -146,7 +144,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadStudentWithBufferedAttachment_Returns_StudentWithBufferedAttachment()
+        public async Task UploadStudentWithBufferedAttachment_Returns_StudentWithBufferedAttachment()
         {
             var fileName = $"{Guid.NewGuid():D}.jpg";
             var contentType = "image/jpeg";
@@ -165,10 +163,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             attachment.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             multipartFormContent.Add(attachment, $"{nameof(StudentViewModel.Profile)}[{nameof(ProfileViewModel.BufferedAttachment)}]", fileName);
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                multipartFormContent, logger.Object)
-                .Result;
+                multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {

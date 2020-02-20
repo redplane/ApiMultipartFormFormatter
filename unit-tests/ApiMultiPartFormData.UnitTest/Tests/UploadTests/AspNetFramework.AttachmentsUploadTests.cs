@@ -8,6 +8,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
+using ApiMultiPartFormData.UnitTest.Tests.Interfaces;
 using ApiMultiPartFormData.UnitTest.ViewModels;
 using Autofac;
 using Moq;
@@ -16,7 +17,7 @@ using NUnit.Framework;
 namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
 {
     [TestFixture]
-    public partial class AttachmentsUploadTests : IAttachmentUploadTests
+    public partial class AttachmentsUploadTests : IAttachmentsUploadTests
     {
         #region Properties
 

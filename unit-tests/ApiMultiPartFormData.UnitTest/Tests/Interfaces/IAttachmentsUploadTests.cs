@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
+namespace ApiMultiPartFormData.UnitTest.Tests.Interfaces
 {
-    public interface IAttachmentUploadTests
+    public interface IAttachmentsUploadTests
     {
         Task UploadAttachmentsIntoStudent_Returns_StudentWithAttachments();
 

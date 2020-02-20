@@ -6,18 +6,16 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Text;
+using System.Threading.Tasks;
+using ApiMultiPartFormData.UnitTest.Tests.Interfaces;
 using ApiMultiPartFormData.UnitTest.ViewModels;
 using Moq;
 using NUnit.Framework;
 
-#if NETFRAMEWORK
-
-#endif
-
 namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
 {
     [TestFixture]
-    public class GuidUploadTests
+    public class GuidUploadTests : IGuidUploadTests
     {
         #region Properties
 
@@ -31,7 +29,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
 
 
         [Test]
-        public void UploadStudentWithId_Returns_StudentWithId()
+        public async Task UploadStudentWithId_Returns_StudentWithId()
         {
             var studentId = Guid.NewGuid().ToString("D");
             var logger = new Mock<IFormatterLogger>();
@@ -42,10 +40,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
 
             multipartFormContent.Add(new StringContent(studentId, Encoding.UTF8), nameof(StudentViewModel.Id));
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                    multipartFormContent, logger.Object)
-                .Result;
+                    multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -57,7 +54,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadStudentWithoutId_Returns_StudentWithGuidEmptyId()
+        public async Task UploadStudentWithoutId_Returns_StudentWithGuidEmptyId()
         {
             var logger = new Mock<IFormatterLogger>();
             logger.Setup(x => x.LogError(It.IsAny<string>(), It.IsAny<Exception>()));
@@ -65,10 +62,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             var multipartFormDataFormatter = new MultipartFormDataFormatter();
             var multipartFormContent = new MultipartFormDataContent("---wwww-wwww-wwww-boundary-----");
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                    multipartFormContent, logger.Object)
-                .Result;
+                    multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -80,7 +76,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadStudentWithoutParentId_Returns_StudentWithNullParentId()
+        public async Task UploadStudentWithoutParentId_Returns_StudentWithNullParentId()
         {
             var logger = new Mock<IFormatterLogger>();
             logger.Setup(x => x.LogError(It.IsAny<string>(), It.IsAny<Exception>()));
@@ -88,10 +84,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             var multipartFormDataFormatter = new MultipartFormDataFormatter();
             var multipartFormContent = new MultipartFormDataContent("---wwww-wwww-wwww-boundary-----");
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                    multipartFormContent, logger.Object)
-                .Result;
+                    multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -103,7 +98,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadStudentWithParentId_Returns_StudentWithParentId()
+        public async Task UploadStudentWithParentId_Returns_StudentWithParentId()
         {
             var parentId = Guid.NewGuid().ToString("D");
 
@@ -113,10 +108,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             var multipartFormDataFormatter = new MultipartFormDataFormatter();
             var multipartFormContent = new MultipartFormDataContent("---wwww-wwww-wwww-boundary-----");
             multipartFormContent.Add(new StringContent(parentId, Encoding.UTF8), nameof(StudentViewModel.ParentId));
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                    multipartFormContent, logger.Object)
-                .Result;
+                    multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -128,7 +122,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadStudentWithChildIds_Returns_StudentWithChildIds()
+        public async Task UploadStudentWithChildIds_Returns_StudentWithChildIds()
         {
             var childIds = new LinkedList<Guid>();
             childIds.AddLast(Guid.NewGuid());
@@ -147,10 +141,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
                 index++;
             }
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                multipartFormContent, logger.Object)
-                .Result;
+                multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -163,7 +156,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadIdIntoProfile_Returns_StudentProfileWithId()
+        public async Task UploadIdIntoProfile_Returns_StudentProfileWithId()
         {
             var profileId = Guid.NewGuid().ToString("D");
 
@@ -174,10 +167,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             var multipartFormContent = new MultipartFormDataContent("---wwww-wwww-wwww-boundary-----");
             multipartFormContent.Add(new StringContent(profileId, Encoding.UTF8), $"{nameof(StudentViewModel.Profile)}[{nameof(ProfileViewModel.Id)}]");
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                multipartFormContent, logger.Object)
-                .Result;
+                multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -189,7 +181,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadBlankIdIntoProfile_Returns_StudentProfileWithId()
+        public async Task UploadBlankIdIntoProfile_Returns_StudentProfileWithId()
         {
             var profileId = Guid.Empty.ToString("D");
 
@@ -200,10 +192,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             var multipartFormContent = new MultipartFormDataContent("---wwww-wwww-wwww-boundary-----");
             multipartFormContent.Add(new StringContent(profileId, Encoding.UTF8), $"{nameof(StudentViewModel.Profile)}[{nameof(ProfileViewModel.Id)}]");
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                multipartFormContent, logger.Object)
-                .Result;
+                multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -215,7 +206,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void NoUploadIntoProfile_Returns_StudentNullProfile()
+        public async Task NoUploadIntoProfile_Returns_StudentNullProfile()
         {
             var logger = new Mock<IFormatterLogger>();
             logger.Setup(x => x.LogError(It.IsAny<string>(), It.IsAny<Exception>()));
@@ -223,10 +214,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
             var multipartFormDataFormatter = new MultipartFormDataFormatter();
             var multipartFormContent = new MultipartFormDataContent("---wwww-wwww-wwww-boundary-----");
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                multipartFormContent, logger.Object)
-                .Result;
+                multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
@@ -238,7 +228,7 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
         }
 
         [Test]
-        public void UploadWithNestedRelativeIds_Returns_StudentProfileWithRelativeIds()
+        public async Task UploadWithNestedRelativeIds_Returns_StudentProfileWithRelativeIds()
         {
             var relativeIds = new Guid[]
             {
@@ -259,10 +249,9 @@ namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
                 multipartFormContent.Add(content, $"{nameof(StudentViewModel.Profile)}[{nameof(ProfileViewModel.RelativeIds)}][{i}]");
             }
 
-            var uploadedModel = multipartFormDataFormatter
+            var uploadedModel = await multipartFormDataFormatter
                 .ReadFromStreamAsync(typeof(StudentViewModel), new MemoryStream(),
-                multipartFormContent, logger.Object)
-                .Result;
+                multipartFormContent, logger.Object);
 
             if (!(uploadedModel is StudentViewModel student))
             {
