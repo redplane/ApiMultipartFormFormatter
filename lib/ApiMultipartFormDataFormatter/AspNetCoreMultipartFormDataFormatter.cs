@@ -29,10 +29,6 @@ namespace ApiMultiPartFormData
 
             try
             {
-                var metaData = context.Metadata;
-                if (metaData.BindingSource == null || metaData.BindingSource != BindingSource.Body)
-                    return InputFormatterResult.NoValue();
-
                 // load multipart data into memory 
                 var httpContents = await context.HttpContext.Request.ReadFormAsync();
 
@@ -50,7 +46,7 @@ namespace ApiMultiPartFormData
                     await BuildRequestModelAsync(instance, parameterParts, value);
                 }
 
-                foreach (var httpFile in context.HttpContext.Request.Form.Files)
+                foreach (var httpFile in httpContents.Files)
                 {
                     // Content is a file.
                     // File retrieved from client-side.
