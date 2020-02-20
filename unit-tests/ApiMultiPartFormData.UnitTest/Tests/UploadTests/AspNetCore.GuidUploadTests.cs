@@ -1,6 +1,4 @@
-﻿
-using ApiMultiPartFormData.UnitTest.Tests.Interfaces;
-#if NETCOREAPP
+﻿#if NETCOREAPP
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.Primitives;
+using ApiMultiPartFormData.UnitTest.Tests.Interfaces;
 
 namespace ApiMultiPartFormData.UnitTest.Tests.UploadTests
 {
