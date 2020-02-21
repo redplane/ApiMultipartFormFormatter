@@ -21,9 +21,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit-tests", "unit-tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiBackEnd.UnitTest", "unit-tests\ApiBackEnd.UnitTests\ApiBackEnd.UnitTest.csproj", "{77997E71-59EB-4DDA-9542-80CDFD8E5822}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiBackEndAspNetCore", "example\back-end\ApiBackEndAspNetCore\ApiBackEndAspNetCore.csproj", "{2730A90E-0EF8-44B7-B7A2-F53D4D652316}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiBackEndAspNetCore", "example\back-end\ApiBackEndAspNetCore\ApiBackEndAspNetCore.csproj", "{2730A90E-0EF8-44B7-B7A2-F53D4D652316}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiBackEndShared", "example\back-end\ApiBackEndShared\ApiBackEndShared.csproj", "{166D4510-C090-4F0E-96F5-72839DA12347}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiBackEndShared", "example\back-end\ApiBackEndShared\ApiBackEndShared.csproj", "{166D4510-C090-4F0E-96F5-72839DA12347}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration-tests", "integration-tests", "{9A030A5E-A54B-4AE8-A406-A38BFA0D07F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCore.ApiBackEnd", "integration-tests\AspNetCore.ApiBackEnd\AspNetCore.ApiBackEnd.csproj", "{90F5C8F6-5BDF-4367-AD9A-EB5976C70ADB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiBackEnd.IntegrationTest.Shared", "integration-tests\ApiBackEnd.IntegrationTest.Shared\ApiBackEnd.IntegrationTest.Shared.csproj", "{2D1C9093-51EE-4481-B667-2B1EDADECA49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +61,14 @@ Global
 		{166D4510-C090-4F0E-96F5-72839DA12347}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{166D4510-C090-4F0E-96F5-72839DA12347}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{166D4510-C090-4F0E-96F5-72839DA12347}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90F5C8F6-5BDF-4367-AD9A-EB5976C70ADB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90F5C8F6-5BDF-4367-AD9A-EB5976C70ADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90F5C8F6-5BDF-4367-AD9A-EB5976C70ADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90F5C8F6-5BDF-4367-AD9A-EB5976C70ADB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D1C9093-51EE-4481-B667-2B1EDADECA49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D1C9093-51EE-4481-B667-2B1EDADECA49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D1C9093-51EE-4481-B667-2B1EDADECA49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D1C9093-51EE-4481-B667-2B1EDADECA49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +82,8 @@ Global
 		{77997E71-59EB-4DDA-9542-80CDFD8E5822} = {051FDC8D-4F24-4EA4-8937-D77F36D1D033}
 		{2730A90E-0EF8-44B7-B7A2-F53D4D652316} = {33256EF5-1C56-410B-B0C4-2C5F096B894D}
 		{166D4510-C090-4F0E-96F5-72839DA12347} = {33256EF5-1C56-410B-B0C4-2C5F096B894D}
+		{90F5C8F6-5BDF-4367-AD9A-EB5976C70ADB} = {9A030A5E-A54B-4AE8-A406-A38BFA0D07F4}
+		{2D1C9093-51EE-4481-B667-2B1EDADECA49} = {9A030A5E-A54B-4AE8-A406-A38BFA0D07F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {10EA0904-FDA3-42B7-848A-BA812777A2AE}

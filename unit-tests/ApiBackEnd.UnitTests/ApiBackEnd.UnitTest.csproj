@@ -88,13 +88,7 @@
     <Compile Include="ControllerTests\EnumUploadTests.cs" />
     <Compile Include="ControllerTests\GuidUploadTests.cs" />
     <Compile Include="ControllerTests\NestedGuidUploadTests.cs" />
-    <Compile Include="Extensions\HttpFileBaseExtensions.cs" />
-    <Compile Include="Extensions\RawUploadRequestViewModelExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Implementations\AttachmentService.cs" />
-    <Compile Include="Services\Interfaces\IAttachmentService.cs" />
-    <Compile Include="ViewModels\RawProfileViewModel.cs" />
-    <Compile Include="ViewModels\RawUploadRequestViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -108,6 +102,10 @@
     <ProjectReference Include="..\..\example\back-end\ApiBackEnd\ApiBackEnd.csproj">
       <Project>{3a670874-7bd9-4534-8e82-209532c73ea3}</Project>
       <Name>ApiBackEnd</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\integration-tests\ApiBackEnd.IntegrationTest.Shared\ApiBackEnd.IntegrationTest.Shared.csproj">
+      <Project>{2D1C9093-51EE-4481-B667-2B1EDADECA49}</Project>
+      <Name>ApiBackEnd.IntegrationTest.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\lib\ApiMultipartFormDataFormatter\ApiMultiPartFormData.csproj">
       <Project>{1F851995-9C6B-4B34-82AF-AC4E075F00C2}</Project>

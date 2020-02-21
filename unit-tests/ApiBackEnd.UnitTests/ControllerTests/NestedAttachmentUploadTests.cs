@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http.SelfHost;
-using ApiBackEnd.UnitTests.Extensions;
-using ApiBackEnd.UnitTests.Services.Implementations;
-using ApiBackEnd.UnitTests.Services.Interfaces;
-using ApiBackEnd.UnitTests.ViewModels;
+using ApiBackEnd.IntegrationTest.Shared.Extensions;
+using ApiBackEnd.IntegrationTest.Shared.Interfaces;
+using ApiBackEnd.IntegrationTest.Shared.Services;
+using ApiBackEnd.IntegrationTest.Shared.ViewModels;
 using ApiBackEndShared.ViewModels.Responses;
 using ApiMultiPartFormData.Models;
 using Autofac;

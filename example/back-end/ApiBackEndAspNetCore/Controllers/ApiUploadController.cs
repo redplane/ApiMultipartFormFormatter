@@ -13,7 +13,7 @@ namespace ApiBackEndAspNetCore.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("")]
-        public IActionResult BasicUpload(UploadRequestViewModel model)
+        public IActionResult BasicUpload([FromBody] UploadRequestViewModel model)
         {
             if (model == null)
             {

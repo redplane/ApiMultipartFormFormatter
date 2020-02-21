@@ -26,3 +26,7 @@
 /example/back-end/ApiBackEndShared/bin
 /example/back-end/ApiBackEndAspNetCore/obj
 /example/back-end/ApiBackEndAspNetCore/bin
+/integration-tests/ApiBackEnd.IntegrationTest.Shared/obj
+/integration-tests/ApiBackEnd.IntegrationTest.Shared/bin
+/integration-tests/AspNetCore.ApiBackEnd/obj
+/integration-tests/AspNetCore.ApiBackEnd/bin
