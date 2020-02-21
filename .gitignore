@@ -30,3 +30,4 @@
 /integration-tests/ApiBackEnd.IntegrationTest.Shared/bin
 /integration-tests/AspNetCore.ApiBackEnd/obj
 /integration-tests/AspNetCore.ApiBackEnd/bin
+/unit-tests/ApiBackEnd.UnitTests/*.user
