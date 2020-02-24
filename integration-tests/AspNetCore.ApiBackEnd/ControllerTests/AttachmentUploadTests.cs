@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net.Http;
@@ -29,13 +30,9 @@ namespace AspNetCore.ApiBackEnd.ControllerTests
     {
         #region Properties
 
-        #region Properties
-
         private const string BaseUrl = "http://localhost:44321";
 
         private TestServer _testServer;
-
-        #endregion
 
         #endregion
 
@@ -103,6 +100,7 @@ namespace AspNetCore.ApiBackEnd.ControllerTests
 
         }
 
+        [Test]
         public async Task UploadValidAttachments_Returns_AttachmentsInfoWhoseInfoSameAsUploadedOnes()
         {
             using (var lifeTimeScope = _testServer.Services.CreateScope())
@@ -114,7 +112,7 @@ namespace AspNetCore.ApiBackEnd.ControllerTests
                 uploadModel.Attachments = new List<HttpFile>();
                 uploadModel.Attachments.Add(new HttpFile(sampleAttachment));
 
-                var httpClient = lifeTimeScope.Resolve<HttpClient>();
+                var httpClient = _testServer.CreateClient();
                 var httpResponseMessage = await httpClient
                     .PostAsync(new Uri("api/upload", UriKind.Relative), uploadModel.ToMultipartFormDataContent());
 

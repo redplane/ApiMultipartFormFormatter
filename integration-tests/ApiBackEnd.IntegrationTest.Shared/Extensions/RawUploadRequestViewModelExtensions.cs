@@ -40,8 +40,11 @@ namespace ApiBackEnd.IntegrationTest.Shared.Extensions
                     multipartFormDataContent.Add(model.Attachments[attachmentId]
                         .ToByteArrayContent($"{nameof(model.Attachments)}[{attachmentId}]"));
 #elif NETSTANDARD
-                    multipartFormDataContent.Add(new ByteArrayContent(model.Attachments[attachmentId].ToBytes()), 
-                    $"{nameof(model.Attachments)}[{attachmentId}]", model.Attachments[attachmentId].FileName);
+                    var attachment = model.Attachments[attachmentId];
+                    var content = new ByteArrayContent(attachment.ToBytes());
+                    content.Headers.ContentType = MediaTypeHeaderValue.Parse(attachment.ContentType);
+                    multipartFormDataContent.Add(content,
+                    $"{nameof(model.Attachments)}[{attachmentId}]", attachment.FileName);
 #endif
                 }
             }
