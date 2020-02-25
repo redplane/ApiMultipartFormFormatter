@@ -49,13 +49,13 @@ namespace ApiBackEnd.IntegrationTest.Shared.Extensions
                 }
             }
 
-            if (!string.IsNullOrEmpty(model.NonNullableQuality))
-                multipartFormDataContent.Add(new StringContent(model.NonNullableQuality, Encoding.UTF8),
-                    nameof(model.NonNullableQuality));
+            var nonNullableQuality = string.IsNullOrEmpty(model.NonNullableQuality) ? "" : model.NonNullableQuality;
+            multipartFormDataContent.Add(new StringContent(nonNullableQuality, Encoding.UTF8),
+                nameof(model.NonNullableQuality));
 
-            if (!string.IsNullOrEmpty(model.NullableQuality))
-                multipartFormDataContent.Add(new StringContent(model.NullableQuality, Encoding.UTF8),
-                    nameof(model.NullableQuality));
+            var nullableQualityContent = string.IsNullOrEmpty(model.NullableQuality) ? "" : model.NullableQuality;
+            multipartFormDataContent.Add(new StringContent(nullableQualityContent, Encoding.UTF8),
+                nameof(model.NullableQuality));
 
             if (model.Ids != null)
                 for (var id = 0; id < model.Ids.Count; id++)
@@ -63,9 +63,11 @@ namespace ApiBackEnd.IntegrationTest.Shared.Extensions
                         $"{nameof(model.Ids)}[{id}]");
 
             if (model.Qualities != null && model.Qualities.Count > 0)
+            {
                 for (var id = 0; id < model.Qualities.Count; id++)
                     multipartFormDataContent
                         .Add(new StringContent(model.Qualities[id], Encoding.UTF8), $"{nameof(model.Qualities)}[{id}]");
+            }
 
             model.Profile?.ExtendHttpContent(multipartFormDataContent, $"{nameof(model.Profile)}.");
 

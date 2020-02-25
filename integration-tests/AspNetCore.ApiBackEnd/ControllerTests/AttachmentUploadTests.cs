@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using ApiBackEnd.IntegrationTest.Shared.Extensions;
 using ApiBackEnd.IntegrationTest.Shared.Interfaces;
@@ -13,29 +11,18 @@ using ApiBackEndAspNetCore;
 using ApiBackEndShared.ViewModels.Responses;
 using ApiMultiPartFormData;
 using ApiMultiPartFormData.Models;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace AspNetCore.ApiBackEnd.ControllerTests
 {
     [TestFixture]
     public class AttachmentUploadTests : IAttachmentUploadTests
     {
-        #region Properties
-
-        private const string BaseUrl = "http://localhost:44321";
-
-        private TestServer _testServer;
-
-        #endregion
-
         #region Installations
 
         [SetUp]
@@ -46,7 +33,7 @@ namespace AspNetCore.ApiBackEnd.ControllerTests
             var config = new ConfigurationBuilder()
                 .SetBasePath(contentRootFull)
                 .AddJsonFile("appsettings.json", false, true)
-                .AddJsonFile($"appsettings.Development.json", true, true)
+                .AddJsonFile("appsettings.Development.json", true, true)
                 .AddEnvironmentVariables().Build();
 
             var webHostBuilder = new WebHostBuilder()
@@ -67,8 +54,21 @@ namespace AspNetCore.ApiBackEnd.ControllerTests
                 });
 
             _testServer = new TestServer(webHostBuilder);
-
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _testServer?.Dispose();
+        }
+
+        #endregion
+
+        #region Properties
+
+        private const string BaseUrl = "http://localhost:44321";
+
+        private TestServer _testServer;
 
         #endregion
 
@@ -97,7 +97,6 @@ namespace AspNetCore.ApiBackEnd.ControllerTests
                 Assert.AreEqual(uploadModel.Attachment.ContentLength, uploadResult.Attachment.ContentLength);
                 Assert.AreEqual(uploadModel.Attachment.ContentType, uploadResult.Attachment.ContentType);
             }
-
         }
 
         [Test]
@@ -125,7 +124,8 @@ namespace AspNetCore.ApiBackEnd.ControllerTests
                 for (var id = 0; id < uploadModel.Attachments.Count; id++)
                 {
                     Assert.AreEqual(uploadModel.Attachments[id].FileName, uploadResult.Attachments[id].FileName);
-                    Assert.AreEqual(uploadModel.Attachments[id].ContentLength, uploadResult.Attachments[id].ContentLength);
+                    Assert.AreEqual(uploadModel.Attachments[id].ContentLength,
+                        uploadResult.Attachments[id].ContentLength);
                     Assert.AreEqual(uploadModel.Attachments[id].ContentType, uploadResult.Attachments[id].ContentType);
                 }
             }

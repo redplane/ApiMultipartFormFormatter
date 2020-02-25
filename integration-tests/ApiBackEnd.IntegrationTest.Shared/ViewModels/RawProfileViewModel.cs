@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using ApiBackEnd.IntegrationTest.Shared.Extensions;
 using ApiMultiPartFormData.Models;
@@ -77,7 +78,9 @@ namespace ApiBackEnd.IntegrationTest.Shared.ViewModels
 #if NETFRAMEWORK
                 httpContent.Add(Photo.ToByteArrayContent($"{prefix}{nameof(Photo)}"));
 #elif NETSTANDARD
-                httpContent.Add(new ByteArrayContent(Photo.ToBytes()), $"{prefix}{nameof(Photo)}", Photo.FileName);
+                var content = new ByteArrayContent(Photo.ToBytes());
+                content.Headers.ContentType = MediaTypeHeaderValue.Parse(Photo.ContentType);
+                httpContent.Add(content, $"{prefix}{nameof(Photo)}", Photo.FileName);
 #endif
             }
 
@@ -88,7 +91,9 @@ namespace ApiBackEnd.IntegrationTest.Shared.ViewModels
 #if NETFRAMEWORK
                     httpContent.Add(Photos[photoId].ToByteArrayContent($"{prefix}{nameof(Photos)}[{photoId}]"));
 #elif NETSTANDARD
-                    httpContent.Add(new ByteArrayContent(Photos[photoId].ToBytes()),$"{prefix}{nameof(Photos)}[{photoId}]", Photos[photoId].FileName);
+                    var content = new ByteArrayContent(Photos[photoId].ToBytes());
+                    content.Headers.ContentType = MediaTypeHeaderValue.Parse(Photos[photoId].ContentType);
+                    httpContent.Add(content, $"{prefix}{nameof(Photos)}[{photoId}]", Photos[photoId].FileName);
 #endif
                 }
             }
