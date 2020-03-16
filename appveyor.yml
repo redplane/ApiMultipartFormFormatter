@@ -55,21 +55,21 @@ deploy:
   artifact: Azure deployment
   on:
     branch:
-      - /rc-.*/
+      - /nightly_build-.*/
 
   # MyGet deployment.
 - provider: NuGet
   server: https://www.myget.org/F/apimultipartformdataformatter
-  api_key: $(myGetApiKey)
+  api_key: $(MY_GET_API_KEY)
   skip_symbols: false
   artifact: Nuget deployment
   on:
     branch:
-      - /rc-.*/
+      - /nightly_build-.*/
 
   # Nuget deployment.
 - provider: NuGet
-  api_key: $(nugetApiKey)
+  api_key: $(NUGET_API_KEY)
   skip_symbols: false
   artifact: Nuget deployment
   on:
