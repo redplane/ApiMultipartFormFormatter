@@ -18,87 +18,145 @@
     
       
 **II**. **Formatter registration**:
- - Please select one of the following implementation below for `WebApiConfig.cs` or `Startup.cs`:
 
-    1. **WITHOUT** dependency injection
-    
-        ```
-        public static void Register(HttpConfiguration config)
-        {
-            // Web API configuration and services
+ -  *ASP.Net Framework*
+    - Please select one of the following implementation below for `WebApiConfig.cs` or `Startup.cs`:
+
+        1. **WITHOUT** dependency injection
         
-            // Web API routes
-            config.MapHttpAttributeRoutes();
-        
-            config.Routes.MapHttpRoute(
-                "DefaultApi",
-                "api/{controller}/{id}",
-                new {id = RouteParameter.Optional}
-            );
-        
-            config.Formatters.Add(new MultipartFormDataFormatter());
-        }
-        ```
-      
-    2. **WITH** dependency injection
-        ```
-        public static void Register(HttpConfiguration config)
-        {
-            // Web API configuration and services
-
-            // Web API routes
-            config.MapHttpAttributeRoutes();
-
-            config.Routes.MapHttpRoute(
-                "DefaultApi",
-                "api/{controller}/{id}",
-                new {id = RouteParameter.Optional}
-            );
-            var containerBuilder = new ContainerBuilder();
-
-            // Register formatter as a single instance in the system.
-            containerBuilder.RegisterType<MultipartFormDataFormatter>()
-                .InstancePerLifetimeScope();
-
-            var container = containerBuilder.Build();
-            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-
-            // Register multipart/form-data formatter.
-            var instance =
-                (MultipartFormDataFormatter) config.DependencyResolver.GetService(typeof(MultipartFormDataFormatter));
-       
-            config.Formatters.Add(instance);
-        }
-        ```
+            ```
+            public static void Register(HttpConfiguration config)
+            {
+                // Web API configuration and services
+            
+                // Web API routes
+                config.MapHttpAttributeRoutes();
+            
+                config.Routes.MapHttpRoute(
+                    "DefaultApi",
+                    "api/{controller}/{id}",
+                    new {id = RouteParameter.Optional}
+                );
+            
+                config.Formatters.Add(new MultipartFormDataFormatter());
+            }
+            ```
+          
+        2. **WITH** dependency injection
+            ```
+            public static void Register(HttpConfiguration config)
+            {
+                // Web API configuration and services
     
-**III**. **API Controller**
+                // Web API routes
+                config.MapHttpAttributeRoutes();
     
-```
-[RoutePrefix("api/account")]
-public class ApiAccountController : ApiController
-{
-    [Route("register")]
-    [HttpPost]
-    public HttpResponseMessage Register(AccountRegistrationViewModel parameters)
+                config.Routes.MapHttpRoute(
+                    "DefaultApi",
+                    "api/{controller}/{id}",
+                    new {id = RouteParameter.Optional}
+                );
+                var containerBuilder = new ContainerBuilder();
+    
+                // Register formatter as a single instance in the system.
+                containerBuilder.RegisterType<MultipartFormDataFormatter>()
+                    .InstancePerLifetimeScope();
+    
+                var container = containerBuilder.Build();
+                config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+    
+                // Register multipart/form-data formatter.
+                var instance =
+                    (MultipartFormDataFormatter) config.DependencyResolver.GetService(typeof(MultipartFormDataFormatter));
+           
+                config.Formatters.Add(instance);
+            }
+            ```
+             
+             
+ -  *ASP.Net Core (>= 2.2)*
+ 
+    ```
+    public class Startup
     {
-        if (parameters == null)
+        public Startup(IConfiguration configuration)
         {
-            parameters = new AccountRegistrationViewModel();
-            Validate(parameters);
+            //...
         }
 
-        if (!ModelState.IsValid)
-        {
-            return Request.CreateResponse(HttpStatusCode.BadRequest);
-        }
+        public IConfiguration Configuration { get; }
 
-        return Request.CreateResponse(HttpStatusCode.OK);
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers(options =>
+                {
+                    //..
+                    options.InputFormatters.Add(new MultipartFormDataFormatter());
+                });
+
+
+        }
     }
-}
-```
-    
- * Start posting a multipart/form-data to your WEB API 2 project and enjoy.
+    ```
+**III**. **API Controller**
 
+- *ASP.NET Framework*
+    ```
+    [RoutePrefix("api/account")]
+    public class ApiAccountController : ApiController
+    {
+        [Route("register")]
+        [HttpPost]
+        public HttpResponseMessage Register(AccountRegistrationViewModel parameters)
+        {
+            if (parameters == null)
+            {
+                parameters = new AccountRegistrationViewModel();
+                Validate(parameters);
+            }
+    
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+    
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+    }
+    ```
+    
+- *ASP.NET Core*
+    ```
+    [Route("api/upload")]
+    [ApiController]
+    public class ApiUploadController : Controller, IUploadController
+    {
+        /// <summary>
+        ///     Upload attachment to service end-point.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("")]
+        public IActionResult BasicUpload([FromBody] UploadRequestViewModel model)
+        {
+            if (model == null)
+            {
+                model = new UploadRequestViewModel();
+                TryValidateModel(model);
+            }
+    
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+    
+    
+            return Ok(new UploadResponseViewModel(model));
+        }
+    }
+    ```
+  
+  
+ * Start posting a multipart/form-data to your WEB API project and enjoy.
+ * **NOTE**: **In ASP.NET Core, you have to mark your controller with *[ApiController]*** in order to make this plugin works. Otherwise, it doesn't.
 
  
 ## C. HttpFile or HttpFileBase usage:
@@ -239,11 +297,12 @@ public class GuidModelBinderService : IModelBinderService
 ## VIII. Change logs:
 
 * 3.0.0:
+    * **ASP.Net Core supported.**
     * Provided `HttpFile` and `HttpFileBase` support (previously `HttpFile` only). [HttpFileBase]() is recommended since it reads data using stream instead of convert data into bytes array. Please refer [discussion](https://github.com/redplane/ApiMultipartFormFormatter/pull/7) for further information. 
         - (Thank [Driedas](https://github.com/Driedas) for his pull request)
     
     * Replaced ~~IMultiPartFormDataModelBinderService~~ with `IModelBinderService` for custom data serialization. Therefore, `IModelBinderService` classes can be registered to handle custom data that plugin cannot handled.
-
+    
 * 2.1.0:
     * Merge [pull request 6](https://github.com/redplane/ApiMultipartFormFormatter/pull/6) created by [everfrown](https://github.com/everfrown) which supported extended data types binding such as: 
         - enum (string or number)
