@@ -57,7 +57,7 @@ deploy:
   artifact: Azure deployment
   on:
     branch:
-      - /nightly_build-.*/
+      - /dev-.*/
 
   # MyGet deployment.
 - provider: NuGet
@@ -67,7 +67,7 @@ deploy:
   artifact: Nuget deployment
   on:
     branch:
-      - /nightly_build-.*/
+      - /dev-.*/
 
   # Nuget deployment.
 - provider: NuGet
