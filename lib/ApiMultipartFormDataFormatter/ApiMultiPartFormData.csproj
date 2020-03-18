@@ -5,7 +5,7 @@
         <PackageId>ApiMultipartFormDataFormatter</PackageId>
         <Company>Freelance</Company>
         <Authors>Linh Nguyen</Authors>
-        <Version>3.1.0-Preview-003</Version>
+        <Version>3.1.0-Preview-004</Version>
         <Description>An enhanced formatter for multipart/form-data data in ASP.NET Framework Web API 2 &amp; ASP.NET Core Web API. This package can deal with nested properties and files.</Description>
         <Copyright>Copyright 2018</Copyright>
         <PackageTags>multipart multipart/form-data form-data formatter</PackageTags>

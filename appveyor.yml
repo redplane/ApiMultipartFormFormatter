@@ -31,10 +31,12 @@ build_script:
   - msbuild "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" /p:Configuration="Debug"
   - nuget pack "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" -OutputDirectory "./lib/ApiMultipartFormDataFormatter/bin/Debug"
 
+# Run unit tests & integration tests.
 test:
   assemblies:
     - '**\*.UnitTest.dll'
     - '**\*.UnitTests.dll'
+    - '**\*.IntegrationTest.dll'
 
 artifacts:
 - path: ./example/back-end/ApiBackEnd/bin/Release/PublishOutput
