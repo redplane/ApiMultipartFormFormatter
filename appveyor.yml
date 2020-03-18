@@ -29,7 +29,6 @@ build_script:
 
   # Build library.
   - msbuild "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" /p:Configuration="Debug"
-  - nuget pack "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" -OutputDirectory "./lib/ApiMultipartFormDataFormatter/bin/Debug"
 
 # Run unit tests & integration tests.
 test:
