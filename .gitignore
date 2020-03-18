@@ -31,3 +31,6 @@
 /integration-tests/AspNetCore.ApiBackEnd/obj
 /integration-tests/AspNetCore.ApiBackEnd/bin
 /unit-tests/ApiBackEnd.UnitTests/*.user
+/integration-tests/AspNetFramework.ApiBackEnd/AspNetFramework.IntegrationTest.csproj.user
+/integration-tests/AspNetFramework.ApiBackEnd/bin
+/integration-tests/AspNetFramework.ApiBackEnd/obj

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ApiBackEnd;
 using ApiBackEnd.IntegrationTest.Shared.Extensions;
 using ApiBackEnd.IntegrationTest.Shared.Interfaces;
 using ApiBackEnd.IntegrationTest.Shared.Services;
@@ -12,7 +13,7 @@ using Autofac;
 using Microsoft.Owin.Hosting;
 using NUnit.Framework;
 
-namespace ApiBackEnd.UnitTests.ControllerTests
+namespace AspNetFramework.IntegrationTest.ControllerTests
 {
     [TestFixture]
     public class AttachmentUploadTests : IAttachmentUploadTests

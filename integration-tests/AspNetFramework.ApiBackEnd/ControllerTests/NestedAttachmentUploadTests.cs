@@ -9,11 +9,10 @@ using ApiBackEnd.IntegrationTest.Shared.ViewModels;
 using ApiBackEndShared.ViewModels.Responses;
 using ApiMultiPartFormData.Models;
 using Autofac;
-using Microsoft.Owin.Hosting;
 using Microsoft.Owin.Testing;
 using NUnit.Framework;
 
-namespace ApiBackEnd.UnitTests.ControllerTests
+namespace AspNetFramework.IntegrationTest.ControllerTests
 {
     [TestFixture]
     public class NestedAttachmentUploadTests

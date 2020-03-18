@@ -17,7 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace AspNetCore.ApiBackEnd.ControllerTests
+namespace AspNetCore.IntegrationTest.ControllerTests
 {
     [TestFixture]
     public class GuidUploadTests : IGuidUploadTests

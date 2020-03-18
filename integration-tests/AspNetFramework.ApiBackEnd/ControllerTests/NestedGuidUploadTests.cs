@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ApiBackEnd;
 using ApiBackEnd.IntegrationTest.Shared.Extensions;
 using ApiBackEnd.IntegrationTest.Shared.ViewModels;
 using ApiBackEndShared.ViewModels.Responses;
@@ -9,7 +10,7 @@ using Autofac;
 using Microsoft.Owin.Hosting;
 using NUnit.Framework;
 
-namespace ApiBackEnd.UnitTests.ControllerTests
+namespace AspNetFramework.IntegrationTest.ControllerTests
 {
     [TestFixture]
     public class NestedGuidUploadTests
