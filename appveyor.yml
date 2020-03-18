@@ -25,6 +25,9 @@ environment:
     NUGET_API_KEY:
       secure: 7CpOZ0B3KsW3sFmCSb3XxHFpba52HEH5gGkb7g9NK93AkTkl339pjo6AkDsDUboa
 
+    GITHUB_RELEASE_API_KEY:
+      secure: TFHc/rZnHEcssfVhLVsDMUl0fVb39UT4XOeKyTvhXRo2aQJAJSXW14pYxloNf6aa
+
 configuration:
   - Debug
   - Release
