@@ -1,5 +1,10 @@
 version: 1.0.{build}
-image: Visual Studio 2017
+image: Visual Studio 2019
+
+branches:
+  only:
+    - /release-.*/
+    - /dev-.*/
 
 only_commits:
  files:
@@ -20,15 +25,20 @@ environment:
     NUGET_API_KEY:
       secure: 7CpOZ0B3KsW3sFmCSb3XxHFpba52HEH5gGkb7g9NK93AkTkl339pjo6AkDsDUboa
 
+configuration:
+  - Debug
+  - Release
+
 build_script:
   # Restore nuget packages.
-  - nuget restore
+  - nuget restore "./lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj"
+  - dotnet restore "./lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj"
 
   # Build demo page
-  - msbuild "./example/back-end/ApiBackEnd/ApiBackEnd.csproj" /p:DeployOnBuild=true /p:PublishProfile="Folder build"  /p:Configuration="Release"
+  #- msbuild "./example/back-end/ApiBackEnd/ApiBackEnd.csproj" /p:DeployOnBuild=true /p:PublishProfile="Folder build"  /p:Configuration="Release"
 
   # Build library.
-  - msbuild "lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" /p:Configuration="Debug"
+  - dotnet build "./lib/ApiMultipartFormDataFormatter/ApiMultiPartFormData.csproj" -c Release
 
 # Run unit tests & integration tests.
 test:
@@ -42,9 +52,14 @@ artifacts:
   name: Azure deployment
   type: WebDeployPackage
 
-- path: lib/ApiMultipartFormDataFormatter/bin/Debug/ApiMultipartFormDataFormatter.*.nupkg
+- path: ./lib/ApiMultipartFormDataFormatter/bin/Debug/ApiMultipartFormDataFormatter.*.nupkg
   name: Nuget deployment
   type: WebDeployPackage
+
+- path: ./lib/ApiMultipartFormDataFormatter/bin/Release/ApiMultipartFormDataFormatter.*.nupkg
+  name: Myget deployment
+  type: WebDeployPackage
+
 
 deploy:
   # Demo website deployment.
@@ -63,7 +78,7 @@ deploy:
   server: https://www.myget.org/F/apimultipartformdataformatter
   api_key: $(MY_GET_API_KEY)
   skip_symbols: false
-  artifact: Nuget deployment
+  artifact: Myget deployment
   on:
     branch:
       - /dev-.*/
