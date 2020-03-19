@@ -57,11 +57,11 @@ artifacts:
   type: WebDeployPackage
 
 - path: ./lib/ApiMultipartFormDataFormatter/bin/Debug/ApiMultipartFormDataFormatter.*.nupkg
-  name: Nuget deployment
+  name: Myget deployment
   type: WebDeployPackage
 
 - path: ./lib/ApiMultipartFormDataFormatter/bin/Release/ApiMultipartFormDataFormatter.*.nupkg
-  name: Myget deployment
+  name: Nuget deployment
   type: WebDeployPackage
 
 
