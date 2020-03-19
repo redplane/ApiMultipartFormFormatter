@@ -5,6 +5,7 @@ branches:
   only:
     - /release-.*/
     - /dev-.*/
+    - master
 
 only_commits:
  files:
