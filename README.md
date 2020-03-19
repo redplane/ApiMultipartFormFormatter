@@ -1,4 +1,5 @@
-# ApiMultipartFormDataFormatter [![Build status](https://ci.appveyor.com/api/projects/status/cwyutunb3xh8clik?svg=true)](https://ci.appveyor.com/project/redplane/apimultipartformformatter)
+# ApiMultipartFormDataFormatter 
+[![Build status](https://ci.appveyor.com/api/projects/status/cwyutunb3xh8clik?svg=true&passingText=master%20-%20OK&failingText=master%20-%20Fails)](https://ci.appveyor.com/project/redplane/apimultipartformformatter)
 
 ## A. Description:
 
