@@ -85,6 +85,7 @@ deploy:
   on:
     branch:
       - /dev-.*/
+      - /release-.*/
 
   # Nuget deployment.
 - provider: NuGet
@@ -93,4 +94,4 @@ deploy:
   artifact: Nuget deployment
   on:
     branch:
-      - /release-.*/
+      - master
