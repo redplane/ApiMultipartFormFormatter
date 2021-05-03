@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <label>Select a file</label>
+        </div>
+        <div class="col-12">
+            <input id="attachmentPicker"
+                   type="file" />
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+
+        $('#attachmentPicker').change(function () {
+            console.log($('#attachmentPicker')[0]);
+            var attachmentPickerControl = $('#attachmentPicker')[0];
+            var attachments = attachmentPickerControl.files;
+
+            if (!attachments || attachments.length < 1) {
+                return;
+            }
+
+            var attachment = attachments[0];
+
+            var formData = new FormData();
+            formData.append('attachment', attachment);
+
+            $.ajax({
+                url: "http://localhost:51506/api/upload",
+                method: 'POST',
+                dataType: 'json',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function () { },
+                error: function (er) { }
+            });
+        });
+
+    });
+
+</script>

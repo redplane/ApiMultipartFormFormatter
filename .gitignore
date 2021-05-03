@@ -34,3 +34,5 @@
 /integration-tests/AspNetFramework.ApiBackEnd/AspNetFramework.IntegrationTest.csproj.user
 /integration-tests/AspNetFramework.ApiBackEnd/bin
 /integration-tests/AspNetFramework.ApiBackEnd/obj
+/example/front-end/jQueryExample/obj
+/example/front-end/jQueryExample/bin
