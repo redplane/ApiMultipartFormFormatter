@@ -36,3 +36,4 @@
 /integration-tests/AspNetFramework.ApiBackEnd/obj
 /example/front-end/jQueryExample/obj
 /example/front-end/jQueryExample/bin
+/example/front-end/jQueryExample/bower_components
